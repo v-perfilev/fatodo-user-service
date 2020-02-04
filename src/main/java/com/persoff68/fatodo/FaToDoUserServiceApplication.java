@@ -9,10 +9,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication(exclude = {UserDetailsServiceAutoConfiguration.class})
 @EnableDiscoveryClient
 @EnableFeignClients
-public class ExtendedSkeletonApplication {
+public class FaToDoUserServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ExtendedSkeletonApplication.class, args);
+        SpringApplication.run(FaToDoUserServiceApplication.class, args);
     }
 
 }
