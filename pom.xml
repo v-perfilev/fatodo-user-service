@@ -11,14 +11,15 @@
     <groupId>com.persoff68</groupId>
     <artifactId>fatodo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>extended-skeleton</name>
-    <description>extended-skeleton for FaToDo</description>
+    <name>extended-mongo-skeleton</name>
+    <description>extended-mongo-skeleton for FaToDo</description>
 
     <properties>
         <!-- Versions -->
         <java.version>13</java.version>
         <spring-boot.version>2.2.4.RELEASE</spring-boot.version>
         <spring-cloud.version>2.2.1.RELEASE</spring-cloud.version>
+        <mongobee.version>0.13</mongobee.version>
         <jackson.version>2.10.2</jackson.version>
         <zalando-problem.version>0.25.2</zalando-problem.version>
         <lombok.version>1.18.10</lombok.version>
@@ -52,6 +53,12 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-openfeign</artifactId>
                 <version>${spring-cloud.version}</version>
+            </dependency>
+            <!-- Mongobee management -->
+            <dependency>
+                <groupId>com.github.mongobee</groupId>
+                <artifactId>mongobee</artifactId>
+                <version>${mongobee.version}</version>
             </dependency>
             <!-- Jackson management -->
             <dependency>
@@ -149,6 +156,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Data MongoDB -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <!-- Mongobee -->
+        <dependency>
+            <groupId>com.github.mongobee</groupId>
+            <artifactId>mongobee</artifactId>
         </dependency>
 
         <!-- Jackson management -->
