@@ -14,11 +14,11 @@ import java.util.Properties;
 @EnableDiscoveryClient
 @EnableFeignClients
 @EnableConfigurationProperties(AppProperties.class)
-public class ExtendedSkeletonApplication {
+public class ExtendedMongoSkeletonApplication {
 
     public static void main(String[] args) {
         Properties defaultProfileProperties = AppProfileUtil.getDefaultProfile();
-        SpringApplication app = new SpringApplication(ExtendedSkeletonApplication.class);
+        SpringApplication app = new SpringApplication(ExtendedMongoSkeletonApplication.class);
         app.setDefaultProperties(defaultProfileProperties);
         app.run(args);
     }
