@@ -13,8 +13,7 @@ public class InitialMigration {
     public void addAuthorities(MongoTemplate mongoTemplate) {
         for (AuthorityType authorityType : AuthorityType.values()) {
             String name = authorityType.getName();
-            Authority authority = new Authority();
-            authority.setName(name);
+            Authority authority = new Authority(name);
             mongoTemplate.save(authority);
         }
     }

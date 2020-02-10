@@ -1,34 +1,33 @@
 package com.persoff68.fatodo.model;
 
-import com.persoff68.fatodo.model.constant.AuthProvider;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 @Document(collection = "ftd_user")
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class User extends AbstractAuditingDocument {
-
     private static final long serialVersionUID = 1L;
 
     @Id
     private String id;
 
     @NotNull
-    private String login;
+    private String email;
 
     @NotNull
-    private String email;
+    private String username;
 
     private String password;
 
     @NotNull
-    private AuthProvider provider;
+    private String provider;
 
     private Set<Authority> authorities;
 
