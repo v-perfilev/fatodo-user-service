@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.controller;
+package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.User;
@@ -25,21 +25,21 @@ public class DetailController {
     @GetMapping(value = "/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipalDTO> getUserPrincipalByUsername(@PathVariable String username) {
         User user = userService.getByUsername(username);
-        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDTO(user);
+        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDto(user);
         return ResponseEntity.ok(userPrincipalDTO);
     }
 
     @GetMapping(value = "/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipalDTO> getUserPrincipalByEmail(@PathVariable String email) {
         User user = userService.getByEmail(email);
-        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDTO(user);
+        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDto(user);
         return ResponseEntity.ok(userPrincipalDTO);
     }
 
-    @GetMapping(value = "/email-or-new/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/email-if-exists/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipalDTO> getUserPrincipalByEmailOrNew(@PathVariable String email) {
-        User user = userService.getByEmailOrNew(email);
-        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDTO(user);
+        User user = userService.getByEmailIfExists(email);
+        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDto(user);
         return ResponseEntity.ok(userPrincipalDTO);
     }
 

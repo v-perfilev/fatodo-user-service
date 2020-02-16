@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.controller;
+package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.User;
@@ -30,7 +30,7 @@ public class UserResource {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<UserDTO>> getAll() {
         List<User> userList = userService.getAll();
         List<UserDTO> userDTOList = userList.stream()
@@ -45,7 +45,7 @@ public class UserResource {
         return ResponseEntity.ok(userDTO);
     }
 
-    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO) {
         User user = userMapper.userDtoToUser(userDTO);
         user = userService.create(user);
@@ -53,10 +53,10 @@ public class UserResource {
         return ResponseEntity.ok(userDTO);
     }
 
-    @PutMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO) {
         User user = userMapper.userDtoToUser(userDTO);
-        user = userService.create(user);
+        user = userService.update(user);
         userDTO = userMapper.userToUserDto(user);
         return ResponseEntity.ok(userDTO);
     }

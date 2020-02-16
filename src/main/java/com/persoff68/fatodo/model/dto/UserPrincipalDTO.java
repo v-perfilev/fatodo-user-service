@@ -13,6 +13,7 @@ public class UserPrincipalDTO {
     private String username;
     private String password;
     private String provider;
+    private String providerId;
     private Set<String> authorities;
 
 }

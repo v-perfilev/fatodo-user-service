@@ -33,7 +33,7 @@ public class UserService {
                 .orElseThrow(RecordNotFoundException::new);
     }
 
-    public User getByEmailOrNew(String email) {
+    public User getByEmailIfExists(String email) {
         return userRepository.findByEmail(email)
                 .orElse(new User());
     }

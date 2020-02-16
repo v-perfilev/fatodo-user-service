@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -26,9 +27,11 @@ public class User extends AbstractAuditingDocument {
 
     private String password;
 
+    private Set<Authority> authorities;
+
     @NotNull
     private String provider;
 
-    private Set<Authority> authorities;
-
+    @Field("provider_id")
+    private String providerId;
 }

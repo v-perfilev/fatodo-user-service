@@ -7,7 +7,6 @@ import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 public interface UserMapper {
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "authoritiesIntoStrings")
-    UserPrincipalDTO userToUserPrincipalDTO(User user);
+    UserPrincipalDTO userToUserPrincipalDto(User user);
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "authoritiesIntoStrings")
     UserDTO userToUserDto(User user);
@@ -24,14 +23,16 @@ public interface UserMapper {
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringsIntoAuthorities")
     User userDtoToUser(UserDTO userDTO);
 
-    @Named("authoritiesIntoStrings")
     static Set<String> authoritiesIntoStrings(Set<Authority> authoritySet) {
-        return authoritySet.stream().map(Authority::getName).collect(Collectors.toSet());
+        return authoritySet != null
+                ? authoritySet.stream().map(Authority::getName).collect(Collectors.toSet())
+                : null;
     }
 
-    @Named("stringsIntoAuthorities")
     static Set<Authority> stringsIntoAuthorities(Set<String> authoritySet) {
-        return authoritySet.stream().filter(AuthorityType::contains).map(Authority::new).collect(Collectors.toSet());
+        return authoritySet != null
+                ? authoritySet.stream().filter(AuthorityType::contains).map(Authority::new).collect(Collectors.toSet())
+                : null;
     }
 
 }
