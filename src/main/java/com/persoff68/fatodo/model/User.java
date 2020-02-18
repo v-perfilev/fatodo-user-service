@@ -27,11 +27,12 @@ public class User extends AbstractAuditingDocument {
 
     private String password;
 
-    private Set<Authority> authorities;
-
     @NotNull
     private String provider;
 
     @Field("provider_id")
     private String providerId;
+
+    @NotNull
+    private Set<Authority> authorities;
 }

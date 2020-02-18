@@ -33,9 +33,9 @@ public class UserService {
                 .orElseThrow(RecordNotFoundException::new);
     }
 
-    public User getByEmailIfExists(String email) {
+    public User getByEmailNullable(String email) {
         return userRepository.findByEmail(email)
-                .orElse(new User());
+                .orElse(null);
     }
 
     public User create(User user) {

@@ -2,7 +2,7 @@ package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.User;
-import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
+import com.persoff68.fatodo.model.UserPrincipal;
 import com.persoff68.fatodo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -23,24 +23,24 @@ public class DetailController {
     private final UserMapper userMapper;
 
     @GetMapping(value = "/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserPrincipalDTO> getUserPrincipalByUsername(@PathVariable String username) {
+    public ResponseEntity<UserPrincipal> getUserPrincipalByUsername(@PathVariable String username) {
         User user = userService.getByUsername(username);
-        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDto(user);
-        return ResponseEntity.ok(userPrincipalDTO);
+        UserPrincipal userPrincipal = userMapper.userToUserPrincipal(user);
+        return ResponseEntity.ok(userPrincipal);
     }
 
     @GetMapping(value = "/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserPrincipalDTO> getUserPrincipalByEmail(@PathVariable String email) {
+    public ResponseEntity<UserPrincipal> getUserPrincipalByEmail(@PathVariable String email) {
         User user = userService.getByEmail(email);
-        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDto(user);
-        return ResponseEntity.ok(userPrincipalDTO);
+        UserPrincipal userPrincipal = userMapper.userToUserPrincipal(user);
+        return ResponseEntity.ok(userPrincipal);
     }
 
-    @GetMapping(value = "/email-if-exists/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserPrincipalDTO> getUserPrincipalByEmailOrNew(@PathVariable String email) {
-        User user = userService.getByEmailIfExists(email);
-        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDto(user);
-        return ResponseEntity.ok(userPrincipalDTO);
+    @GetMapping(value = "/email/{email}/nullable", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserPrincipal> getUserPrincipalByEmailNullable(@PathVariable String email) {
+        User user = userService.getByEmailNullable(email);
+        UserPrincipal userPrincipal = userMapper.userToUserPrincipal(user);
+        return ResponseEntity.ok(userPrincipal);
     }
 
 }

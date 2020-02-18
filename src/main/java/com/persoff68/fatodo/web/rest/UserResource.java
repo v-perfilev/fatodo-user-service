@@ -2,6 +2,8 @@ package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.User;
+import com.persoff68.fatodo.model.dto.LocalUserDTO;
+import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,30 +37,46 @@ public class UserResource {
     public ResponseEntity<Collection<UserDTO>> getAll() {
         List<User> userList = userService.getAll();
         List<UserDTO> userDTOList = userList.stream()
-                .map(userMapper::userToUserDto).collect(Collectors.toList());
+                .map(userMapper::userToUserDTO).collect(Collectors.toList());
         return ResponseEntity.ok(userDTOList);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> getById(@PathVariable String id) {
         User user = userService.getById(id);
-        UserDTO userDTO = userMapper.userToUserDto(user);
+        UserDTO userDTO = userMapper.userToUserDTO(user);
+        return ResponseEntity.ok(userDTO);
+    }
+
+    @PostMapping(value = "/oauth2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDTO> createOAuth2(@Valid @RequestBody OAuth2UserDTO oAuth2UserDTO) {
+        User user = userMapper.oAuth2UserDTOToUser(oAuth2UserDTO);
+        user = userService.create(user);
+        UserDTO userDTO = userMapper.userToUserDTO(user);
+        return ResponseEntity.ok(userDTO);
+    }
+
+    @PostMapping(value = "/local", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDTO> createLocal(@Valid @RequestBody LocalUserDTO localUserDTO) {
+        User user = userMapper.localUserDTOToUser(localUserDTO);
+        user = userService.create(user);
+        UserDTO userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.ok(userDTO);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO) {
-        User user = userMapper.userDtoToUser(userDTO);
+    public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO) {
+        User user = userMapper.userDTOToUser(userDTO);
         user = userService.create(user);
-        userDTO = userMapper.userToUserDto(user);
+        userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.ok(userDTO);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO) {
-        User user = userMapper.userDtoToUser(userDTO);
+    public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO userDTO) {
+        User user = userMapper.userDTOToUser(userDTO);
         user = userService.update(user);
-        userDTO = userMapper.userToUserDto(user);
+        userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.ok(userDTO);
     }
 

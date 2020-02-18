@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 public class Authority {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @NotNull
