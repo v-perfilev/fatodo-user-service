@@ -1,19 +1,38 @@
 package com.persoff68.fatodo.exception.handler;
 
 import com.persoff68.fatodo.exception.util.ProblemUtils;
+import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.zalando.problem.DefaultProblem;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
-import org.zalando.problem.violations.ConstraintViolationProblem;
 
 import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
 
+@RestController
 @ControllerAdvice
-class ExceptionHandler implements ProblemHandling, SecurityAdviceTrait {
+class ExceptionHandler implements ErrorController, ProblemHandling, SecurityAdviceTrait {
+
+    private final static String ERROR_PATH = "/error";
+
+    @Override
+    public String getErrorPath() {
+        return ERROR_PATH;
+    }
+
+    @RequestMapping(value = ERROR_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Problem> error(HttpServletRequest request) {
+        NativeWebRequest nativeWebRequest = new ServletWebRequest(request);
+        Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
+        return create(throwable, nativeWebRequest);
+    }
 
     @Override
     public ResponseEntity<Problem> process(@Nullable ResponseEntity<Problem> entity, NativeWebRequest request) {
@@ -21,11 +40,7 @@ class ExceptionHandler implements ProblemHandling, SecurityAdviceTrait {
             return null;
         }
         Problem problem = entity.getBody();
-        if (problem instanceof ConstraintViolationProblem) {
-            problem = ProblemUtils.processConstraintViolationProblem(problem, request);
-        } else if (problem instanceof DefaultProblem) {
-            problem = ProblemUtils.processDefaultProblem(problem, request);
-        }
+        problem = ProblemUtils.processProblem(problem, request);
         return new ResponseEntity<>(problem, entity.getHeaders(), entity.getStatusCode());
     }
 
