@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.service;
 
+import com.persoff68.fatodo.exception.RecordAlreadyExistsException;
 import com.persoff68.fatodo.exception.RecordNotFoundException;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.repository.UserRepository;
@@ -39,6 +40,10 @@ public class UserService {
     }
 
     public User create(User user) {
+        String id = user.getId();
+        if (id != null) {
+            throw new RecordAlreadyExistsException();
+        }
         return userRepository.save(user);
     }
 

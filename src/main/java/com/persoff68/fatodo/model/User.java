@@ -4,12 +4,12 @@ import com.persoff68.fatodo.model.constant.AuthorityType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 @Document(collection = "ftd_user")
@@ -22,9 +22,11 @@ public class User extends AbstractAuditingDocument {
     private String id;
 
     @NotNull
+    @Indexed(unique = true)
     private String email;
 
     @NotNull
+    @Indexed(unique = true)
     private String username;
 
     private String password;
@@ -32,7 +34,6 @@ public class User extends AbstractAuditingDocument {
     @NotNull
     private String provider;
 
-    @Field("provider_id")
     private String providerId;
 
     @NotNull
