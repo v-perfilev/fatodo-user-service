@@ -2,6 +2,7 @@ package com.persoff68.fatodo.config;
 
 import com.github.mongobee.Mongobee;
 import com.mongodb.MongoClient;
+import com.persoff68.fatodo.config.constant.AppConstants;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +13,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
-@EnableMongoRepositories(basePackages = "com.persoff68.fatodo.repository")
+@EnableMongoRepositories(basePackages = AppConstants.REPOSITORY_PATH)
 @EnableMongoAuditing
 public class DatabaseConfiguration {
 
