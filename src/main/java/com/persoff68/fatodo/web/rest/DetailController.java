@@ -43,4 +43,16 @@ public class DetailController {
         return ResponseEntity.ok(userPrincipal);
     }
 
+    @GetMapping(value = "/username/{username}/unique")
+    public ResponseEntity<Boolean> isUsernameUnique(@PathVariable("username") String username) {
+        boolean isUnique = userService.isUsernameUnique(username);
+        return ResponseEntity.ok(isUnique);
+    }
+
+    @GetMapping(value = "/email/{email}/unique")
+    public ResponseEntity<Boolean> isEmailUnique(@PathVariable("email") String email) {
+        boolean isUnique = userService.isEmailUnique(email);
+        return ResponseEntity.ok(isUnique);
+    }
+
 }

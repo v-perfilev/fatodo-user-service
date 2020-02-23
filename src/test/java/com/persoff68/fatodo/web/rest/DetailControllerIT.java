@@ -101,6 +101,46 @@ public class DetailControllerIT {
         assertThat(resultString).isEqualTo("");
     }
 
+    @Test
+    void testIsUsernameUnique_true() throws Exception {
+        ResultActions resultActions = mvc.perform(get(ENDPOINT + "/username/test_username_6/unique"))
+                .andExpect(status().isOk());
+
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        boolean isUnique = Boolean.parseBoolean(resultString);
+        assertThat(isUnique).isEqualTo(true);
+    }
+
+    @Test
+    void testIsUsernameUnique_false() throws Exception {
+        ResultActions resultActions = mvc.perform(get(ENDPOINT + "/username/test_username_1/unique"))
+                .andExpect(status().isOk());
+
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        boolean isUnique = Boolean.parseBoolean(resultString);
+        assertThat(isUnique).isEqualTo(false);
+    }
+
+    @Test
+    void testIsEmailUnique_true() throws Exception {
+        ResultActions resultActions = mvc.perform(get(ENDPOINT + "/email/test_6@email.com/unique"))
+                .andExpect(status().isOk());
+
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        boolean isUnique = Boolean.parseBoolean(resultString);
+        assertThat(isUnique).isEqualTo(true);
+    }
+
+    @Test
+    void testIsEmailUnique_false() throws Exception {
+        ResultActions resultActions = mvc.perform(get(ENDPOINT + "/email/test_1@email.com/unique"))
+                .andExpect(status().isOk());
+
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        boolean isUnique = Boolean.parseBoolean(resultString);
+        assertThat(isUnique).isEqualTo(false);
+    }
+
 
     private static UserPrincipal createUserPrincipal(int id) {
         UserPrincipal userPrincipal = new UserPrincipal();

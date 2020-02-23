@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.persoff68.fatodo.FaToDoUserServiceApplication;
 import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
+import com.persoff68.fatodo.model.dto.LocalUserDTO;
+import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +23,10 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FaToDoUserServiceApplication.class)
@@ -39,8 +43,6 @@ public class UserResourceIT {
     @Autowired
     UserRepository userRepository;
 
-    UserDTO testUserDTO;
-
     @BeforeEach
     void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
@@ -49,7 +51,6 @@ public class UserResourceIT {
         for (int i = 1; i <= 5; i++) {
             userRepository.save(createUser(i));
         }
-        testUserDTO = createUserDTO(1);
     }
 
     @Test
@@ -66,13 +67,14 @@ public class UserResourceIT {
 
     @Test
     void testGetById_correct() throws Exception {
+        UserDTO userDTO = createUserDTO(1);
         ResultActions resultActions = mvc.perform(get(ENDPOINT + "/test_id_1"))
                 .andExpect(status().isOk());
 
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         UserDTO result = objectMapper.readValue(resultString, UserDTO.class);
 
-        assertThat(result).isEqualTo(testUserDTO);
+        assertThat(result).isEqualTo(userDTO);
     }
 
     @Test
@@ -89,8 +91,7 @@ public class UserResourceIT {
 
     @Test
     void testCreate_ifNotExists() throws Exception {
-        UserDTO userDTO = createUserDTO(6);
-        userDTO.setId(null);
+        UserDTO userDTO = createUserDTOWithoutId(6);
         String json = objectMapper.writeValueAsString(userDTO);
 
         ResultActions resultActions = mvc.perform(post(ENDPOINT)
@@ -117,16 +118,133 @@ public class UserResourceIT {
 
     @Test
     void testCreate_ifExistsWithoutId() throws Exception {
-        UserDTO userDTO = createUserDTO(1);
-        userDTO.setId(null);
+        UserDTO userDTO = createUserDTOWithoutId(1);
         String json = objectMapper.writeValueAsString(userDTO);
-
-        // TODO should return error cause user with same username and email exists
 
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreateOAuth2_ifNotExists() throws Exception {
+        OAuth2UserDTO oAuth2UserDTO = createOAuth2UserDTOWithoutId(6);
+        String json = objectMapper.writeValueAsString(oAuth2UserDTO);
+
+        ResultActions resultActions = mvc.perform(post(ENDPOINT + "/oauth2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isCreated());
+
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        UserDTO result = objectMapper.readValue(resultString, UserDTO.class);
+
+        assertThat(result.getId()).isNotNull();
+        assertThat(result.getProvider()).isEqualTo("GOOGLE");
+    }
+
+    @Test
+    void testCreateOAuth2_ifExistsWithId() throws Exception {
+        OAuth2UserDTO oAuth2UserDTO = createOAuth2UserDTO(1);
+        String json = objectMapper.writeValueAsString(oAuth2UserDTO);
+
+        mvc.perform(post(ENDPOINT + "/oauth2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreateOAuth2_ifExistsWithoutId() throws Exception {
+        OAuth2UserDTO oAuth2UserDTO = createOAuth2UserDTOWithoutId(1);
+        String json = objectMapper.writeValueAsString(oAuth2UserDTO);
+
+        mvc.perform(post(ENDPOINT + "/oauth2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreateLocal_ifNotExists() throws Exception {
+        LocalUserDTO localUserDTO = createLocalUserDTOWithoutId(6);
+        String json = objectMapper.writeValueAsString(localUserDTO);
+
+        ResultActions resultActions = mvc.perform(post(ENDPOINT + "/local")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isCreated());
+
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        UserDTO result = objectMapper.readValue(resultString, UserDTO.class);
+
+        assertThat(result.getId()).isNotNull();
+        assertThat(result.getProvider()).isEqualTo("LOCAL");
+    }
+
+    @Test
+    void testCreateLocal_ifExistsWithId() throws Exception {
+        LocalUserDTO localUserDTO = createLocalUserDTO(1);
+        String json = objectMapper.writeValueAsString(localUserDTO);
+
+        mvc.perform(post(ENDPOINT + "/local")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreateLocal_ifExistsWithoutId() throws Exception {
+        LocalUserDTO localUserDTO = createLocalUserDTOWithoutId(1);
+        String json = objectMapper.writeValueAsString(localUserDTO);
+
+        mvc.perform(post(ENDPOINT + "/local")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testUpdate_ifNotExists() throws Exception {
+        UserDTO userDTO = createUserDTO(6);
+        String json = objectMapper.writeValueAsString(userDTO);
+
+        mvc.perform(put(ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testUpdate_ifExists() throws Exception {
+        UserDTO userDTO = createUserDTO(1);
+        userDTO.setUsername("new_name");
+        String json = objectMapper.writeValueAsString(userDTO);
+
+
+        ResultActions resultActions = mvc.perform(put(ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isOk());
+
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        UserDTO result = objectMapper.readValue(resultString, UserDTO.class);
+
+        assertThat(result.getId()).isEqualTo(userDTO.getId());
+        assertThat(result.getUsername()).isEqualTo("new_name");
+    }
+
+    @Test
+    void testDelete_ifNotExists() throws Exception {
+        mvc.perform(delete(ENDPOINT + "/test_id_6"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testDelete_ifExists() throws Exception {
+        mvc.perform(delete(ENDPOINT + "/test_id_1"))
+                .andExpect(status().isOk());
     }
 
 
@@ -135,20 +253,66 @@ public class UserResourceIT {
         user.setId("test_id_" + id);
         user.setUsername("test_username_" + id);
         user.setEmail("test_" + id + "@email.com");
-        user.setPassword("test_password");
+        user.setPassword("test_password_" + id);
         user.setAuthorities(Collections.singleton(new Authority("ROLE_USER")));
-        user.setProvider("LOCAL");
+        user.setProvider("test_provider_" + id);
         return user;
     }
 
     private static UserDTO createUserDTO(int id) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId("test_id_" + id);
-        userDTO.setUsername("test_username_" + id);
-        userDTO.setEmail("test_" + id + "@email.com");
-        userDTO.setAuthorities(Collections.singleton("ROLE_USER"));
-        userDTO.setProvider("LOCAL");
-        return userDTO;
+        UserDTO dto = new UserDTO();
+        dto.setId("test_id_" + id);
+        dto.setUsername("test_username_" + id);
+        dto.setEmail("test_" + id + "@email.com");
+        dto.setAuthorities(Collections.singleton("ROLE_USER"));
+        dto.setProvider("test_provider_" + id);
+        return dto;
     }
 
+    private static UserDTO createUserDTOWithoutId(int id) {
+        UserDTO dto = new UserDTO();
+        dto.setUsername("test_username_" + id);
+        dto.setEmail("test_" + id + "@email.com");
+        dto.setAuthorities(Collections.singleton("ROLE_USER"));
+        dto.setProvider("test_provider_" + id);
+        return dto;
+    }
+
+    private static OAuth2UserDTO createOAuth2UserDTO(int id) {
+        OAuth2UserDTO dto = new OAuth2UserDTO();
+        dto.setId("test_id_" + id);
+        dto.setUsername("test_username_" + id);
+        dto.setEmail("test_" + id + "@email.com");
+        dto.setProvider("GOOGLE");
+        dto.setProviderId("test_provider_id");
+        return dto;
+    }
+
+    private static OAuth2UserDTO createOAuth2UserDTOWithoutId(int id) {
+        OAuth2UserDTO dto = new OAuth2UserDTO();
+        dto.setUsername("test_username_" + id);
+        dto.setEmail("test_" + id + "@email.com");
+        dto.setProvider("GOOGLE");
+        dto.setProviderId("test_provider_id");
+        return dto;
+    }
+
+    private static LocalUserDTO createLocalUserDTO(int id) {
+        LocalUserDTO dto = new LocalUserDTO();
+        dto.setId("test_id_" + id);
+        dto.setUsername("test_username_" + id);
+        dto.setEmail("test_" + id + "@email.com");
+        dto.setPassword("test_password_" + id);
+        dto.setProvider("LOCAL");
+        return dto;
+    }
+
+    private static LocalUserDTO createLocalUserDTOWithoutId(int id) {
+        LocalUserDTO dto = new LocalUserDTO();
+        dto.setUsername("test_username_" + id);
+        dto.setEmail("test_" + id + "@email.com");
+        dto.setPassword("test_password_" + id);
+        dto.setProvider("LOCAL");
+        return dto;
+    }
 }

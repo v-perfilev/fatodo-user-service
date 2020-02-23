@@ -60,4 +60,12 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public boolean isUsernameUnique(String username) {
+        return !userRepository.existsByUsername(username);
+    }
+
+    public boolean isEmailUnique(String email) {
+        return !userRepository.existsByEmail(email);
+    }
+
 }
