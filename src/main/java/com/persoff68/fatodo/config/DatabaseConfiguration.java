@@ -14,7 +14,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
 @EnableMongoRepositories(basePackages = AppConstants.REPOSITORY_PATH)
-@EnableMongoAuditing
+@EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
 public class DatabaseConfiguration {
 
     @Bean
