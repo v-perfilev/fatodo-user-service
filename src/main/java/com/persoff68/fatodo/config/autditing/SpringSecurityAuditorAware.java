@@ -26,12 +26,17 @@ public class SpringSecurityAuditorAware implements AuditorAware<String> {
     }
 
     private static String fetchUsernameFromAuthentication(Authentication authentication) {
+        if (authentication == null) {
+            return null;
+        }
+
         String username = null;
-        if (authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof UserDetails) {
+            UserDetails springSecurityUser = (UserDetails) principal;
             username = springSecurityUser.getUsername();
-        } else if (authentication.getPrincipal() instanceof String) {
-            username = (String) authentication.getPrincipal();
+        } else if (principal instanceof String) {
+            username = (String) principal;
         }
         return username;
     }
