@@ -22,6 +22,13 @@ public class DetailController {
     private final UserService userService;
     private final UserMapper userMapper;
 
+    @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserPrincipal> getUserPrincipalById(@PathVariable String id) {
+        User user = userService.getById(id);
+        UserPrincipal userPrincipal = userMapper.userToUserPrincipal(user);
+        return ResponseEntity.ok(userPrincipal);
+    }
+
     @GetMapping(value = "/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipal> getUserPrincipalByUsername(@PathVariable String username) {
         User user = userService.getByUsername(username);
