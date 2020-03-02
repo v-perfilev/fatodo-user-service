@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.exception.handler;
+package com.persoff68.fatodo.exception;
 
 import com.persoff68.fatodo.exception.constant.ExceptionTypes;
 import lombok.RequiredArgsConstructor;
