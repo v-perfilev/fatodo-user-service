@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @SpringBootTest(classes = FaToDoUserServiceApplication.class)
-public class DetailControllerIT {
+public class AuthControllerIT {
     private static final String ENDPOINT = "/details";
 
     @Autowired

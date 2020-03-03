@@ -57,22 +57,6 @@ public class UserResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
-    @PostMapping(value = "/oauth2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> createOAuth2(@Valid @RequestBody OAuth2UserDTO oAuth2UserDTO) {
-        User user = userMapper.oAuth2UserDTOToUser(oAuth2UserDTO);
-        user = userService.create(user);
-        UserDTO userDTO = userMapper.userToUserDTO(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
-    }
-
-    @PostMapping(value = "/local", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> createLocal(@Valid @RequestBody LocalUserDTO localUserDTO) {
-        User user = userMapper.localUserDTOToUser(localUserDTO);
-        user = userService.create(user);
-        UserDTO userDTO = userMapper.userToUserDTO(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
-    }
-
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO userDTO) {
         User user = userMapper.userDTOToUser(userDTO);
