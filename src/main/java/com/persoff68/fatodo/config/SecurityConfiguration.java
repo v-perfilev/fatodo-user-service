@@ -48,7 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/auth/**").hasRole("ROLE_SYSTEM")
+                .antMatchers("/auth/**").hasAuthority("ROLE_SYSTEM")
                 .anyRequest().authenticated();
     }
 
