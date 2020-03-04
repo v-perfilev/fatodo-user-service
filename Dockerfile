@@ -1,5 +1,5 @@
 # BUILD
-FROM openjdk:13-jdk-alpine as build
+FROM persoff68/alpine-openjdk-13-glibc as build
 WORKDIR /build
 
 # important libs
@@ -16,7 +16,7 @@ COPY src src
 RUN ./mvnw install -DskipTests
 
 # DEPLOY
-FROM openjdk:13-jdk-alpine
+FROM persoff68/alpine-openjdk-13-glibc
 VOLUME /app
 COPY --from=build /build/target/*.jar /app/app.jar
 
