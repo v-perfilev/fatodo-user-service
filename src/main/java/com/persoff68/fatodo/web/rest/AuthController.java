@@ -2,7 +2,7 @@ package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.User;
-import com.persoff68.fatodo.model.UserPrincipal;
+import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
@@ -31,24 +31,24 @@ public class AuthController {
     private final UserMapper userMapper;
 
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserPrincipal> getUserPrincipalById(@PathVariable String id) {
+    public ResponseEntity<UserPrincipalDTO> getUserPrincipalById(@PathVariable String id) {
         User user = userService.getById(id);
-        UserPrincipal userPrincipal = userMapper.userToUserPrincipal(user);
-        return ResponseEntity.ok(userPrincipal);
+        UserPrincipalDTO userPrincipalDTO = userMapper.toUserPrincipalDTO(user);
+        return ResponseEntity.ok(userPrincipalDTO);
     }
 
     @GetMapping(value = "/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserPrincipal> getUserPrincipalByUsername(@PathVariable String username) {
+    public ResponseEntity<UserPrincipalDTO> getUserPrincipalByUsername(@PathVariable String username) {
         User user = userService.getByUsername(username);
-        UserPrincipal userPrincipal = userMapper.userToUserPrincipal(user);
-        return ResponseEntity.ok(userPrincipal);
+        UserPrincipalDTO userPrincipalDTO = userMapper.toUserPrincipalDTO(user);
+        return ResponseEntity.ok(userPrincipalDTO);
     }
 
     @GetMapping(value = "/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserPrincipal> getUserPrincipalByEmail(@PathVariable String email) {
+    public ResponseEntity<UserPrincipalDTO> getUserPrincipalByEmail(@PathVariable String email) {
         User user = userService.getByEmail(email);
-        UserPrincipal userPrincipal = userMapper.userToUserPrincipal(user);
-        return ResponseEntity.ok(userPrincipal);
+        UserPrincipalDTO userPrincipalDTO = userMapper.toUserPrincipalDTO(user);
+        return ResponseEntity.ok(userPrincipalDTO);
     }
 
     @GetMapping(value = "/username/{username}/unique")
@@ -65,17 +65,17 @@ public class AuthController {
 
     @PostMapping(value = "/create-oauth2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> createOAuth2(@Valid @RequestBody OAuth2UserDTO oAuth2UserDTO) {
-        User user = userMapper.oAuth2UserDTOToUser(oAuth2UserDTO);
+        User user = userMapper.fromOAuth2UserDTO(oAuth2UserDTO);
         user = userService.create(user);
-        UserDTO userDTO = userMapper.userToUserDTO(user);
+        UserDTO userDTO = userMapper.toDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
     @PostMapping(value = "/create-local", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> createLocal(@Valid @RequestBody LocalUserDTO localUserDTO) {
-        User user = userMapper.localUserDTOToUser(localUserDTO);
+        User user = userMapper.fromLocalUserDTO(localUserDTO);
         user = userService.create(user);
-        UserDTO userDTO = userMapper.userToUserDTO(user);
+        UserDTO userDTO = userMapper.toDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 

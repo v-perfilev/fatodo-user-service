@@ -34,11 +34,6 @@ public class UserService {
                 .orElseThrow(ModelNotFoundException::new);
     }
 
-    public User getByEmailNullable(String email) {
-        return userRepository.findByEmail(email)
-                .orElse(null);
-    }
-
     public User create(User user) {
         String id = user.getId();
         if (id != null) {

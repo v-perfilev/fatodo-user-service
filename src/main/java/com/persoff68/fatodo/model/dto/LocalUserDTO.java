@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.model.dto;
 
+import com.persoff68.fatodo.config.constant.AppConstants;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -8,7 +9,7 @@ import javax.validation.constraints.Size;
 
 @Data
 public class LocalUserDTO {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
     private String id;
 

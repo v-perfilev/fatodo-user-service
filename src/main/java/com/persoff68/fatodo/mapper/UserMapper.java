@@ -2,7 +2,7 @@ package com.persoff68.fatodo.mapper;
 
 import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
-import com.persoff68.fatodo.model.UserPrincipal;
+import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.constant.AuthorityType;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
@@ -17,17 +17,17 @@ import java.util.stream.Collectors;
 public interface UserMapper {
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "authoritiesIntoStrings")
-    UserPrincipal userToUserPrincipal(User user);
+    UserPrincipalDTO toUserPrincipalDTO(User user);
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "authoritiesIntoStrings")
-    UserDTO userToUserDTO(User user);
+    UserDTO toDTO(User user);
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringsIntoAuthorities")
-    User userDTOToUser(UserDTO userDTO);
+    User fromDTO(UserDTO userDTO);
 
-    User localUserDTOToUser(LocalUserDTO localUserDTO);
+    User fromLocalUserDTO(LocalUserDTO localUserDTO);
 
-    User oAuth2UserDTOToUser(OAuth2UserDTO oAuth2UserDTO);
+    User fromOAuth2UserDTO(OAuth2UserDTO oAuth2UserDTO);
 
     static Set<String> authoritiesIntoStrings(Set<Authority> authoritySet) {
         return authoritySet != null

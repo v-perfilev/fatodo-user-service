@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FaToDoUserServiceApplication;
 import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
-import com.persoff68.fatodo.model.UserPrincipal;
+import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
@@ -41,13 +41,13 @@ public class AuthControllerIT {
     @Autowired
     UserRepository userRepository;
 
-    UserPrincipal testUserPrincipal;
+    UserPrincipalDTO testUserPrincipalDTO;
 
     @BeforeEach
     void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
         userRepository.deleteAll();
-        testUserPrincipal = createUserPrincipal(1);
+        testUserPrincipalDTO = createUserPrincipal(1);
         userRepository.save(createUser(1));
     }
 
@@ -57,9 +57,9 @@ public class AuthControllerIT {
                 .andExpect(status().isOk());
 
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        UserPrincipal result = objectMapper.readValue(resultString, UserPrincipal.class);
+        UserPrincipalDTO result = objectMapper.readValue(resultString, UserPrincipalDTO.class);
 
-        assertThat(result).isEqualTo(testUserPrincipal);
+        assertThat(result).isEqualTo(testUserPrincipalDTO);
     }
 
     @Test
@@ -74,9 +74,9 @@ public class AuthControllerIT {
                 .andExpect(status().isOk());
 
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        UserPrincipal result = objectMapper.readValue(resultString, UserPrincipal.class);
+        UserPrincipalDTO result = objectMapper.readValue(resultString, UserPrincipalDTO.class);
 
-        assertThat(result).isEqualTo(testUserPrincipal);
+        assertThat(result).isEqualTo(testUserPrincipalDTO);
     }
 
     @Test
@@ -204,15 +204,15 @@ public class AuthControllerIT {
     }
 
 
-    private static UserPrincipal createUserPrincipal(int id) {
-        UserPrincipal userPrincipal = new UserPrincipal();
-        userPrincipal.setId("test_id_" + id);
-        userPrincipal.setUsername("test_username_" + id);
-        userPrincipal.setEmail("test_" + id + "@email.com");
-        userPrincipal.setPassword("test_password");
-        userPrincipal.setAuthorities(Collections.singleton("ROLE_USER"));
-        userPrincipal.setProvider("LOCAL");
-        return userPrincipal;
+    private static UserPrincipalDTO createUserPrincipal(int id) {
+        UserPrincipalDTO userPrincipalDTO = new UserPrincipalDTO();
+        userPrincipalDTO.setId("test_id_" + id);
+        userPrincipalDTO.setUsername("test_username_" + id);
+        userPrincipalDTO.setEmail("test_" + id + "@email.com");
+        userPrincipalDTO.setPassword("test_password");
+        userPrincipalDTO.setAuthorities(Collections.singleton("ROLE_USER"));
+        userPrincipalDTO.setProvider("LOCAL");
+        return userPrincipalDTO;
     }
 
     private static User createUser(int id) {

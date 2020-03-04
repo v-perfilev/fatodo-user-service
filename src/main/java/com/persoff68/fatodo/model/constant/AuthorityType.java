@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public enum AuthorityType {
 
+    SYSTEM("ROLE_SYSTEM"),
     USER("ROLE_USER"),
     ADMIN("ROLE_ADMIN");
 

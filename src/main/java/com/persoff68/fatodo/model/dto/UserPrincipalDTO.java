@@ -1,12 +1,13 @@
-package com.persoff68.fatodo.model;
+package com.persoff68.fatodo.model.dto;
 
+import com.persoff68.fatodo.config.constant.AppConstants;
 import lombok.Data;
 
 import java.util.Set;
 
 @Data
-public class UserPrincipal {
-    private static final long serialVersionUID = 1L;
+public class UserPrincipalDTO {
+    private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
     private String id;
     private String email;

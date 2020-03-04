@@ -2,8 +2,6 @@ package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.User;
-import com.persoff68.fatodo.model.dto.LocalUserDTO;
-import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -38,30 +36,30 @@ public class UserResource {
     public ResponseEntity<Collection<UserDTO>> getAll() {
         List<User> userList = userService.getAll();
         List<UserDTO> userDTOList = userList.stream()
-                .map(userMapper::userToUserDTO).collect(Collectors.toList());
+                .map(userMapper::toDTO).collect(Collectors.toList());
         return ResponseEntity.ok(userDTOList);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> getById(@PathVariable String id) {
         User user = userService.getById(id);
-        UserDTO userDTO = userMapper.userToUserDTO(user);
+        UserDTO userDTO = userMapper.toDTO(user);
         return ResponseEntity.ok(userDTO);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO) {
-        User user = userMapper.userDTOToUser(userDTO);
+        User user = userMapper.fromDTO(userDTO);
         user = userService.create(user);
-        userDTO = userMapper.userToUserDTO(user);
+        userDTO = userMapper.toDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO userDTO) {
-        User user = userMapper.userDTOToUser(userDTO);
+        User user = userMapper.fromDTO(userDTO);
         user = userService.update(user);
-        userDTO = userMapper.userToUserDTO(user);
+        userDTO = userMapper.toDTO(user);
         return ResponseEntity.ok(userDTO);
     }
 

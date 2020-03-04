@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.model;
 
+import com.persoff68.fatodo.config.constant.AppConstants;
 import com.persoff68.fatodo.model.constant.AuthorityType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +17,7 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class User extends AbstractAuditingDocument {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
     @Id
     private String id;

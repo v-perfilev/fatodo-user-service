@@ -146,7 +146,6 @@ public class UserResourceIT {
         userDTO.setUsername("new_name");
         String json = objectMapper.writeValueAsString(userDTO);
 
-
         ResultActions resultActions = mvc.perform(put(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
