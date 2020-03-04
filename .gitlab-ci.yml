@@ -1,4 +1,4 @@
-image: openjdk:13-alpine
+image: persoff68/alpine-openjdk-13-glibc
 
 variables:
   MAVEN_CLI_OPTS: "-ntp --batch-mode"
@@ -7,9 +7,6 @@ variables:
 cache:
   paths:
     - .m2/repository/
-
-before_script:
-  - apk add libstdc++
 
 stages:
   - build
