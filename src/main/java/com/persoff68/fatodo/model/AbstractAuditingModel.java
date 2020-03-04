@@ -5,18 +5,19 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Version;
 
 import java.io.Serializable;
 import java.time.Instant;
 
 @Data
-public abstract class AbstractAuditingDocument implements Serializable {
+public abstract class AbstractAuditingModel {
 
     @CreatedBy
     private String createdBy;
 
     @CreatedDate
-    private Instant createdDate = Instant.now();
+    private Instant createdDate;
 
     @LastModifiedBy
     private String lastModifiedBy;

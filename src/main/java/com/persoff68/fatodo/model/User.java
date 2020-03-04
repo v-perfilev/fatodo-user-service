@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
@@ -16,11 +15,11 @@ import java.util.Set;
 @Document(collection = "ftd_user")
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class User extends AbstractAuditingDocument {
+public class User extends AbstractAuditingModel {
     private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
     @Id
-    private String id;
+    private String id = null;
 
     @NotNull
     @Indexed(unique = true)
