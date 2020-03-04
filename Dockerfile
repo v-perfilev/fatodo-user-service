@@ -13,7 +13,7 @@ RUN apk --no-cache add ca-certificates && \
 COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
-RUN ./mvnw clean verify -fn
+RUN ./mvnw verify clean --fail-never
 
 # app build layer
 COPY src src
