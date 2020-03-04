@@ -2,18 +2,20 @@ package com.persoff68.fatodo.mapper;
 
 import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
-import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.constant.AuthorityType;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
+import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "authoritiesIntoStrings")
@@ -29,13 +31,15 @@ public interface UserMapper {
 
     User fromOAuth2UserDTO(OAuth2UserDTO oAuth2UserDTO);
 
-    static Set<String> authoritiesIntoStrings(Set<Authority> authoritySet) {
+    @Named("authoritiesIntoStrings")
+    default Set<String> authoritiesIntoStrings(Set<Authority> authoritySet) {
         return authoritySet != null
                 ? authoritySet.stream().map(Authority::getName).collect(Collectors.toSet())
                 : null;
     }
 
-    static Set<Authority> stringsIntoAuthorities(Set<String> authoritySet) {
+    @Named("stringsIntoAuthorities")
+    default Set<Authority> stringsIntoAuthorities(Set<String> authoritySet) {
         return authoritySet != null
                 ? authoritySet.stream().filter(AuthorityType::contains).map(Authority::new).collect(Collectors.toSet())
                 : null;
