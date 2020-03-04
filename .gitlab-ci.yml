@@ -8,6 +8,9 @@ cache:
   paths:
     - .m2/repository/
 
+before_script:
+  - apk add libstdc++
+
 stages:
   - build
   - test
