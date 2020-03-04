@@ -39,9 +39,9 @@ public interface UserMapper {
     }
 
     @Named("stringsIntoAuthorities")
-    default Set<Authority> stringsIntoAuthorities(Set<String> authoritySet) {
-        return authoritySet != null
-                ? authoritySet.stream().filter(AuthorityType::contains).map(Authority::new).collect(Collectors.toSet())
+    default Set<Authority> stringsIntoAuthorities(Set<String> stringSet) {
+        return stringSet != null
+                ? stringSet.stream().filter(AuthorityType::contains).map(Authority::new).collect(Collectors.toSet())
                 : null;
     }
 
