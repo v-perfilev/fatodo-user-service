@@ -33,21 +33,21 @@ public class AuthController {
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipalDTO> getUserPrincipalById(@PathVariable String id) {
         User user = userService.getById(id);
-        UserPrincipalDTO userPrincipalDTO = userMapper.toUserPrincipalDTO(user);
+        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDTO(user);
         return ResponseEntity.ok(userPrincipalDTO);
     }
 
     @GetMapping(value = "/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipalDTO> getUserPrincipalByUsername(@PathVariable String username) {
         User user = userService.getByUsername(username);
-        UserPrincipalDTO userPrincipalDTO = userMapper.toUserPrincipalDTO(user);
+        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDTO(user);
         return ResponseEntity.ok(userPrincipalDTO);
     }
 
     @GetMapping(value = "/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipalDTO> getUserPrincipalByEmail(@PathVariable String email) {
         User user = userService.getByEmail(email);
-        UserPrincipalDTO userPrincipalDTO = userMapper.toUserPrincipalDTO(user);
+        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDTO(user);
         return ResponseEntity.ok(userPrincipalDTO);
     }
 
@@ -65,17 +65,17 @@ public class AuthController {
 
     @PostMapping(value = "/create-oauth2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> createOAuth2(@Valid @RequestBody OAuth2UserDTO oAuth2UserDTO) {
-        User user = userMapper.fromOAuth2UserDTO(oAuth2UserDTO);
+        User user = userMapper.oAuth2UserDTOToUser(oAuth2UserDTO);
         user = userService.create(user);
-        UserDTO userDTO = userMapper.toDTO(user);
+        UserDTO userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
     @PostMapping(value = "/create-local", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> createLocal(@Valid @RequestBody LocalUserDTO localUserDTO) {
-        User user = userMapper.fromLocalUserDTO(localUserDTO);
+        User user = userMapper.localUserDTOToUser(localUserDTO);
         user = userService.create(user);
-        UserDTO userDTO = userMapper.toDTO(user);
+        UserDTO userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 

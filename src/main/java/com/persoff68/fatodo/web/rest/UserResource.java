@@ -36,30 +36,30 @@ public class UserResource {
     public ResponseEntity<Collection<UserDTO>> getAll() {
         List<User> userList = userService.getAll();
         List<UserDTO> userDTOList = userList.stream()
-                .map(userMapper::toDTO).collect(Collectors.toList());
+                .map(userMapper::userToUserDTO).collect(Collectors.toList());
         return ResponseEntity.ok(userDTOList);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> getById(@PathVariable String id) {
         User user = userService.getById(id);
-        UserDTO userDTO = userMapper.toDTO(user);
+        UserDTO userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.ok(userDTO);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO) {
-        User user = userMapper.fromDTO(userDTO);
+        User user = userMapper.userDTOToUser(userDTO);
         user = userService.create(user);
-        userDTO = userMapper.toDTO(user);
+        userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO userDTO) {
-        User user = userMapper.fromDTO(userDTO);
+        User user = userMapper.userDTOToUser(userDTO);
         user = userService.update(user);
-        userDTO = userMapper.toDTO(user);
+        userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.ok(userDTO);
     }
 

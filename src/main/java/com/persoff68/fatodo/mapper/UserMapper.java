@@ -19,17 +19,17 @@ import java.util.stream.Collectors;
 public interface UserMapper {
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "authoritiesIntoStrings")
-    UserPrincipalDTO toUserPrincipalDTO(User user);
+    UserPrincipalDTO userToUserPrincipalDTO(User user);
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "authoritiesIntoStrings")
-    UserDTO toDTO(User user);
+    UserDTO userToUserDTO(User user);
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringsIntoAuthorities")
-    User fromDTO(UserDTO userDTO);
+    User userDTOToUser(UserDTO userDTO);
 
-    User fromLocalUserDTO(LocalUserDTO localUserDTO);
+    User localUserDTOToUser(LocalUserDTO localUserDTO);
 
-    User fromOAuth2UserDTO(OAuth2UserDTO oAuth2UserDTO);
+    User oAuth2UserDTOToUser(OAuth2UserDTO oAuth2UserDTO);
 
     @Named("authoritiesIntoStrings")
     default Set<String> authoritiesIntoStrings(Set<Authority> authoritySet) {
