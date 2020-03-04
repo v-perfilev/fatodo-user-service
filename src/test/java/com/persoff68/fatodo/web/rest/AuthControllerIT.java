@@ -5,11 +5,15 @@ import com.persoff68.fatodo.FaToDoUserServiceApplication;
 import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.UserPrincipal;
+import com.persoff68.fatodo.model.dto.LocalUserDTO;
+import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
+import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -19,12 +23,13 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest(classes = FaToDoUserServiceApplication.class)
 public class AuthControllerIT {
-    private static final String ENDPOINT = "/details";
+    private static final String ENDPOINT = "/auth";
 
     @Autowired
     private WebApplicationContext context;
@@ -41,7 +46,7 @@ public class AuthControllerIT {
     @BeforeEach
     void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
-
+        userRepository.deleteAll();
         testUserPrincipal = createUserPrincipal(1);
         userRepository.save(createUser(1));
     }
@@ -78,27 +83,6 @@ public class AuthControllerIT {
     void testGetUserPrincipalByEmail_notFound() throws Exception {
         mvc.perform(get(ENDPOINT + "/email/test_0@email.com"))
                 .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void testGetUserPrincipalByEmailNullable_correct() throws Exception {
-        ResultActions resultActions = mvc.perform(get(ENDPOINT + "/email/test_1@email.com/nullable"))
-                .andExpect(status().isOk());
-
-        String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        UserPrincipal result = objectMapper.readValue(resultString, UserPrincipal.class);
-
-        assertThat(result).isEqualTo(testUserPrincipal);
-    }
-
-    @Test
-    void testGetUserPrincipalByEmailNullable_notFound() throws Exception {
-        ResultActions resultActions = mvc.perform(get(ENDPOINT + "/email/test_0@email.com/nullable"))
-                .andExpect(status().isOk());
-
-        String resultString = resultActions.andReturn().getResponse().getContentAsString();
-
-        assertThat(resultString).isEqualTo("");
     }
 
     @Test
@@ -141,6 +125,84 @@ public class AuthControllerIT {
         assertThat(isUnique).isEqualTo(false);
     }
 
+    @Test
+    void testCreateOAuth2_ifNotExists() throws Exception {
+        OAuth2UserDTO oAuth2UserDTO = createOAuth2UserDTOWithoutId(6);
+        String json = objectMapper.writeValueAsString(oAuth2UserDTO);
+
+        ResultActions resultActions = mvc.perform(post(ENDPOINT + "/create-oauth2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isCreated());
+
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        UserDTO result = objectMapper.readValue(resultString, UserDTO.class);
+
+        assertThat(result.getId()).isNotNull();
+        assertThat(result.getProvider()).isEqualTo("GOOGLE");
+    }
+
+    @Test
+    void testCreateOAuth2_ifExistsWithoutId() throws Exception {
+        OAuth2UserDTO oAuth2UserDTO = createOAuth2UserDTOWithoutId(1);
+        String json = objectMapper.writeValueAsString(oAuth2UserDTO);
+
+        mvc.perform(post(ENDPOINT + "/create-oauth2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreateOAuth2_ifExistsWithId() throws Exception {
+        OAuth2UserDTO oAuth2UserDTO = createOAuth2UserDTO(1);
+        String json = objectMapper.writeValueAsString(oAuth2UserDTO);
+
+        mvc.perform(post(ENDPOINT + "/create-oauth2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreateLocal_ifNotExists() throws Exception {
+        LocalUserDTO localUserDTO = createLocalUserDTOWithoutId(6);
+        String json = objectMapper.writeValueAsString(localUserDTO);
+
+        ResultActions resultActions = mvc.perform(post(ENDPOINT + "/create-local")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isCreated());
+
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        UserDTO result = objectMapper.readValue(resultString, UserDTO.class);
+
+        assertThat(result.getId()).isNotNull();
+        assertThat(result.getProvider()).isEqualTo("LOCAL");
+    }
+
+    @Test
+    void testCreateLocal_ifExistsWithId() throws Exception {
+        LocalUserDTO localUserDTO = createLocalUserDTO(1);
+        String json = objectMapper.writeValueAsString(localUserDTO);
+
+        mvc.perform(post(ENDPOINT + "/create-local")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testCreateLocal_ifExistsWithoutId() throws Exception {
+        LocalUserDTO localUserDTO = createLocalUserDTOWithoutId(1);
+        String json = objectMapper.writeValueAsString(localUserDTO);
+
+        mvc.perform(post(ENDPOINT + "/create-local")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isBadRequest());
+    }
+
 
     private static UserPrincipal createUserPrincipal(int id) {
         UserPrincipal userPrincipal = new UserPrincipal();
@@ -162,6 +224,45 @@ public class AuthControllerIT {
         user.setAuthorities(Collections.singleton(new Authority("ROLE_USER")));
         user.setProvider("LOCAL");
         return user;
+    }
+
+
+    private static OAuth2UserDTO createOAuth2UserDTO(int id) {
+        OAuth2UserDTO dto = new OAuth2UserDTO();
+        dto.setId("test_id_" + id);
+        dto.setUsername("test_username_" + id);
+        dto.setEmail("test_" + id + "@email.com");
+        dto.setProvider("GOOGLE");
+        dto.setProviderId("test_provider_id");
+        return dto;
+    }
+
+    private static OAuth2UserDTO createOAuth2UserDTOWithoutId(int id) {
+        OAuth2UserDTO dto = new OAuth2UserDTO();
+        dto.setUsername("test_username_" + id);
+        dto.setEmail("test_" + id + "@email.com");
+        dto.setProvider("GOOGLE");
+        dto.setProviderId("test_provider_id");
+        return dto;
+    }
+
+    private static LocalUserDTO createLocalUserDTO(int id) {
+        LocalUserDTO dto = new LocalUserDTO();
+        dto.setId("test_id_" + id);
+        dto.setUsername("test_username_" + id);
+        dto.setEmail("test_" + id + "@email.com");
+        dto.setPassword("test_password_" + id);
+        dto.setProvider("LOCAL");
+        return dto;
+    }
+
+    private static LocalUserDTO createLocalUserDTOWithoutId(int id) {
+        LocalUserDTO dto = new LocalUserDTO();
+        dto.setUsername("test_username_" + id);
+        dto.setEmail("test_" + id + "@email.com");
+        dto.setPassword("test_password_" + id);
+        dto.setProvider("LOCAL");
+        return dto;
     }
 
 }
