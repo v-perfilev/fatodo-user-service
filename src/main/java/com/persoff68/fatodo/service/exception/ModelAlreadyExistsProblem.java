@@ -4,9 +4,9 @@ import com.persoff68.fatodo.exception.constant.ExceptionTypes;
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;
 
-public class ModelAlreadyExistsException extends AbstractThrowableProblem {
+public class ModelAlreadyExistsProblem extends AbstractThrowableProblem {
 
-    public ModelAlreadyExistsException() {
+    public ModelAlreadyExistsProblem() {
         super(ExceptionTypes.DB_TYPE, "Record already exist in database", Status.BAD_REQUEST);
     }
 

@@ -8,8 +8,8 @@
         <version>2.2.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.persoff68</groupId>
-    <artifactId>fatodo</artifactId>
+    <groupId>com.persoff68.fatodo</groupId>
+    <artifactId>userservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>fatodo-user-service</name>
     <description>User service for FaToDo</description>
@@ -135,6 +135,7 @@
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${swagger.version}</version>
             </dependency>
+            <!-- Embedded mongo management -->
             <dependency>
                 <groupId>de.flapdoodle.embed</groupId>
                 <artifactId>de.flapdoodle.embed.mongo</artifactId>
@@ -259,7 +260,7 @@
             <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
 
-        <!-- Spring Test -->
+        <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

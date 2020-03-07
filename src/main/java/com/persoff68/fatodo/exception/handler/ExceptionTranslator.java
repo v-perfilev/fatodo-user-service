@@ -1,6 +1,7 @@
-package com.persoff68.fatodo.exception;
+package com.persoff68.fatodo.exception.handler;
 
 import com.persoff68.fatodo.exception.constant.ExceptionTypes;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -27,29 +28,36 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
         if (entity == null) {
             return null;
         }
+        HttpServletRequest httpRequest = request.getNativeRequest(HttpServletRequest.class);
+        String route = httpRequest.getRequestURI();
         Problem problem = entity.getBody();
-        problem = processProblem(problem, request);
+        problem = handleProblem(problem, route);
         return new ResponseEntity<>(problem, entity.getHeaders(), entity.getStatusCode());
     }
 
-    private Problem processProblem(Problem problem, NativeWebRequest request) {
-        if (problem instanceof ConstraintViolationProblem) {
-            problem = processConstraintViolationProblem(problem, request);
-        } else {
-            problem = processDefaultProblem(problem, request);
-        }
-        return problem;
+    public ResponseEntity<Problem> process(Problem problem, String route) {
+        problem = handleProblem(problem, route);
+        return ResponseEntity.status(problem.getStatus().getStatusCode())
+                .contentType(MediaType.APPLICATION_JSON).body(problem);
     }
 
-    private Problem processConstraintViolationProblem(Problem problem, NativeWebRequest request) {
-        return createBaseBuilder(problem, request)
+    private Problem handleProblem(Problem problem, String route) {
+        if (problem instanceof ConstraintViolationProblem) {
+            return handleConstraintViolationProblem(problem, route);
+        } else {
+            return handleDefaultProblem(problem, route);
+        }
+    }
+
+    private Problem handleConstraintViolationProblem(Problem problem, String route) {
+        return createBaseBuilder(problem, route)
                 .with(VIOLATIONS_KEY, ((ConstraintViolationProblem) problem).getViolations())
                 .with(MESSAGE_KEY, ERROR_VIOLATION)
                 .build();
     }
 
-    private Problem processDefaultProblem(Problem problem, NativeWebRequest request) {
-        ProblemBuilder builder = createBaseBuilder(problem, request)
+    private Problem handleDefaultProblem(Problem problem, String route) {
+        ProblemBuilder builder = createBaseBuilder(problem, route)
                 .withCause(((AbstractThrowableProblem) problem).getCause())
                 .withDetail(problem.getDetail())
                 .withInstance(problem.getInstance());
@@ -60,15 +68,14 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
         return builder.build();
     }
 
-    private ProblemBuilder createBaseBuilder(Problem problem, NativeWebRequest request) {
+    private ProblemBuilder createBaseBuilder(Problem problem, String route) {
         ProblemBuilder builder = Problem.builder();
-        HttpServletRequest httpRequest = request.getNativeRequest(HttpServletRequest.class);
-        if (problem != null && httpRequest != null) {
+        if (problem != null && route != null) {
             builder
                     .withType(Problem.DEFAULT_TYPE.equals(problem.getType()) ? ExceptionTypes.DEFAULT_TYPE : problem.getType())
                     .withStatus(problem.getStatus())
                     .withTitle(problem.getTitle())
-                    .with(PATH_KEY, httpRequest.getRequestURI());
+                    .with(PATH_KEY, route);
         }
         return builder;
     }
