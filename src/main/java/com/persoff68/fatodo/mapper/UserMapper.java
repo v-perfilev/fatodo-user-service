@@ -2,7 +2,7 @@ package com.persoff68.fatodo.mapper;
 
 import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
-import com.persoff68.fatodo.model.constant.AuthorityType;
+import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;

@@ -1,7 +1,7 @@
 package com.persoff68.fatodo.model;
 
 import com.persoff68.fatodo.config.constant.AppConstants;
-import com.persoff68.fatodo.model.constant.AuthorityType;
+import com.persoff68.fatodo.config.constant.AuthorityType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;

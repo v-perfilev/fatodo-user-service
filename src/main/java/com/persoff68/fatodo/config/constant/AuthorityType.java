@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.model.constant;
+package com.persoff68.fatodo.config.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import java.util.stream.Stream;
 public enum AuthorityType {
 
     SYSTEM("ROLE_SYSTEM"),
-    USER("ROLE_USER"),
-    ADMIN("ROLE_ADMIN");
+    ADMIN("ROLE_ADMIN"),
+    USER("ROLE_USER");
 
     @Getter
     private String name;

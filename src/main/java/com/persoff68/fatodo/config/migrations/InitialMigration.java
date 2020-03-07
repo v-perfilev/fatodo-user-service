@@ -3,7 +3,7 @@ package com.persoff68.fatodo.config.migrations;
 import com.github.mongobee.changeset.ChangeLog;
 import com.github.mongobee.changeset.ChangeSet;
 import com.persoff68.fatodo.model.Authority;
-import com.persoff68.fatodo.model.constant.AuthorityType;
+import com.persoff68.fatodo.config.constant.AuthorityType;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 @ChangeLog(order = "001")
