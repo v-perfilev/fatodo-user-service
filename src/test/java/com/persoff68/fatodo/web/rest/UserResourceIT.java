@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.persoff68.fatodo.FaToDoUserServiceApplication;
 import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
-import com.persoff68.fatodo.model.dto.LocalUserDTO;
-import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -126,7 +124,6 @@ public class UserResourceIT {
                 .content(json))
                 .andExpect(status().isBadRequest());
     }
-
 
 
     @Test
