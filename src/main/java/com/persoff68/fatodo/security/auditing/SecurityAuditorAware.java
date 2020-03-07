@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.security.auditing;
 
+import com.persoff68.fatodo.config.constant.AppConstants;
 import com.persoff68.fatodo.security.util.SecurityUtils;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,8 @@ public class SecurityAuditorAware implements AuditorAware<String> {
 
     @Override
     public Optional<String> getCurrentAuditor() {
-        return SecurityUtils.getCurrentUsername();
+        Optional<String> currentUsername = SecurityUtils.getCurrentUsername();
+        return currentUsername.isPresent() ? currentUsername : Optional.of(AppConstants.SYSTEM_USERNAME);
     }
 }
 
