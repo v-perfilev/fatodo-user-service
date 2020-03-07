@@ -3,6 +3,8 @@ package com.persoff68.fatodo.service.exception.handler;
 import com.persoff68.fatodo.exception.handler.ExceptionTranslator;
 import com.persoff68.fatodo.service.exception.CommonDatabaseProblem;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,6 +15,7 @@ import org.zalando.problem.ThrowableProblem;
 import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE + 1)
 @RequiredArgsConstructor
 public class ServiceExceptionHandling {
 
