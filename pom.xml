@@ -144,6 +144,7 @@
                 <artifactId>de.flapdoodle.embed.mongo</artifactId>
                 <version>${embedded-mongo.version}</version>
             </dependency>
+            <!-- Test management -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-contract-verifier</artifactId>
@@ -291,7 +292,7 @@
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- Spring Cloud Contract -->
+        <!-- Spring Cloud Contract Test -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-contract-verifier</artifactId>

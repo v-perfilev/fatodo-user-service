@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.web.rest;
 
+import com.persoff68.fatodo.config.constant.Providers;
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
@@ -74,7 +75,7 @@ public class AuthController {
     @PostMapping(value = "/local", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> createLocal(@Valid @RequestBody LocalUserDTO localUserDTO) {
         User user = userMapper.localUserDTOToUser(localUserDTO);
-        user.setProvider("LOCAL"); // TODO add constant for providers
+        user.setProvider(Providers.LOCAL);
         user = userService.create(user);
         UserDTO userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
