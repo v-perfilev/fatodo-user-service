@@ -15,6 +15,9 @@
     <description>Extended mongo skeleton for FaToDo</description>
 
     <properties>
+        <!-- Packages -->
+        <root.package>com.persoff68.fatodo</root.package>
+        <contract.package>com.persoff68.fatodo.contract</contract.package>
         <!-- Dependency versions -->
         <java.version>13</java.version>
         <spring-boot.version>2.2.4.RELEASE</spring-boot.version>
@@ -140,6 +143,12 @@
                 <groupId>de.flapdoodle.embed</groupId>
                 <artifactId>de.flapdoodle.embed.mongo</artifactId>
                 <version>${embedded-mongo.version}</version>
+            </dependency>
+            <!-- Test management -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-contract-verifier</artifactId>
+                <version>${spring-cloud.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -283,6 +292,12 @@
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Spring Cloud Contract Test -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-contract-verifier</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -339,6 +354,18 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <!-- Spring Cloud Contract Maven Plugin -->
+            <plugin>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+                <version>${spring-cloud.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <testFramework>JUNIT5</testFramework>
+                    <baseClassForTests>${contract.package}.DefaultBase</baseClassForTests>
+                    <packageWithBaseClasses>${contract.package}</packageWithBaseClasses>
+                </configuration>
             </plugin>
         </plugins>
     </build>
