@@ -11,8 +11,6 @@ import javax.validation.constraints.Size;
 public class LocalUserDTO {
     private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
-    private String id;
-
     @NotNull
     @Email
     @Size(min = 5, max = 50)
@@ -25,8 +23,5 @@ public class LocalUserDTO {
     @NotNull
     @Size(min = 5, max = 100)
     private String password;
-
-    @NotNull
-    private String provider;
 
 }

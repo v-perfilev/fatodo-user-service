@@ -1,7 +1,6 @@
 package com.persoff68.fatodo.model;
 
 import com.persoff68.fatodo.config.constant.AppConstants;
-import com.persoff68.fatodo.config.constant.AuthorityType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -19,7 +18,7 @@ public class Authority {
     @NotNull
     private String name;
 
-    public static Authority of(AuthorityType authorityType) {
-        return new Authority(authorityType.getName());
+    public static Authority of(String name) {
+        return new Authority(name);
     }
 }

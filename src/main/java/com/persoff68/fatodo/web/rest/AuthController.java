@@ -2,10 +2,10 @@ package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.User;
-import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
+import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -63,7 +63,7 @@ public class AuthController {
         return ResponseEntity.ok(isUnique);
     }
 
-    @PostMapping(value = "/create-oauth2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/oauth2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> createOAuth2(@Valid @RequestBody OAuth2UserDTO oAuth2UserDTO) {
         User user = userMapper.oAuth2UserDTOToUser(oAuth2UserDTO);
         user = userService.create(user);
@@ -71,9 +71,10 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
-    @PostMapping(value = "/create-local", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/local", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> createLocal(@Valid @RequestBody LocalUserDTO localUserDTO) {
         User user = userMapper.localUserDTOToUser(localUserDTO);
+        user.setProvider("LOCAL"); // TODO add constant for providers
         user = userService.create(user);
         UserDTO userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);

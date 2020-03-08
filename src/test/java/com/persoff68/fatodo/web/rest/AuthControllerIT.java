@@ -127,10 +127,10 @@ public class AuthControllerIT {
 
     @Test
     void testCreateOAuth2_ifNotExists() throws Exception {
-        OAuth2UserDTO oAuth2UserDTO = createOAuth2UserDTOWithoutId(6);
+        OAuth2UserDTO oAuth2UserDTO = createOAuth2UserDTO(6);
         String json = objectMapper.writeValueAsString(oAuth2UserDTO);
 
-        ResultActions resultActions = mvc.perform(post(ENDPOINT + "/create-oauth2")
+        ResultActions resultActions = mvc.perform(post(ENDPOINT + "/oauth2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(status().isCreated());
@@ -143,33 +143,11 @@ public class AuthControllerIT {
     }
 
     @Test
-    void testCreateOAuth2_ifExistsWithoutId() throws Exception {
-        OAuth2UserDTO oAuth2UserDTO = createOAuth2UserDTOWithoutId(1);
-        String json = objectMapper.writeValueAsString(oAuth2UserDTO);
-
-        mvc.perform(post(ENDPOINT + "/create-oauth2")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void testCreateOAuth2_ifExistsWithId() throws Exception {
-        OAuth2UserDTO oAuth2UserDTO = createOAuth2UserDTO(1);
-        String json = objectMapper.writeValueAsString(oAuth2UserDTO);
-
-        mvc.perform(post(ENDPOINT + "/create-oauth2")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     void testCreateLocal_ifNotExists() throws Exception {
-        LocalUserDTO localUserDTO = createLocalUserDTOWithoutId(6);
+        LocalUserDTO localUserDTO = createLocalUserDTO(6);
         String json = objectMapper.writeValueAsString(localUserDTO);
 
-        ResultActions resultActions = mvc.perform(post(ENDPOINT + "/create-local")
+        ResultActions resultActions = mvc.perform(post(ENDPOINT + "/local")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(status().isCreated());
@@ -179,28 +157,6 @@ public class AuthControllerIT {
 
         assertThat(result.getId()).isNotNull();
         assertThat(result.getProvider()).isEqualTo("LOCAL");
-    }
-
-    @Test
-    void testCreateLocal_ifExistsWithId() throws Exception {
-        LocalUserDTO localUserDTO = createLocalUserDTO(1);
-        String json = objectMapper.writeValueAsString(localUserDTO);
-
-        mvc.perform(post(ENDPOINT + "/create-local")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void testCreateLocal_ifExistsWithoutId() throws Exception {
-        LocalUserDTO localUserDTO = createLocalUserDTOWithoutId(1);
-        String json = objectMapper.writeValueAsString(localUserDTO);
-
-        mvc.perform(post(ENDPOINT + "/create-local")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(status().isBadRequest());
     }
 
 
@@ -229,16 +185,6 @@ public class AuthControllerIT {
 
     private static OAuth2UserDTO createOAuth2UserDTO(int id) {
         OAuth2UserDTO dto = new OAuth2UserDTO();
-        dto.setId("test_id_" + id);
-        dto.setUsername("test_username_" + id);
-        dto.setEmail("test_" + id + "@email.com");
-        dto.setProvider("GOOGLE");
-        dto.setProviderId("test_provider_id");
-        return dto;
-    }
-
-    private static OAuth2UserDTO createOAuth2UserDTOWithoutId(int id) {
-        OAuth2UserDTO dto = new OAuth2UserDTO();
         dto.setUsername("test_username_" + id);
         dto.setEmail("test_" + id + "@email.com");
         dto.setProvider("GOOGLE");
@@ -248,21 +194,11 @@ public class AuthControllerIT {
 
     private static LocalUserDTO createLocalUserDTO(int id) {
         LocalUserDTO dto = new LocalUserDTO();
-        dto.setId("test_id_" + id);
         dto.setUsername("test_username_" + id);
         dto.setEmail("test_" + id + "@email.com");
         dto.setPassword("test_password_" + id);
-        dto.setProvider("LOCAL");
         return dto;
     }
 
-    private static LocalUserDTO createLocalUserDTOWithoutId(int id) {
-        LocalUserDTO dto = new LocalUserDTO();
-        dto.setUsername("test_username_" + id);
-        dto.setEmail("test_" + id + "@email.com");
-        dto.setPassword("test_password_" + id);
-        dto.setProvider("LOCAL");
-        return dto;
-    }
 
 }
