@@ -8,7 +8,7 @@ Contract.make {
         method POST()
         url("/auth/local")
         headers {
-            header 'Content-Type': 'application/json'
+            contentType applicationJson()
         }
         body('''
             {
