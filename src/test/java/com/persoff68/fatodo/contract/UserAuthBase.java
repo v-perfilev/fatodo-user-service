@@ -34,7 +34,7 @@ public class UserAuthBase {
         user.setId("test_id_" + id);
         user.setUsername("test_username_" + id);
         user.setEmail("test_" + id + "@email.com");
-        user.setPassword("test_password");
+        user.setPassword("$2a$10$5B6QB1ZmZMmxcfIN99HlEO4gEBg7XpMHUjr.WG5gBUGhEw/4S08ka");
         user.setAuthorities(Collections.singleton(new Authority("ROLE_USER")));
         user.setProvider("LOCAL");
         return user;

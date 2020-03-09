@@ -7,6 +7,9 @@ Contract.make {
     request {
         method GET()
         url("/auth/id/test_id_1")
+        headers {
+            header 'Authorization': absent()
+        }
     }
     response {
         status 401

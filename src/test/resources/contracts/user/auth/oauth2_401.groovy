@@ -9,6 +9,9 @@ Contract.make {
         url("/auth/oauth2")
         headers {
             contentType applicationJson()
+            headers {
+                header 'Authorization': absent()
+            }
         }
         body('''
             {

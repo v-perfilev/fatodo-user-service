@@ -9,6 +9,9 @@ Contract.make {
         url("/auth/local")
         headers {
             contentType applicationJson()
+            headers {
+                header 'Authorization': absent()
+            }
         }
         body('''
             {
