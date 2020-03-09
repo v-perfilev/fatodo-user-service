@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.config;
 
+import com.persoff68.fatodo.config.constant.Authorities;
 import com.persoff68.fatodo.security.filter.JwtTokenFilter;
 import com.persoff68.fatodo.security.filter.SecurityLocaleFilter;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(securityLocaleFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/auth/**").hasAuthority("ROLE_SYSTEM")
+                .antMatchers("/auth/**").hasAuthority(Authorities.SYSTEM)
                 .anyRequest().authenticated();
     }
 
