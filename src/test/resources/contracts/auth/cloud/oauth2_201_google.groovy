@@ -23,14 +23,12 @@ Contract.make {
         headers {
             contentType applicationJson()
         }
-        body('''
-            {
-              "email" : "test_google@email.com",
-              "username" : "test_google@email.com",
-              "provider" : "GOOGLE",
-              "providerId": "test_id_google",
-              "authorities" : [ "ROLE_USER" ]
-            }
-        ''')
+        body(
+                "email": "test_google@email.com",
+                "username": "test_google@email.com",
+                "provider": "GOOGLE",
+                "providerId": "test_id_google",
+                "authorities": ["ROLE_USER"]
+        )
     }
 }

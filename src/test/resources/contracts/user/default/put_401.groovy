@@ -11,16 +11,14 @@ Contract.make {
             contentType applicationJson()
             header 'Authorization': absent()
         }
-        body('''
-            {
-              "id":"test_id_update",
-              "email":"test_update@email.com",
-              "username":"test_username_update",
-              "provider":"LOCAL",
-              "providerId":null,
-              "authorities" : [ "ROLE_USER" ]
-            }
-        ''')
+        body(
+                "id": "test_id_update",
+                "email": "test_update@email.com",
+                "username": "test_username_update",
+                "provider": "LOCAL",
+                "providerId": null,
+                "authorities": ["ROLE_USER"]
+        )
     }
     response {
         status 401

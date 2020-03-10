@@ -16,15 +16,13 @@ Contract.make {
         headers {
             contentType applicationJson()
         }
-        body('''
-            {
-              "id":"test_id_get",
-              "email":"test_get@email.com",
-              "username":"test_username_get",
-              "provider":"LOCAL",
-              "providerId":null,
-              "authorities" : [ "ROLE_USER" ]
-            }
-        ''')
+        body(
+                "id": "test_id_get",
+                "email": "test_get@email.com",
+                "username": "test_username_get",
+                "provider": "LOCAL",
+                "providerId": null,
+                "authorities": ["ROLE_USER"]
+        )
     }
 }

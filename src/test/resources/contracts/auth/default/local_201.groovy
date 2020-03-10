@@ -22,14 +22,12 @@ Contract.make {
         headers {
             contentType applicationJson()
         }
-        body('''
-            {
-              "email": "test_local_create@email.com",
-              "username": "test_username_local_create",
-              "provider" : "LOCAL",
-              "providerId" : null,
-              "authorities" : [ "ROLE_USER" ]
-            }
-        ''')
+        body(
+                "email": "test_local_create@email.com",
+                "username": "test_username_local_create",
+                "provider": "LOCAL",
+                "providerId": null,
+                "authorities": ["ROLE_USER"]
+        )
     }
 }

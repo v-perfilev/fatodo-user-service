@@ -16,16 +16,14 @@ Contract.make {
         headers {
             contentType applicationJson()
         }
-        body('''
-            {
-              "id" : "test_id_local",
-              "email" : "test_local@email.com",
-              "username" : "test_username_local",
-              "password" : "$2a$10$GZrq9GxkRWW1Pv7fKJHGAe4ebib6113zhlU4nZlCtH/ylebR9rkn6",
-              "provider" : "LOCAL",
-              "providerId" : null,
-              "authorities" : [ "ROLE_USER" ]
-            }
-        ''')
+        body(
+                "id": "test_id_local",
+                "email": "test_local@email.com",
+                "username": "test_username_local",
+                "password": '$2a$10$GZrq9GxkRWW1Pv7fKJHGAe4ebib6113zhlU4nZlCtH/ylebR9rkn6',
+                "provider": "LOCAL",
+                "providerId": null,
+                "authorities": ["ROLE_USER"]
+        )
     }
 }

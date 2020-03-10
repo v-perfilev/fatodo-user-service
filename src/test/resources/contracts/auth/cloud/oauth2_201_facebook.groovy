@@ -23,14 +23,12 @@ Contract.make {
         headers {
             contentType applicationJson()
         }
-        body('''
-            {
-              "email" : "test_facebook@email.com",
-              "username" : "test_facebook@email.com",
-              "provider": "FACEBOOK",
-              "providerId": "test_id_facebook",
-              "authorities" : [ "ROLE_USER" ]
-            }
-        ''')
+        body(
+                "email": "test_facebook@email.com",
+                "username": "test_facebook@email.com",
+                "provider": "FACEBOOK",
+                "providerId": "test_id_facebook",
+                "authorities": ["ROLE_USER"]
+        )
     }
 }
