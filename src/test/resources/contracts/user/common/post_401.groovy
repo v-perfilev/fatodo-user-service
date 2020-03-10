@@ -1,4 +1,4 @@
-package contracts.auth.cloud
+package contracts.user.common
 
 import org.springframework.cloud.contract.spec.Contract
 
@@ -6,16 +6,17 @@ Contract.make {
     description "should return 401 cause not authorized"
     request {
         method POST()
-        url("/auth/oauth2")
+        url("/users")
         headers {
             contentType applicationJson()
             header 'Authorization': absent()
         }
         body(
-                "email": "test_google@email.com",
-                "username": "test_google@email.com",
-                "provider": "GOOGLE",
-                "providerId": "test_id_google"
+                "email": "test_create@email.com",
+                "username": "test_username_create",
+                "provider": "LOCAL",
+                "providerId": null,
+                "authorities": ["ROLE_USER"]
         )
     }
     response {
