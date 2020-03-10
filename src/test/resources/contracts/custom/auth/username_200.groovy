@@ -21,7 +21,7 @@ Contract.make {
               "id" : "test_id_1",
               "email" : "test_1@email.com",
               "username" : "test_username_1",
-              "password" : "$2a$10$s..1roVUr2IIqafDsTV..ujcjuvRfP9IxTiGtIQpKOkZoc3H0jfxy",
+              "password" : "$2a$10$GZrq9GxkRWW1Pv7fKJHGAe4ebib6113zhlU4nZlCtH/ylebR9rkn6",
               "provider" : "LOCAL",
               "providerId" : null,
               "authorities" : [ "ROLE_USER" ]

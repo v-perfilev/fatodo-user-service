@@ -34,7 +34,7 @@ public class CustomAuthBase {
         user.setId("test_id_" + id);
         user.setUsername("test_username_" + id);
         user.setEmail("test_" + id + "@email.com");
-        user.setPassword("$2a$10$s..1roVUr2IIqafDsTV..ujcjuvRfP9IxTiGtIQpKOkZoc3H0jfxy");
+        user.setPassword("$2a$10$GZrq9GxkRWW1Pv7fKJHGAe4ebib6113zhlU4nZlCtH/ylebR9rkn6");
         user.setAuthorities(Collections.singleton(new Authority("ROLE_USER")));
         user.setProvider("LOCAL");
         return user;
