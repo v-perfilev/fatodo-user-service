@@ -53,6 +53,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(securityLocaleFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/auth/**").hasAuthority(Authorities.SYSTEM)
+                .antMatchers("/users/**").hasAuthority(Authorities.ADMIN)
                 .anyRequest().authenticated();
     }
 
