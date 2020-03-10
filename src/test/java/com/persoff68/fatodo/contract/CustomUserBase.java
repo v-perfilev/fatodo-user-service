@@ -14,7 +14,7 @@ import java.util.Collections;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMessageVerifier
-public class UserUserBase {
+public class CustomUserBase {
 
     @Autowired
     WebApplicationContext context;
