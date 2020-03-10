@@ -11,7 +11,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMessageVerifier
-public class AuthCustomBase {
+public class AuthCloudBase {
 
     @Autowired
     WebApplicationContext context;
