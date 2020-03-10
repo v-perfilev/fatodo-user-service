@@ -1,4 +1,4 @@
-package contracts.auth.custom
+package contracts.auth.cloud
 
 import org.springframework.cloud.contract.spec.Contract
 
