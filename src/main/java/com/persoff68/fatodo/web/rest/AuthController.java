@@ -51,18 +51,6 @@ public class AuthController {
         return ResponseEntity.ok(userPrincipalDTO);
     }
 
-    @GetMapping(value = "/email/{email}/unique")
-    public ResponseEntity<Boolean> isEmailUnique(@PathVariable("email") String email) {
-        boolean isUnique = userService.isEmailUnique(email);
-        return ResponseEntity.ok(isUnique);
-    }
-
-    @GetMapping(value = "/username/{username}/unique")
-    public ResponseEntity<Boolean> isUsernameUnique(@PathVariable("username") String username) {
-        boolean isUnique = userService.isUsernameUnique(username);
-        return ResponseEntity.ok(isUnique);
-    }
-
     @PostMapping(value = "/local", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> createLocal(@Valid @RequestBody LocalUserDTO localUserDTO) {
         User user = userMapper.localUserDTOToUser(localUserDTO);

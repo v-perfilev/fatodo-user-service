@@ -12,12 +12,12 @@ import java.util.Collections;
 
 public class FactoryUtils {
 
-    public static User createUser_local(String postfix) {
+    public static User createUser_local(String postfix, String password) {
         User user = new User();
         user.setId("test_id_" + postfix);
         user.setEmail("test_" + postfix + "@email.com");
         user.setUsername("test_username_" + postfix);
-        user.setPassword("$2a$10$GZrq9GxkRWW1Pv7fKJHGAe4ebib6113zhlU4nZlCtH/ylebR9rkn6");
+        user.setPassword(password);
         user.setAuthorities(Collections.singleton(new Authority("ROLE_USER")));
         user.setProvider("LOCAL");
         return user;

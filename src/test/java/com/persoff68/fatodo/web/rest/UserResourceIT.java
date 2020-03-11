@@ -49,8 +49,8 @@ public class UserResourceIT {
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         userRepository.deleteAll();
-        userRepository.save(FactoryUtils.createUser_local("1"));
-        userRepository.save(FactoryUtils.createUser_local("2"));
+        userRepository.save(FactoryUtils.createUser_local("1", "encoded_password"));
+        userRepository.save(FactoryUtils.createUser_local("2", "encoded_password"));
     }
 
 

@@ -52,6 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(securityLocaleFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
+                .antMatchers("/check/**").permitAll()
                 .antMatchers("/auth/**").hasAuthority(Authorities.SYSTEM)
                 .antMatchers("/users/**").hasAuthority(Authorities.ADMIN)
                 .anyRequest().authenticated();

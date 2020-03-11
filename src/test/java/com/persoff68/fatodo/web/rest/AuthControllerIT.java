@@ -46,7 +46,7 @@ public class AuthControllerIT {
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         userRepository.deleteAll();
-        userRepository.save(FactoryUtils.createUser_local("local"));
+        userRepository.save(FactoryUtils.createUser_local("local", "encodedPassword"));
         userRepository.save(FactoryUtils.createUser_oAuth2("oauth2", Providers.GOOGLE));
     }
 
@@ -169,93 +169,6 @@ public class AuthControllerIT {
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
-
-
-    @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
-    public void testIsEmailUnique_true() throws Exception {
-        String email = "test_not_exists@email.com";
-        String url = ENDPOINT + "/email/" + email + "/unique";
-        ResultActions resultActions = mvc.perform(get(url))
-                .andExpect(status().isOk());
-        String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        boolean isUnique = Boolean.parseBoolean(resultString);
-        assertThat(isUnique).isTrue();
-    }
-
-    @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
-    public void testIsEmailUnique_false() throws Exception {
-        String email = "test_local@email.com";
-        String url = ENDPOINT + "/email/" + email + "/unique";
-        ResultActions resultActions = mvc.perform(get(url))
-                .andExpect(status().isOk());
-        String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        boolean isUnique = Boolean.parseBoolean(resultString);
-        assertThat(isUnique).isFalse();
-    }
-
-    @Test
-    @WithAnonymousUser
-    public void testIsEmailUnique_unauthorized() throws Exception {
-        String email = "test_local@email.com";
-        String url = ENDPOINT + "/email/" + email + "/unique";
-        mvc.perform(get(url))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    @WithMockUser(authorities = Authorities.USER)
-    public void testIsEmailUnique_forbidden() throws Exception {
-        String email = "test_local@email.com";
-        String url = ENDPOINT + "/email/" + email + "/unique";
-        mvc.perform(get(url))
-                .andExpect(status().isForbidden());
-    }
-
-
-    @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
-    public void testIsUsernameUnique_true() throws Exception {
-        String username = "test_username_not_exists";
-        String url = ENDPOINT + "/username/" + username + "/unique";
-        ResultActions resultActions = mvc.perform(get(url))
-                .andExpect(status().isOk());
-        String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        boolean isUnique = Boolean.parseBoolean(resultString);
-        assertThat(isUnique).isTrue();
-    }
-
-    @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
-    public void testIsUsernameUnique_false() throws Exception {
-        String username = "test_username_local";
-        String url = ENDPOINT + "/username/" + username + "/unique";
-        ResultActions resultActions = mvc.perform(get(url))
-                .andExpect(status().isOk());
-        String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        boolean isUnique = Boolean.parseBoolean(resultString);
-        assertThat(isUnique).isFalse();
-    }
-
-    @Test
-    @WithAnonymousUser
-    public void testIsUsernameUnique_unauthorized() throws Exception {
-        String username = "test_username_local";
-        String url = ENDPOINT + "/username/" + username + "/unique";
-        mvc.perform(get(url))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    @WithMockUser(authorities = Authorities.USER)
-    public void testIsUsernameUnique_forbidden() throws Exception {
-        String username = "test_username_local";
-        String url = ENDPOINT + "/username/" + username + "/unique";
-        mvc.perform(get(url))
-                .andExpect(status().isForbidden());
-    }
-
 
     @Test
     @WithMockUser(authorities = Authorities.SYSTEM)
