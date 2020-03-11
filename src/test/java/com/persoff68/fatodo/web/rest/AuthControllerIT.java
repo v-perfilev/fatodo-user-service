@@ -7,6 +7,7 @@ import com.persoff68.fatodo.config.constant.Authorities;
 import com.persoff68.fatodo.config.constant.Providers;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
+import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +40,7 @@ public class AuthControllerIT {
     ObjectMapper objectMapper;
 
     MockMvc mvc;
+
 
     @BeforeEach
     public void setup() {
@@ -265,9 +267,12 @@ public class AuthControllerIT {
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isCreated());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        UserPrincipalDTO resultDTO = objectMapper.readValue(resultString, UserPrincipalDTO.class);
+        UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
         assertThat(resultDTO.getId()).isNotNull();
         assertThat(resultDTO.getEmail()).isEqualTo(dto.getEmail());
+        assertThat(resultDTO.getUsername()).isEqualTo(dto.getUsername());
+        assertThat(resultDTO.getProvider()).isEqualTo(Providers.LOCAL);
+        assertThat(resultDTO.getAuthorities()).containsOnly(Authorities.USER);
     }
 
     @Test
@@ -325,9 +330,13 @@ public class AuthControllerIT {
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isCreated());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        UserPrincipalDTO resultDTO = objectMapper.readValue(resultString, UserPrincipalDTO.class);
+        UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
         assertThat(resultDTO.getId()).isNotNull();
         assertThat(resultDTO.getEmail()).isEqualTo(dto.getEmail());
+        assertThat(resultDTO.getUsername()).isEqualTo(dto.getUsername());
+        assertThat(resultDTO.getProvider()).isEqualTo(dto.getProvider());
+        assertThat(resultDTO.getProviderId()).isEqualTo(dto.getProviderId());
+        assertThat(resultDTO.getAuthorities()).containsOnly(Authorities.USER);
     }
 
     @Test
