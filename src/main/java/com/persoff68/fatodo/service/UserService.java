@@ -24,13 +24,13 @@ public class UserService {
                 .orElseThrow(ModelNotFoundProblem::new);
     }
 
-    public User getByUsername(String username) {
-        return userRepository.findByUsername(username)
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email)
                 .orElseThrow(ModelNotFoundProblem::new);
     }
 
-    public User getByEmail(String email) {
-        return userRepository.findByEmail(email)
+    public User getByUsername(String username) {
+        return userRepository.findByUsername(username)
                 .orElseThrow(ModelNotFoundProblem::new);
     }
 

@@ -25,7 +25,6 @@ import javax.validation.Valid;
 @RequestMapping(AuthController.ENDPOINT)
 @RequiredArgsConstructor
 public class AuthController {
-
     static final String ENDPOINT = "/auth";
 
     private final UserService userService;
@@ -38,13 +37,6 @@ public class AuthController {
         return ResponseEntity.ok(userPrincipalDTO);
     }
 
-    @GetMapping(value = "/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserPrincipalDTO> getUserPrincipalByUsername(@PathVariable String username) {
-        User user = userService.getByUsername(username);
-        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDTO(user);
-        return ResponseEntity.ok(userPrincipalDTO);
-    }
-
     @GetMapping(value = "/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipalDTO> getUserPrincipalByEmail(@PathVariable String email) {
         User user = userService.getByEmail(email);
@@ -52,10 +44,11 @@ public class AuthController {
         return ResponseEntity.ok(userPrincipalDTO);
     }
 
-    @GetMapping(value = "/username/{username}/unique")
-    public ResponseEntity<Boolean> isUsernameUnique(@PathVariable("username") String username) {
-        boolean isUnique = userService.isUsernameUnique(username);
-        return ResponseEntity.ok(isUnique);
+    @GetMapping(value = "/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserPrincipalDTO> getUserPrincipalByUsername(@PathVariable String username) {
+        User user = userService.getByUsername(username);
+        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDTO(user);
+        return ResponseEntity.ok(userPrincipalDTO);
     }
 
     @GetMapping(value = "/email/{email}/unique")
@@ -64,18 +57,24 @@ public class AuthController {
         return ResponseEntity.ok(isUnique);
     }
 
-    @PostMapping(value = "/oauth2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> createOAuth2(@Valid @RequestBody OAuth2UserDTO oAuth2UserDTO) {
-        User user = userMapper.oAuth2UserDTOToUser(oAuth2UserDTO);
-        user = userService.create(user);
-        UserDTO userDTO = userMapper.userToUserDTO(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
+    @GetMapping(value = "/username/{username}/unique")
+    public ResponseEntity<Boolean> isUsernameUnique(@PathVariable("username") String username) {
+        boolean isUnique = userService.isUsernameUnique(username);
+        return ResponseEntity.ok(isUnique);
     }
 
     @PostMapping(value = "/local", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> createLocal(@Valid @RequestBody LocalUserDTO localUserDTO) {
         User user = userMapper.localUserDTOToUser(localUserDTO);
         user.setProvider(Providers.LOCAL);
+        user = userService.create(user);
+        UserDTO userDTO = userMapper.userToUserDTO(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
+    }
+
+    @PostMapping(value = "/oauth2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDTO> createOAuth2(@Valid @RequestBody OAuth2UserDTO oAuth2UserDTO) {
+        User user = userMapper.oAuth2UserDTOToUser(oAuth2UserDTO);
         user = userService.create(user);
         UserDTO userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);

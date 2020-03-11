@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = SecurityUtils.class)
 @ExtendWith(MockitoExtension.class)
-public class SecurityUtilsIT {
+public class SecurityUtilsTest {
 
     @Test
     @WithAnonymousUser
