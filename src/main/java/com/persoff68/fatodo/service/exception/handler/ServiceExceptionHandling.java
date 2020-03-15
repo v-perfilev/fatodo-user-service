@@ -24,8 +24,7 @@ public class ServiceExceptionHandling {
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<String> handleDatabaseException(Exception e, HttpServletRequest request) throws IOException {
         Exception exception = new CommonDatabaseException(e.getMessage());
-        AttributeHandler attributeHandler = new AttributeHandler(request, exception);
-        return attributeHandler.getResponseEntity(objectMapper);
+        return AttributeHandler.from(request, exception).getResponseEntity(objectMapper);
     }
 
 }
