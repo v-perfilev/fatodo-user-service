@@ -2,8 +2,7 @@ package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.FaToDoUserServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
-import com.persoff68.fatodo.config.constant.Authorities;
-import com.persoff68.fatodo.config.constant.Providers;
+import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +40,7 @@ public class CheckControllerIT {
 
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testIsEmailUnique_true() throws Exception {
         String email = "test_not_exists@email.com";
         String url = ENDPOINT + "/email/" + email + "/unique";
@@ -53,7 +52,7 @@ public class CheckControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testIsEmailUnique_false() throws Exception {
         String email = "test_local@email.com";
         String url = ENDPOINT + "/email/" + email + "/unique";
@@ -65,7 +64,7 @@ public class CheckControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testIsUsernameUnique_true() throws Exception {
         String username = "test_username_not_exists";
         String url = ENDPOINT + "/username/" + username + "/unique";
@@ -77,7 +76,7 @@ public class CheckControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testIsUsernameUnique_false() throws Exception {
         String username = "test_username_local";
         String url = ENDPOINT + "/username/" + username + "/unique";

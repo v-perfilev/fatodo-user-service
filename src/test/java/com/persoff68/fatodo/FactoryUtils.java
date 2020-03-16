@@ -1,7 +1,7 @@
 package com.persoff68.fatodo;
 
-import com.persoff68.fatodo.config.constant.Authorities;
-import com.persoff68.fatodo.config.constant.Providers;
+import com.persoff68.fatodo.config.constant.AuthorityType;
+import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
@@ -19,7 +19,7 @@ public class FactoryUtils {
         user.setUsername("test_username_" + postfix);
         user.setPassword(password);
         user.setAuthorities(Collections.singleton(new Authority("ROLE_USER")));
-        user.setProvider("LOCAL");
+        user.setProvider(Provider.LOCAL);
         return user;
     }
 
@@ -29,7 +29,7 @@ public class FactoryUtils {
         user.setEmail("test_" + postfix + "@email.com");
         user.setUsername("test_" + postfix + "@email.com");
         user.setAuthorities(Collections.singleton(new Authority("ROLE_USER")));
-        user.setProvider(provider);
+        user.setProvider(Provider.valueOf(provider));
         user.setProviderId("test_id_" + postfix);
         return user;
     }
@@ -64,8 +64,8 @@ public class FactoryUtils {
         dto.setId("test_id_" + postfix);
         dto.setEmail("test_" + postfix + "@email.com");
         dto.setUsername("test_username_" + postfix);
-        dto.setProvider(Providers.LOCAL);
-        dto.setAuthorities(Collections.singleton(Authorities.USER));
+        dto.setProvider(Provider.Constants.LOCAL_VALUE);
+        dto.setAuthorities(Collections.singleton(AuthorityType.Constants.USER_VALUE));
         return dto;
     }
 

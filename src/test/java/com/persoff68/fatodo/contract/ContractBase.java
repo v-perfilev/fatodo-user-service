@@ -1,8 +1,8 @@
 package com.persoff68.fatodo.contract;
 
 import com.persoff68.fatodo.FactoryUtils;
-import com.persoff68.fatodo.config.constant.Authorities;
-import com.persoff68.fatodo.config.constant.Providers;
+import com.persoff68.fatodo.config.constant.AuthorityType;
+import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -15,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +42,7 @@ public class ContractBase {
         List<String> authorityList = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        BDDAssertions.then(authorityList).contains(Authorities.SYSTEM);
+        BDDAssertions.then(authorityList).contains(AuthorityType.Constants.SYSTEM_VALUE);
     }
 
     protected void assertAdminJwt(String jwt) {
@@ -51,13 +50,13 @@ public class ContractBase {
         List<String> authorityList = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        BDDAssertions.then(authorityList).contains(Authorities.ADMIN);
+        BDDAssertions.then(authorityList).contains(AuthorityType.Constants.ADMIN_VALUE);
     }
 
     protected void assertAuthorities(List<String> authorities) {
         boolean isValid = true;
         for (String authority : authorities) {
-            if (!Authorities.contains(authority)) {
+            if (!AuthorityType.contains(authority)) {
                 isValid = false;
                 break;
             }
@@ -66,7 +65,7 @@ public class ContractBase {
     }
 
     protected void assertProvider(String provider) {
-        boolean isValid = Providers.contains(provider);
+        boolean isValid = Provider.contains(provider);
         BDDAssertions.then(isValid).isTrue();
     }
 

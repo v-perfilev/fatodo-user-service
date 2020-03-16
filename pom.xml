@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.4.RELEASE</version>
+        <version>2.2.5.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.persoff68.fatodo</groupId>
@@ -26,7 +26,6 @@
         <jackson.version>2.10.2</jackson.version>
         <jaxb.version>2.3.1</jaxb.version>
         <jwt.version>0.9.1</jwt.version>
-        <zalando-problem.version>0.25.2</zalando-problem.version>
         <lombok.version>1.18.10</lombok.version>
         <mapstruct.version>1.3.1.Final</mapstruct.version>
         <swagger.version>2.9.2</swagger.version>
@@ -94,12 +93,6 @@
                 <artifactId>jjwt</artifactId>
                 <version>${jwt.version}</version>
             </dependency>
-            <!-- Zalando Problem Handler management -->
-            <dependency>
-                <groupId>org.zalando</groupId>
-                <artifactId>problem-spring-web-starter</artifactId>
-                <version>${zalando-problem.version}</version>
-            </dependency>
             <!-- Spring Configuration Processor management -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -148,6 +141,16 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-contract-verifier</artifactId>
+                <version>${spring-cloud.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-contract-wiremock</artifactId>
+                <version>${spring-cloud.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-contract-stub-runner</artifactId>
                 <version>${spring-cloud.version}</version>
             </dependency>
         </dependencies>
@@ -233,12 +236,6 @@
             <artifactId>jjwt</artifactId>
         </dependency>
 
-        <!-- Zalando Problem Handler -->
-        <dependency>
-            <groupId>org.zalando</groupId>
-            <artifactId>problem-spring-web-starter</artifactId>
-        </dependency>
-
         <!-- Spring Configuration Processor -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -296,6 +293,16 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-contract-verifier</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-contract-wiremock</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-contract-stub-runner</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

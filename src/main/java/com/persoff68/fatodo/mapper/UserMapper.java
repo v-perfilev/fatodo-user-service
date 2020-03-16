@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.mapper;
 
-import com.persoff68.fatodo.config.constant.Authorities;
+import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
@@ -41,7 +41,7 @@ public interface UserMapper {
     @Named("stringsIntoAuthorities")
     default Set<Authority> stringsIntoAuthorities(Set<String> stringSet) {
         return stringSet != null
-                ? stringSet.stream().filter(Authorities::contains).map(Authority::new).collect(Collectors.toSet())
+                ? stringSet.stream().filter(AuthorityType::contains).map(Authority::new).collect(Collectors.toSet())
                 : null;
     }
 

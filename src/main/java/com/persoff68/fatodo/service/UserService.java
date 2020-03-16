@@ -2,8 +2,8 @@ package com.persoff68.fatodo.service;
 
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.repository.UserRepository;
-import com.persoff68.fatodo.service.exception.ModelAlreadyExistsProblem;
-import com.persoff68.fatodo.service.exception.ModelNotFoundProblem;
+import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
+import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,23 +21,23 @@ public class UserService {
 
     public User getById(String id) {
         return userRepository.findById(id)
-                .orElseThrow(ModelNotFoundProblem::new);
+                .orElseThrow(ModelNotFoundException::new);
     }
 
     public User getByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(ModelNotFoundProblem::new);
+                .orElseThrow(ModelNotFoundException::new);
     }
 
     public User getByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(ModelNotFoundProblem::new);
+                .orElseThrow(ModelNotFoundException::new);
     }
 
     public User create(User user) {
         String id = user.getId();
         if (id != null) {
-            throw new ModelAlreadyExistsProblem();
+            throw new ModelAlreadyExistsException();
         }
         return userRepository.save(user);
     }
@@ -45,13 +45,13 @@ public class UserService {
     public User update(User user) {
         String id = user.getId();
         userRepository.findById(id)
-                .orElseThrow(ModelNotFoundProblem::new);
+                .orElseThrow(ModelNotFoundException::new);
         return userRepository.save(user);
     }
 
     public void delete(String id) {
         userRepository.findById(id)
-                .orElseThrow(ModelNotFoundProblem::new);
+                .orElseThrow(ModelNotFoundException::new);
         userRepository.deleteById(id);
     }
 

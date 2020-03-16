@@ -4,9 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.persoff68.fatodo.FaToDoUserServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
-import com.persoff68.fatodo.config.constant.Authorities;
-import com.persoff68.fatodo.config.constant.Providers;
-import com.persoff68.fatodo.model.User;
+import com.persoff68.fatodo.config.constant.AuthorityType;
+import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,7 +54,7 @@ public class UserResourceIT {
 
 
     @Test
-    @WithMockUser(authorities = Authorities.ADMIN)
+    @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
     public void testGetAll_ok() throws Exception {
         ResultActions resultActions = mvc.perform(get(ENDPOINT))
                 .andExpect(status().isOk());
@@ -73,7 +72,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testGetAll_forbidden() throws Exception {
         mvc.perform(get(ENDPOINT))
                 .andExpect(status().isForbidden());
@@ -81,7 +80,7 @@ public class UserResourceIT {
 
 
     @Test
-    @WithMockUser(authorities = Authorities.ADMIN)
+    @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
     public void testGetById_ok() throws Exception {
         String id = "test_id_1";
         String url = ENDPOINT + "/" + id;
@@ -102,7 +101,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testGetById_forbidden() throws Exception {
         String id = "test_id_1";
         String url = ENDPOINT + "/" + id;
@@ -111,7 +110,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.ADMIN)
+    @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
     public void testGetById_notFound() throws Exception {
         String id = "test_id_not_exists";
         String url = ENDPOINT + "/" + id;
@@ -121,7 +120,7 @@ public class UserResourceIT {
 
 
     @Test
-    @WithMockUser(authorities = Authorities.ADMIN)
+    @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
     public void testCreate_created() throws Exception {
         UserDTO dto = FactoryUtils.createUserDTO_local("not_exists");
         dto.setId(null);
@@ -134,12 +133,12 @@ public class UserResourceIT {
         assertThat(resultDTO.getId()).isNotNull();
         assertThat(resultDTO.getEmail()).isEqualTo(dto.getEmail());
         assertThat(resultDTO.getUsername()).isEqualTo(dto.getUsername());
-        assertThat(resultDTO.getProvider()).isEqualTo(Providers.LOCAL);
-        assertThat(resultDTO.getAuthorities()).containsOnly(Authorities.USER);
+        assertThat(resultDTO.getProvider()).isEqualTo(Provider.Constants.LOCAL_VALUE);
+        assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.Constants.USER_VALUE);
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.ADMIN)
+    @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
     public void testCreate_duplicated() throws Exception {
         UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setId(null);
@@ -150,7 +149,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.ADMIN)
+    @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
     public void testCreate_invalid() throws Exception {
         UserDTO dto = FactoryUtils.createInvalidUserDTO_local();
         dto.setId(null);
@@ -172,7 +171,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testCreate_forbidden() throws Exception {
         UserDTO dto = FactoryUtils.createUserDTO_local("not_exists");
         dto.setId(null);
@@ -184,7 +183,7 @@ public class UserResourceIT {
 
 
     @Test
-    @WithMockUser(authorities = Authorities.ADMIN)
+    @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
     public void testUpdate_updated() throws Exception {
         UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setEmail("test_updated@email.com");
@@ -202,7 +201,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.ADMIN)
+    @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
     public void testUpdate_duplicated() throws Exception {
         UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setEmail("test_2@email.com");
@@ -213,7 +212,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.ADMIN)
+    @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
     public void testUpdate_invalid() throws Exception {
         UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setEmail("");
@@ -235,7 +234,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testUpdate_forbidden() throws Exception {
         UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setEmail("test_updated@email.com");
@@ -246,7 +245,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.ADMIN)
+    @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
     public void testUpdate_notExists() throws Exception {
         UserDTO dto = FactoryUtils.createUserDTO_local("not_exists");
         dto.setEmail("test_updated@email.com");
@@ -258,7 +257,7 @@ public class UserResourceIT {
 
 
     @Test
-    @WithMockUser(authorities = Authorities.ADMIN)
+    @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
     public void testDelete_ok() throws Exception {
         String id = "test_id_1";
         String url = ENDPOINT + "/" + id;
@@ -278,7 +277,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testDelete_forbidden() throws Exception {
         String id = "test_id_1";
         String url = ENDPOINT + "/" + id;
@@ -287,7 +286,7 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.ADMIN)
+    @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
     public void testDelete_notFound() throws Exception {
         String id = "test_id_not_exists";
         String url = ENDPOINT + "/" + id;

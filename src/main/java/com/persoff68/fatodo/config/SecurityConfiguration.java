@@ -1,11 +1,11 @@
 package com.persoff68.fatodo.config;
 
-import com.persoff68.fatodo.config.constant.Authorities;
+import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.security.filter.JwtTokenFilter;
 import com.persoff68.fatodo.security.filter.SecurityLocaleFilter;
+import com.persoff68.fatodo.security.filter.SecurityProblemSupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,11 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
-@Import(SecurityProblemSupport.class)
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -53,8 +51,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(securityLocaleFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/check/**").permitAll()
-                .antMatchers("/auth/**").hasAuthority(Authorities.SYSTEM)
-                .antMatchers("/users/**").hasAuthority(Authorities.ADMIN)
+                .antMatchers("/auth/**").hasAuthority(AuthorityType.Constants.SYSTEM_VALUE)
+                .antMatchers("/users/**").hasAuthority(AuthorityType.Constants.ADMIN_VALUE)
                 .anyRequest().authenticated();
     }
 

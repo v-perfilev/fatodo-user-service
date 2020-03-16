@@ -1,7 +1,8 @@
 package com.persoff68.fatodo.model;
 
 import com.persoff68.fatodo.config.constant.AppConstants;
-import com.persoff68.fatodo.config.constant.Authorities;
+import com.persoff68.fatodo.config.constant.AuthorityType;
+import com.persoff68.fatodo.config.constant.Provider;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
@@ -32,10 +33,10 @@ public class User extends AbstractAuditingModel {
     private String password;
 
     @NotNull
-    private String provider;
+    private Provider provider;
 
     private String providerId;
 
     @NotNull
-    private Set<Authority> authorities = Collections.singleton(Authority.of(Authorities.USER));
+    private Set<Authority> authorities = Collections.singleton(Authority.of(AuthorityType.Constants.USER_VALUE));
 }

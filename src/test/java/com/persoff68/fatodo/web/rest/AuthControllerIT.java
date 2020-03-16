@@ -3,8 +3,8 @@ package com.persoff68.fatodo.web.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FaToDoUserServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
-import com.persoff68.fatodo.config.constant.Authorities;
-import com.persoff68.fatodo.config.constant.Providers;
+import com.persoff68.fatodo.config.constant.AuthorityType;
+import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
@@ -47,12 +47,12 @@ public class AuthControllerIT {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         userRepository.deleteAll();
         userRepository.save(FactoryUtils.createUser_local("local", "encodedPassword"));
-        userRepository.save(FactoryUtils.createUser_oAuth2("oauth2", Providers.GOOGLE));
+        userRepository.save(FactoryUtils.createUser_oAuth2("oauth2", Provider.Constants.GOOGLE_VALUE));
     }
 
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testGetById_ok() throws Exception {
         String id = "test_id_local";
         String url = ENDPOINT + "/id/" + id;
@@ -73,7 +73,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.USER)
+    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testGetById_forbidden() throws Exception {
         String id = "test_id_local";
         String url = ENDPOINT + "/id/" + id;
@@ -82,7 +82,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testGetById_notFound() throws Exception {
         String id = "test_id_not_exists";
         String url = ENDPOINT + "/id/" + id;
@@ -92,7 +92,7 @@ public class AuthControllerIT {
 
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testGetByEmail_ok() throws Exception {
         String email = "test_local@email.com";
         String url = ENDPOINT + "/email/" + email;
@@ -113,7 +113,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.USER)
+    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testGetByEmail_forbidden() throws Exception {
         String email = "test_local@email.com";
         String url = ENDPOINT + "/email/" + email;
@@ -122,7 +122,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testGetByEmail_notFound() throws Exception {
         String email = "test_not_exists@email.com";
         String url = ENDPOINT + "/email/" + email;
@@ -132,7 +132,7 @@ public class AuthControllerIT {
 
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testGetByUsername_ok() throws Exception {
         String username = "test_username_local";
         String url = ENDPOINT + "/username/" + username;
@@ -153,7 +153,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.USER)
+    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testGetByUsername_forbidden() throws Exception {
         String username = "test_username_local";
         String url = ENDPOINT + "/username/" + username;
@@ -162,7 +162,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testGetByUsername_notFound() throws Exception {
         String username = "test_username_not_exists";
         String url = ENDPOINT + "/username/" + username;
@@ -171,7 +171,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testCreateLocalUser_created() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = FactoryUtils.createLocalUserDTO("not_exists");
@@ -184,12 +184,12 @@ public class AuthControllerIT {
         assertThat(resultDTO.getId()).isNotNull();
         assertThat(resultDTO.getEmail()).isEqualTo(dto.getEmail());
         assertThat(resultDTO.getUsername()).isEqualTo(dto.getUsername());
-        assertThat(resultDTO.getProvider()).isEqualTo(Providers.LOCAL);
-        assertThat(resultDTO.getAuthorities()).containsOnly(Authorities.USER);
+        assertThat(resultDTO.getProvider()).isEqualTo(Provider.Constants.LOCAL_VALUE);
+        assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.Constants.USER_VALUE);
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testCreateLocalUser_duplicated() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = FactoryUtils.createLocalUserDTO("local");
@@ -200,7 +200,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testCreateLocalUser_invalid() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = FactoryUtils.createInvalidLocalUserDTO();
@@ -222,7 +222,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.USER)
+    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testCreateLocalUser_forbidden() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = FactoryUtils.createLocalUserDTO("local");
@@ -234,10 +234,10 @@ public class AuthControllerIT {
 
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testCreateOAuth2User_created() throws Exception {
         String url = ENDPOINT + "/oauth2";
-        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("not_exists", Providers.GOOGLE);
+        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("not_exists", Provider.Constants.GOOGLE_VALUE);
         String requestBody = objectMapper.writeValueAsString(dto);
         ResultActions resultActions = mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -249,14 +249,14 @@ public class AuthControllerIT {
         assertThat(resultDTO.getUsername()).isEqualTo(dto.getUsername());
         assertThat(resultDTO.getProvider()).isEqualTo(dto.getProvider());
         assertThat(resultDTO.getProviderId()).isEqualTo(dto.getProviderId());
-        assertThat(resultDTO.getAuthorities()).containsOnly(Authorities.USER);
+        assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.Constants.USER_VALUE);
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testCreateOAuth2User_duplicated() throws Exception {
         String url = ENDPOINT + "/oauth2";
-        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Providers.GOOGLE);
+        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Provider.Constants.GOOGLE_VALUE);
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -264,7 +264,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.SYSTEM)
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testCreateOAuth2User_invalid() throws Exception {
         String url = ENDPOINT + "/oauth2";
         OAuth2UserDTO dto = FactoryUtils.createInvalidOAuth2UserDTO();
@@ -278,7 +278,7 @@ public class AuthControllerIT {
     @WithAnonymousUser
     public void testCreateOAuth2User_unauthorized() throws Exception {
         String url = ENDPOINT + "/oauth2";
-        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Providers.GOOGLE);
+        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Provider.Constants.GOOGLE_VALUE);
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -286,10 +286,10 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = Authorities.USER)
+    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testCreateOAuth2User_forbidden() throws Exception {
         String url = ENDPOINT + "/oauth2";
-        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Providers.GOOGLE);
+        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Provider.Constants.GOOGLE_VALUE);
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
