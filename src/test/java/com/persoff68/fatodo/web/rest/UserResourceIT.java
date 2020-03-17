@@ -145,7 +145,7 @@ public class UserResourceIT {
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isConflict());
     }
 
     @Test
@@ -208,7 +208,7 @@ public class UserResourceIT {
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isConflict());
     }
 
     @Test

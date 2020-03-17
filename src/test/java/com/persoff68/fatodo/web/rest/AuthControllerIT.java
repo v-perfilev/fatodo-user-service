@@ -196,7 +196,7 @@ public class AuthControllerIT {
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isConflict());
     }
 
     @Test
@@ -260,7 +260,7 @@ public class AuthControllerIT {
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isConflict());
     }
 
     @Test
