@@ -2,7 +2,7 @@ package com.persoff68.fatodo.service.exception.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.exception.attribute.AttributeHandler;
-import com.persoff68.fatodo.service.exception.CommonDatabaseException;
+import com.persoff68.fatodo.service.exception.ModelDuplicatedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -23,7 +23,7 @@ public class ServiceExceptionHandling {
 
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<String> handleDatabaseException(Exception e, HttpServletRequest request) throws IOException {
-        Exception exception = new CommonDatabaseException(e.getMessage());
+        Exception exception = new ModelDuplicatedException();
         return AttributeHandler.from(request, exception).getResponseEntity(objectMapper);
     }
 
