@@ -16,7 +16,7 @@ public class FaToDoUserServiceApplication {
         Properties defaultProfileProperties = AppProfileUtils.getDefaultProfile();
         SpringApplication app = new SpringApplication(FaToDoUserServiceApplication.class);
         app.setDefaultProperties(defaultProfileProperties);
-        app.run(args);
+        app.run();
     }
 
 }

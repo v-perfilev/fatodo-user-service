@@ -24,7 +24,10 @@ class FaToDoUserServiceApplicationTests {
     }
 
     @Test
-    void contextLoads() {
+    void contextLoads() throws Exception {
+        ExtendedMongoSkeletonApplication.main(new String[]{});
+        mvc.perform(get("/"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
