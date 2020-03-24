@@ -44,16 +44,19 @@ public class UserService {
 
     public User update(User user) {
         String id = user.getId();
-        userRepository.findById(id)
-                .orElseThrow(ModelNotFoundException::new);
+        if (!userRepository.existsById(id)) {
+            throw new ModelNotFoundException();
+        }
         return userRepository.save(user);
     }
 
     public void delete(String id) {
-        userRepository.findById(id)
-                .orElseThrow(ModelNotFoundException::new);
+        if (!userRepository.existsById(id)) {
+            throw new ModelNotFoundException();
+        }
         userRepository.deleteById(id);
     }
+
 
     public boolean isUsernameUnique(String username) {
         return !userRepository.existsByUsername(username);
