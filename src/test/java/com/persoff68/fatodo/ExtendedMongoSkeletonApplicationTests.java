@@ -26,7 +26,7 @@ class ExtendedMongoSkeletonApplicationTests {
 
     @Test
     void contextLoads() throws Exception {
-        ExtendedSkeletonApplication.main(new String[]{});
+        ExtendedMongoSkeletonApplication.main(new String[]{});
         mvc.perform(get("/"))
                 .andExpect(status().isNotFound());
     }
