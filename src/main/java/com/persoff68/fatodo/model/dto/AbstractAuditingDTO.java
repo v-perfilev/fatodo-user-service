@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.Instant;
 
 @Data
-public abstract class AbstractAuditingDto {
+public abstract class AbstractAuditingDTO {
 
     private String createdBy;
     private Instant createdDate;
