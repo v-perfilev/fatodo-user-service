@@ -37,36 +37,4 @@ public class ContractBase {
         userRepository.save(FactoryUtils.createUser_oAuth2("google", "GOOGLE"));
     }
 
-    protected void assertSystemJwt(String jwt) {
-        Authentication authentication = jwtTokenProvider.getAuthenticationFromJwt(jwt);
-        List<String> authorityList = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
-        BDDAssertions.then(authorityList).contains(AuthorityType.Constants.SYSTEM_VALUE);
-    }
-
-    protected void assertAdminJwt(String jwt) {
-        Authentication authentication = jwtTokenProvider.getAuthenticationFromJwt(jwt);
-        List<String> authorityList = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
-        BDDAssertions.then(authorityList).contains(AuthorityType.Constants.ADMIN_VALUE);
-    }
-
-    protected void assertAuthorities(List<String> authorities) {
-        boolean isValid = true;
-        for (String authority : authorities) {
-            if (!AuthorityType.contains(authority)) {
-                isValid = false;
-                break;
-            }
-        }
-        BDDAssertions.then(isValid).isTrue();
-    }
-
-    protected void assertProvider(String provider) {
-        boolean isValid = Provider.contains(provider);
-        BDDAssertions.then(isValid).isTrue();
-    }
-
 }
