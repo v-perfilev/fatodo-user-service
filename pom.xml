@@ -542,7 +542,7 @@
     <distributionManagement>
         <repository>
             <id>fatodo</id>
-            <url>${maven.repo.url}/repository/fatodo/</url>
+            <url>${maven.repo.url}</url>
         </repository>
     </distributionManagement>
 
