@@ -25,7 +25,7 @@
         <!-- Dependency versions -->
         <java.version>13</java.version>
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
-        <mongobee.version>0.13</mongobee.version>
+        <mongock.version>3.2.4</mongock.version>
         <jackson.version>2.10.2</jackson.version>
         <jaxb.version>2.3.1</jaxb.version>
         <jwt.version>0.9.1</jwt.version>
@@ -68,11 +68,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- Mongobee management -->
+            <!-- Mongock management -->
             <dependency>
-                <groupId>com.github.mongobee</groupId>
-                <artifactId>mongobee</artifactId>
-                <version>${mongobee.version}</version>
+                <groupId>com.github.cloudyrock.mongock</groupId>
+                <artifactId>mongock-spring</artifactId>
+                <version>${mongock.version}</version>
             </dependency>
             <!-- Jackson management -->
             <dependency>
@@ -198,10 +198,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
-        <!-- Mongobee -->
+        <!-- Mongock -->
         <dependency>
-            <groupId>com.github.mongobee</groupId>
-            <artifactId>mongobee</artifactId>
+            <groupId>com.github.cloudyrock.mongock</groupId>
+            <artifactId>mongock-spring</artifactId>
         </dependency>
 
         <!-- Jackson -->

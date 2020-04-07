@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.config.migrations;
 
-import com.github.mongobee.changeset.ChangeLog;
+import com.github.cloudyrock.mongock.ChangeLog;
 
 @ChangeLog(order = "001")
 public class InitialMigration {
