@@ -1,7 +1,7 @@
 package com.persoff68.fatodo.config.migrations;
 
-import com.github.mongobee.changeset.ChangeLog;
-import com.github.mongobee.changeset.ChangeSet;
+import com.github.cloudyrock.mongock.ChangeLog;
+import com.github.cloudyrock.mongock.ChangeSet;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.model.Authority;
 import org.springframework.data.mongodb.core.MongoTemplate;
