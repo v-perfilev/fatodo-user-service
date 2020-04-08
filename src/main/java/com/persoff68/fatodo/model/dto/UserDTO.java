@@ -14,8 +14,6 @@ import java.util.Set;
 public class UserDTO extends AbstractAuditingDTO {
     private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
-    private String id;
-
     @NotNull
     @Email
     @Size(min = 5, max = 50)

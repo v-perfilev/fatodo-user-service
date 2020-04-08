@@ -19,9 +19,6 @@ import java.util.Set;
 public class User extends AbstractAuditingModel {
     private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
-    @Id
-    private String id = null;
-
     @NotNull
     @Indexed(unique = true)
     private String email;
