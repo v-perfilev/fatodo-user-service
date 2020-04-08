@@ -8,13 +8,12 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Data
 public abstract class AbstractAuditingModel {
 
     @Id
-    private UUID id;
+    private String id;
 
     @CreatedBy
     private String createdBy;
