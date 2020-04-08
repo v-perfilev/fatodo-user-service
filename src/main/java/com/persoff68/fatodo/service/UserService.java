@@ -5,6 +5,8 @@ import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    @Cacheable(value = "user", key = "#id")
     public User getById(String id) {
         return userRepository.findById(id)
                 .orElseThrow(ModelNotFoundException::new);
@@ -42,6 +45,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @CacheEvict(value = "user", key = "#user.id")
     public User update(User user) {
         String id = user.getId();
         if (!userRepository.existsById(id)) {
@@ -50,6 +54,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @CacheEvict(value = "user", key = "#id")
     public void delete(String id) {
         if (!userRepository.existsById(id)) {
             throw new ModelNotFoundException();
