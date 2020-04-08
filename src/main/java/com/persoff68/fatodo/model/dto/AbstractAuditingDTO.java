@@ -1,12 +1,13 @@
 package com.persoff68.fatodo.model.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
 import java.time.Instant;
 
 @Data
-public abstract class AbstractAuditingDTO implements Serializable {
+@EqualsAndHashCode(callSuper = false)
+public abstract class AbstractAuditingDTO extends AbstractDTO {
 
     private String id;
     private String createdBy;
