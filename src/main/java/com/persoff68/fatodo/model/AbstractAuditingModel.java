@@ -7,10 +7,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Data
-public abstract class AbstractAuditingModel {
+public abstract class AbstractAuditingModel implements Serializable {
 
     @Id
     private String id;
