@@ -38,8 +38,7 @@ public class UserService {
     }
 
     public User create(User user) {
-        String id = user.getId();
-        if (id != null) {
+        if (user.getId() != null) {
             throw new ModelAlreadyExistsException();
         }
         return userRepository.save(user);
@@ -47,8 +46,7 @@ public class UserService {
 
     @CacheEvict(value = "user", key = "#user.id")
     public User update(User user) {
-        String id = user.getId();
-        if (!userRepository.existsById(id)) {
+        if (!userRepository.existsById(user.getId())) {
             throw new ModelNotFoundException();
         }
         return userRepository.save(user);

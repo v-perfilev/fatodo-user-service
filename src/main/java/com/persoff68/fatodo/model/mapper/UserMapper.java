@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.mapper;
+package com.persoff68.fatodo.model.mapper;
 
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.model.Authority;

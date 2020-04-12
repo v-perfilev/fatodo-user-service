@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.web.rest;
 
-import com.persoff68.fatodo.mapper.UserMapper;
+import com.persoff68.fatodo.model.mapper.UserMapper;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.service.UserService;
