@@ -1,12 +1,12 @@
 package com.persoff68.fatodo.service;
 
+import com.persoff68.fatodo.config.aop.cache.annotation.RedisCacheEvict;
+import com.persoff68.fatodo.config.aop.cache.annotation.RedisCacheable;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +21,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    @Cacheable(value = "user", key = "#id")
+    @RedisCacheable(cacheName = "users", key = "#id")
     public User getById(String id) {
+
         return userRepository.findById(id)
                 .orElseThrow(ModelNotFoundException::new);
     }
@@ -44,7 +45,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @CacheEvict(value = "user", key = "#user.id")
+    @RedisCacheEvict(cacheName = "users", key = "#user.id")
     public User update(User user) {
         if (!userRepository.existsById(user.getId())) {
             throw new ModelNotFoundException();
@@ -52,7 +53,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @CacheEvict(value = "user", key = "#id")
+    @RedisCacheEvict(cacheName = "users", key = "#id")
     public void delete(String id) {
         if (!userRepository.existsById(id)) {
             throw new ModelNotFoundException();
