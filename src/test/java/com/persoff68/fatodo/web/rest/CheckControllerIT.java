@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(classes = FaToDoUserServiceApplication.class)
 public class CheckControllerIT {
-    private static final String ENDPOINT = "/check";
+    private static final String ENDPOINT = "/api/check";
 
     @Autowired
     WebApplicationContext context;

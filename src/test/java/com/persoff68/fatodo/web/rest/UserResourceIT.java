@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(classes = FaToDoUserServiceApplication.class)
 public class UserResourceIT {
-    private static final String ENDPOINT = "/users";
+    private static final String ENDPOINT = "/api/users";
 
     @Autowired
     WebApplicationContext context;
