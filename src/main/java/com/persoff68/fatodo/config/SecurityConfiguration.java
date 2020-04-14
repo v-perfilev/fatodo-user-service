@@ -53,9 +53,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(securityLocaleFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/check/**").permitAll()
-                .antMatchers("/auth/**").hasAuthority(AuthorityType.Constants.SYSTEM_VALUE)
-                .antMatchers("/users/**").hasAuthority(AuthorityType.Constants.ADMIN_VALUE)
+                .antMatchers("/api/check/**").permitAll()
+                .antMatchers("/api/auth/**").hasAuthority(AuthorityType.Constants.SYSTEM_VALUE)
+                .antMatchers("/api/users/**").hasAuthority(AuthorityType.Constants.ADMIN_VALUE)
                 .anyRequest().authenticated();
     }
 

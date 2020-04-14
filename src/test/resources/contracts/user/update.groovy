@@ -7,7 +7,7 @@ Contract.make {
     description 'should return status 200 and UserDTO'
     request {
         method PUT()
-        url("/users")
+        url("/api/users")
         headers {
             contentType applicationJson()
             header 'Authorization': $(

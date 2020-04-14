@@ -8,8 +8,8 @@ Contract.make {
     request {
         method DELETE()
         url($(
-                consumer(regex('\\/users\\/[\\w-]+')),
-                producer("/users/test_id_local")
+                consumer(regex('\\/api\\/users\\/[\\w-]+')),
+                producer("/api/users/test_id_local")
         ))
         headers {
             header 'Authorization': $(
