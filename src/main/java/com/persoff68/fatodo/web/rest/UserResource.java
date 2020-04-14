@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserResource {
 
-    static final String ENDPOINT = "/users";
+    static final String ENDPOINT = "/api/users";
 
     private final UserService userService;
     private final UserMapper userMapper;

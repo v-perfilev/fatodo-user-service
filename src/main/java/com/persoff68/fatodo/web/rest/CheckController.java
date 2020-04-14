@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(CheckController.ENDPOINT)
 @RequiredArgsConstructor
 public class CheckController {
-    static final String ENDPOINT = "/check";
+    static final String ENDPOINT = "/api/check";
 
     private final UserService userService;
 

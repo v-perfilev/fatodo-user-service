@@ -25,7 +25,7 @@ import javax.validation.Valid;
 @RequestMapping(AuthController.ENDPOINT)
 @RequiredArgsConstructor
 public class AuthController {
-    static final String ENDPOINT = "/auth";
+    static final String ENDPOINT = "/api/auth";
 
     private final UserService userService;
     private final UserMapper userMapper;
