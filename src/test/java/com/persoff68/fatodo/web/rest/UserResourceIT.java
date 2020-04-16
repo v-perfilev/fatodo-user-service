@@ -139,7 +139,7 @@ public class UserResourceIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
-    public void testCreate_duplicated() throws Exception {
+    public void testCreate_conflict_duplicated() throws Exception {
         UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setId(null);
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -150,7 +150,7 @@ public class UserResourceIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
-    public void testCreate_invalid() throws Exception {
+    public void testCreate_badRequest_invalid() throws Exception {
         UserDTO dto = FactoryUtils.createInvalidUserDTO_local();
         dto.setId(null);
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -184,7 +184,7 @@ public class UserResourceIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
-    public void testUpdate_updated() throws Exception {
+    public void testUpdate_ok() throws Exception {
         UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setEmail("test_updated@email.com");
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -202,7 +202,7 @@ public class UserResourceIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
-    public void testUpdate_duplicated() throws Exception {
+    public void testUpdate_conflict_duplicated() throws Exception {
         UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setEmail("test_2@email.com");
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -213,9 +213,21 @@ public class UserResourceIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
-    public void testUpdate_invalid() throws Exception {
+    public void testUpdate_badRequest_invalidEmail() throws Exception {
         UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setEmail("");
+        String requestBody = objectMapper.writeValueAsString(dto);
+        mvc.perform(put(ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
+    public void testUpdate_badRequest_noId() throws Exception {
+        UserDTO dto = FactoryUtils.createUserDTO_local("1");
+        dto.setEmail("test_2@email.com");
+        dto.setId(null);
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -246,7 +258,7 @@ public class UserResourceIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.ADMIN_VALUE)
-    public void testUpdate_notExists() throws Exception {
+    public void testUpdate_notFound() throws Exception {
         UserDTO dto = FactoryUtils.createUserDTO_local("not_exists");
         dto.setEmail("test_updated@email.com");
         String requestBody = objectMapper.writeValueAsString(dto);

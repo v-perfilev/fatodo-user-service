@@ -190,7 +190,7 @@ public class AuthControllerIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
-    public void testCreateLocalUser_duplicated() throws Exception {
+    public void testCreateLocalUser_conflict_duplicated() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = FactoryUtils.createLocalUserDTO("local");
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -201,7 +201,7 @@ public class AuthControllerIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
-    public void testCreateLocalUser_invalid() throws Exception {
+    public void testCreateLocalUser_badRequest_invalid() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = FactoryUtils.createInvalidLocalUserDTO();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -254,7 +254,7 @@ public class AuthControllerIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
-    public void testCreateOAuth2User_duplicated() throws Exception {
+    public void testCreateOAuth2User_conflict_duplicated() throws Exception {
         String url = ENDPOINT + "/oauth2";
         OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Provider.Constants.GOOGLE_VALUE);
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -265,7 +265,7 @@ public class AuthControllerIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
-    public void testCreateOAuth2User_invalid() throws Exception {
+    public void testCreateOAuth2User_badRequest_invalid() throws Exception {
         String url = ENDPOINT + "/oauth2";
         OAuth2UserDTO dto = FactoryUtils.createInvalidOAuth2UserDTO();
         String requestBody = objectMapper.writeValueAsString(dto);

@@ -5,6 +5,7 @@ import com.persoff68.fatodo.config.aop.cache.annotation.RedisCacheable;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
+import com.persoff68.fatodo.service.exception.ModelInvalidException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,9 @@ public class UserService {
 
     @RedisCacheEvict(cacheName = "users", key = "#user.id")
     public User update(User user) {
+        if (user.getId() == null) {
+            throw new ModelInvalidException();
+        }
         if (!userRepository.existsById(user.getId())) {
             throw new ModelNotFoundException();
         }
