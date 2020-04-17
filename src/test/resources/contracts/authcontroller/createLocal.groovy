@@ -1,13 +1,13 @@
-package contracts.auth
+package contracts.authcontroller
 
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'create oauth2 user'
+    name 'create local user'
     description 'should return status 201 and UserDTO'
     request {
         method POST()
-        url("/api/auth/oauth2")
+        url("/api/auth/local")
         headers {
             contentType applicationJson()
             header 'Authorization': $(
@@ -18,20 +18,13 @@ Contract.make {
         body(
                 "email": $(
                         consumer(email()),
-                        producer("test_facebook@email.com")
+                        producer("test_new@email.com")
                 ),
                 "username": $(
-                        consumer(email()),
-                        producer("test_facebook@email.com")
+                        consumer(regex(".{5,50}")),
+                        producer("test_username_new")
                 ),
-                "provider": $(
-                        consumer(execute('assertProviders($it)')),
-                        producer("FACEBOOK")
-                ),
-                "providerId": $(
-                        consumer(anyNonBlankString()),
-                        producer("test_provider_facebook")
-                )
+                "password": anyNonBlankString()
         )
     }
     response {
@@ -40,10 +33,14 @@ Contract.make {
             contentType applicationJson()
         }
         body(
-                "email": "test_facebook@email.com",
-                "username": "test_facebook@email.com",
-                "provider": "FACEBOOK",
-                "providerId": "test_provider_facebook",
+                "id": $(
+                        producer(anyNonBlankString()),
+                        consumer("test_id_local"))
+                ,
+                "email": "test_new@email.com",
+                "username": "test_username_new",
+                "provider": "LOCAL",
+                "providerId": null,
                 "authorities": ["ROLE_USER"]
         )
     }

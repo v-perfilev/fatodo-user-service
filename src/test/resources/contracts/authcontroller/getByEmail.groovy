@@ -1,15 +1,15 @@
-package contracts.auth
+package contracts.authcontroller
 
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'get user principal by id'
+    name 'get user principal by email'
     description 'should return status 200 and UserPrincipalDTO'
     request {
         method GET()
         url($(
-                consumer(regex('\\/api\\/auth\\/id\\/[\\w-]+')),
-                producer("/api/auth/id/test_id_local")
+                consumer(regex('\\/api\\/auth\\/email\\/[\\w-\\.]+(%40|@)[\\w-\\.]+')),
+                producer("/api/auth/email/test_local@email.com")
         ))
         headers {
             header 'Authorization': $(
