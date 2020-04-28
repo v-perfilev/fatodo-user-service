@@ -7,6 +7,7 @@ import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.mapper.UserMapper;
+import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import com.persoff68.fatodo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,13 +23,22 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(AuthController.ENDPOINT)
+@RequestMapping(UserController.ENDPOINT)
 @RequiredArgsConstructor
-public class AuthController {
-    static final String ENDPOINT = "/api/auth";
+public class UserController {
+    static final String ENDPOINT = "/api/user";
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDTO> getCurrentUser() {
+        String id = jwtTokenProvider.getId();
+        User user = userService.getById(id);
+        UserDTO userDTO = userMapper.userToUserDTO(user);
+        return ResponseEntity.ok(userDTO);
+    }
 
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipalDTO> getUserPrincipalById(@PathVariable String id) {

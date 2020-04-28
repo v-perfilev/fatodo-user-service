@@ -1,4 +1,4 @@
-package contracts.usercontroller
+package contracts.userresource
 
 import org.springframework.cloud.contract.spec.Contract
 

@@ -1,15 +1,15 @@
-package contracts.authcontroller
+package contracts.usercontroller
 
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'get user principal by id'
+    name 'get user principal by username'
     description 'should return status 200 and UserPrincipalDTO'
     request {
         method GET()
         url($(
-                consumer(regex('\\/api\\/auth\\/id\\/[\\w-]+')),
-                producer("/api/auth/id/test_id_local")
+                consumer(regex('\\/api\\/user\\/username\\/[\\w-]+')),
+                producer("/api/user/username/test_username_local")
         ))
         headers {
             header 'Authorization': $(

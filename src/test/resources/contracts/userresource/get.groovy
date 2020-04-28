@@ -1,20 +1,20 @@
-package contracts.authcontroller
+package contracts.userresource
 
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'get user principal by email'
-    description 'should return status 200 and UserPrincipalDTO'
+    name 'get user'
+    description 'should return status 200 and UserDTO'
     request {
         method GET()
         url($(
-                consumer(regex('\\/api\\/auth\\/email\\/[\\w-\\.]+(%40|@)[\\w-\\.]+')),
-                producer("/api/auth/email/test_local@email.com")
+                consumer(regex('\\/api\\/users\\/[\\w-]+')),
+                producer("/api/users/test_id_local")
         ))
         headers {
             header 'Authorization': $(
                     consumer(containing("Bearer")),
-                    producer("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJ0ZXN0X3N5c3RlbSIsImF1dGhvcml0aWVzIjoiUk9MRV9TWVNURU0iLCJpYXQiOjAsImV4cCI6MzI1MDM2NzY0MDB9.EV6TMwQSB2XSTnQuB6LQbLETQmWEullfxSOmGDrlsdk93DDWfqr3VQGti6pMmmbUfgCyP9yyWjlWK50dYHYnEg")
+                    producer("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwidXNlcm5hbWUiOiJ0ZXN0X2FkbWluIiwiYXV0aG9yaXRpZXMiOiJST0xFX0FETUlOIiwiaWF0IjowLCJleHAiOjMyNTAzNjc2NDAwfQ.RwSPieOfY1iwF5Tz8ZMw8tiWVZc-nGx4JGgVh08wzV_HrNYZelT9Auo2mcKp6L1PTIBc8cRRlcsvR7YjbiI9qA")
             )
         }
     }
@@ -27,7 +27,6 @@ Contract.make {
                 "id": "test_id_local",
                 "email": "test_local@email.com",
                 "username": "test_username_local",
-                "password": '$2a$10$GZrq9GxkRWW1Pv7fKJHGAe4ebib6113zhlU4nZlCtH/ylebR9rkn6',
                 "provider": "LOCAL",
                 "providerId": null,
                 "authorities": ["ROLE_USER"]

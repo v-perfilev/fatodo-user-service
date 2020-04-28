@@ -3,6 +3,7 @@ package com.persoff68.fatodo.contract;
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
+import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -33,6 +34,9 @@ public class ContractBase {
     public void setup() {
         RestAssuredMockMvc.webAppContextSetup(context);
         userRepository.deleteAll();
+        User currentUser = FactoryUtils.createUser_local("current", "encodedPassword");
+        currentUser.setId("3");
+        userRepository.save(currentUser);
         userRepository.save(FactoryUtils.createUser_local("local", "$2a$10$GZrq9GxkRWW1Pv7fKJHGAe4ebib6113zhlU4nZlCtH/ylebR9rkn6"));
         userRepository.save(FactoryUtils.createUser_oAuth2("google", "GOOGLE"));
     }

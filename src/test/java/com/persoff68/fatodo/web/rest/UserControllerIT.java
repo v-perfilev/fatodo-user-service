@@ -3,8 +3,10 @@ package com.persoff68.fatodo.web.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FaToDoUserServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
+import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
+import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
@@ -22,6 +24,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static com.persoff68.fatodo.FactoryUtils.createUser_local;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,8 +32,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FaToDoUserServiceApplication.class)
-public class AuthControllerIT {
-    private static final String ENDPOINT = "/api/auth";
+public class UserControllerIT {
+    private static final String ENDPOINT = "/api/user";
 
     @Autowired
     WebApplicationContext context;
@@ -46,14 +49,33 @@ public class AuthControllerIT {
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         userRepository.deleteAll();
-        userRepository.save(FactoryUtils.createUser_local("local", "encodedPassword"));
+        User currentUser = FactoryUtils.createUser_local("current", "encodedPassword");
+        currentUser.setId("3");
+        userRepository.save(currentUser);
+        userRepository.save(createUser_local("local", "encodedPassword"));
         userRepository.save(FactoryUtils.createUser_oAuth2("oauth2", Provider.Constants.GOOGLE_VALUE));
     }
 
+    @Test
+    @WithCustomSecurityContext(jwt = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwidXNlcm5hbWUiOiJ0ZXN0X3VzZXIiLCJhdXRob3JpdGllcyI6IlJPTEVfVVNFUiIsImlhdCI6MCwiZXhwIjozMjUwMzY3NjQwMH0.ggV38p_Fnqo2OZNtwR3NWKZhMXPd-vf4PrRxN0NmTWsHPrKwWZJSGO2dJBBPWXWs4OI6tjsNV2TM3Kf6NK92hw")
+    public void testGetCurrentUser_ok() throws Exception {
+        ResultActions resultActions = mvc.perform(get(ENDPOINT))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
+        assertThat(resultDTO.getId()).isEqualTo("3");
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testGetCurrentUser_unauthorized() throws Exception {
+        mvc.perform(get(ENDPOINT))
+                .andExpect(status().isUnauthorized());
+    }
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
-    public void testGetById_ok() throws Exception {
+    public void testGetUserPrincipalById_ok() throws Exception {
         String id = "test_id_local";
         String url = ENDPOINT + "/id/" + id;
         ResultActions resultActions = mvc.perform(get(url))
@@ -65,7 +87,7 @@ public class AuthControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testGetById_unauthorized() throws Exception {
+    public void testGetUserPrincipalById_unauthorized() throws Exception {
         String id = "test_id_local";
         String url = ENDPOINT + "/id/" + id;
         mvc.perform(get(url))
@@ -74,7 +96,7 @@ public class AuthControllerIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
-    public void testGetById_forbidden() throws Exception {
+    public void testGetUserPrincipalById_forbidden() throws Exception {
         String id = "test_id_local";
         String url = ENDPOINT + "/id/" + id;
         mvc.perform(get(url))
@@ -83,7 +105,7 @@ public class AuthControllerIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
-    public void testGetById_notFound() throws Exception {
+    public void testGetUserPrincipalById_notFound() throws Exception {
         String id = "test_id_not_exists";
         String url = ENDPOINT + "/id/" + id;
         mvc.perform(get(url))
@@ -93,7 +115,7 @@ public class AuthControllerIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
-    public void testGetByEmail_ok() throws Exception {
+    public void testGetUserPrincipalByEmail_ok() throws Exception {
         String email = "test_local@email.com";
         String url = ENDPOINT + "/email/" + email;
         ResultActions resultActions = mvc.perform(get(url))
@@ -105,7 +127,7 @@ public class AuthControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testGetByEmail_unauthorized() throws Exception {
+    public void testGetUserPrincipalByEmail_unauthorized() throws Exception {
         String email = "test_local@email.com";
         String url = ENDPOINT + "/email/" + email;
         mvc.perform(get(url))
@@ -114,7 +136,7 @@ public class AuthControllerIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
-    public void testGetByEmail_forbidden() throws Exception {
+    public void testGetUserPrincipalByEmail_forbidden() throws Exception {
         String email = "test_local@email.com";
         String url = ENDPOINT + "/email/" + email;
         mvc.perform(get(url))
@@ -123,7 +145,7 @@ public class AuthControllerIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
-    public void testGetByEmail_notFound() throws Exception {
+    public void testGetUserPrincipalByEmail_notFound() throws Exception {
         String email = "test_not_exists@email.com";
         String url = ENDPOINT + "/email/" + email;
         mvc.perform(get(url))
@@ -133,7 +155,7 @@ public class AuthControllerIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
-    public void testGetByUsername_ok() throws Exception {
+    public void testGetUserPrincipalByUsername_ok() throws Exception {
         String username = "test_username_local";
         String url = ENDPOINT + "/username/" + username;
         ResultActions resultActions = mvc.perform(get(url))
@@ -145,7 +167,7 @@ public class AuthControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testGetByUsername_unauthorized() throws Exception {
+    public void testGetUserPrincipalByUsername_unauthorized() throws Exception {
         String username = "test_username_local";
         String url = ENDPOINT + "/username/" + username;
         mvc.perform(get(url))
@@ -154,7 +176,7 @@ public class AuthControllerIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
-    public void testGetByUsername_forbidden() throws Exception {
+    public void testGetUserPrincipalByUsername_forbidden() throws Exception {
         String username = "test_username_local";
         String url = ENDPOINT + "/username/" + username;
         mvc.perform(get(url))
@@ -163,7 +185,7 @@ public class AuthControllerIT {
 
     @Test
     @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
-    public void testGetByUsername_notFound() throws Exception {
+    public void testGetUserPrincipalByUsername_notFound() throws Exception {
         String username = "test_username_not_exists";
         String url = ENDPOINT + "/username/" + username;
         mvc.perform(get(url))
