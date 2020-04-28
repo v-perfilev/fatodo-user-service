@@ -1,4 +1,4 @@
-package contracts.usercontroller
+package contracts.authcontroller
 
 import org.springframework.cloud.contract.spec.Contract
 
@@ -7,7 +7,7 @@ Contract.make {
     description 'should return status 201 and UserDTO'
     request {
         method POST()
-        url("/api/user/local")
+        url("/api/auth/local")
         headers {
             contentType applicationJson()
             header 'Authorization': $(
