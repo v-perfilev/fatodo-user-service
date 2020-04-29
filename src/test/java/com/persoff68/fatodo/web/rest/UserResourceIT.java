@@ -134,7 +134,7 @@ public class UserResourceIT {
         assertThat(resultDTO.getEmail()).isEqualTo(dto.getEmail());
         assertThat(resultDTO.getUsername()).isEqualTo(dto.getUsername());
         assertThat(resultDTO.getProvider()).isEqualTo(Provider.Constants.LOCAL_VALUE);
-        assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.Constants.USER_VALUE);
+        assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.USER);
     }
 
     @Test

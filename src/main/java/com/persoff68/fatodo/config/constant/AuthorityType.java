@@ -22,10 +22,6 @@ public enum AuthorityType {
         return new SimpleGrantedAuthority(value);
     }
 
-    public static boolean contains(String value) {
-        return Arrays.stream(AuthorityType.values()).anyMatch(a -> a.getValue().equals(value));
-    }
-
     public static class Constants {
         public static final String SYSTEM_VALUE = "ROLE_SYSTEM";
         public static final String ADMIN_VALUE = "ROLE_ADMIN";

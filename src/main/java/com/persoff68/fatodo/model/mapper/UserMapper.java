@@ -32,16 +32,16 @@ public interface UserMapper {
     User oAuth2UserDTOToUser(OAuth2UserDTO oAuth2UserDTO);
 
     @Named("authoritiesIntoStrings")
-    default Set<String> authoritiesIntoStrings(Set<Authority> authoritySet) {
+    default Set<AuthorityType> authoritiesIntoAuthorityTypes(Set<Authority> authoritySet) {
         return authoritySet != null
                 ? authoritySet.stream().map(Authority::getName).collect(Collectors.toSet())
                 : null;
     }
 
     @Named("stringsIntoAuthorities")
-    default Set<Authority> stringsIntoAuthorities(Set<String> stringSet) {
+    default Set<Authority> stringsIntoAuthorities(Set<AuthorityType> stringSet) {
         return stringSet != null
-                ? stringSet.stream().filter(AuthorityType::contains).map(Authority::new).collect(Collectors.toSet())
+                ? stringSet.stream().map(Authority::new).collect(Collectors.toSet())
                 : null;
     }
 

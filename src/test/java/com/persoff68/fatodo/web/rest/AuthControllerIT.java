@@ -190,7 +190,7 @@ public class AuthControllerIT {
         assertThat(resultDTO.getEmail()).isEqualTo(dto.getEmail());
         assertThat(resultDTO.getUsername()).isEqualTo(dto.getUsername());
         assertThat(resultDTO.getProvider()).isEqualTo(Provider.Constants.LOCAL_VALUE);
-        assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.Constants.USER_VALUE);
+        assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.USER);
     }
 
     @Test
@@ -254,7 +254,7 @@ public class AuthControllerIT {
         assertThat(resultDTO.getUsername()).isEqualTo(dto.getUsername());
         assertThat(resultDTO.getProvider()).isEqualTo(dto.getProvider());
         assertThat(resultDTO.getProviderId()).isEqualTo(dto.getProviderId());
-        assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.Constants.USER_VALUE);
+        assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.USER);
     }
 
     @Test

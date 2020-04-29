@@ -15,14 +15,6 @@ public class AuthorityTypeTest {
     }
 
     @Test
-    void testContains() {
-        boolean isTrue = AuthorityType.contains("ROLE_SYSTEM");
-        assertThat(isTrue).isTrue();
-        boolean isFalse = AuthorityType.contains("ROLE_NOT_EXISTS");
-        assertThat(isFalse).isFalse();
-    }
-
-    @Test
     void testGetGrantedAuthority() {
         assertThat(AuthorityType.ADMIN.getGrantedAuthority())
                 .isEqualTo(new SimpleGrantedAuthority(AuthorityType.Constants.ADMIN_VALUE));

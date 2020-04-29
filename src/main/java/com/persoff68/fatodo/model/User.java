@@ -5,6 +5,7 @@ import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 @Document(collection = "ftd_user")
 @Data
 @EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class User extends AbstractAuditingModel {
     private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
@@ -34,5 +36,5 @@ public class User extends AbstractAuditingModel {
     private String providerId;
 
     @NotNull
-    private Set<Authority> authorities = Collections.singleton(Authority.of(AuthorityType.Constants.USER_VALUE));
+    private Set<Authority> authorities;
 }

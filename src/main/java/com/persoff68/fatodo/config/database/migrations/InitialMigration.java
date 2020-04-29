@@ -12,7 +12,7 @@ public class InitialMigration {
     @ChangeSet(author = "initiator", id = "01-authorities", order = "01")
     public void addAuthorities(MongoTemplate mongoTemplate) {
         for (AuthorityType authorityType : AuthorityType.values()) {
-            Authority authority = new Authority(authorityType.getValue());
+            Authority authority = new Authority(authorityType);
             mongoTemplate.save(authority);
         }
     }

@@ -1,6 +1,7 @@
 package com.persoff68.fatodo.model.dto;
 
 import com.persoff68.fatodo.config.constant.AppConstants;
+import com.persoff68.fatodo.config.constant.AuthorityType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -27,5 +28,5 @@ public class UserDTO extends AbstractAuditingDTO {
 
     private String providerId;
 
-    private Set<String> authorities;
+    private Set<AuthorityType> authorities;
 }
