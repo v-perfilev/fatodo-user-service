@@ -1,7 +1,6 @@
 package com.persoff68.fatodo.model;
 
 import com.persoff68.fatodo.config.constant.AppConstants;
-import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +9,6 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
-import java.util.Collections;
 import java.util.Set;
 
 @Document(collection = "ftd_user")

@@ -18,7 +18,7 @@ public class FactoryUtils {
         user.setEmail("test_" + postfix + "@email.com");
         user.setUsername("test_username_" + postfix);
         user.setPassword(password);
-        user.setAuthorities(Collections.singleton(new Authority(AuthorityType.USER)));
+        user.setAuthorities(Collections.singleton(new Authority(AuthorityType.USER.getValue())));
         user.setProvider(Provider.LOCAL);
         return user;
     }
@@ -28,7 +28,7 @@ public class FactoryUtils {
         user.setId("test_id_" + postfix);
         user.setEmail("test_" + postfix + "@email.com");
         user.setUsername("test_" + postfix + "@email.com");
-        user.setAuthorities(Collections.singleton(new Authority(AuthorityType.USER)));
+        user.setAuthorities(Collections.singleton(new Authority(AuthorityType.USER.getValue())));
         user.setProvider(Provider.valueOf(provider));
         user.setProviderId("test_id_" + postfix);
         return user;
@@ -65,7 +65,7 @@ public class FactoryUtils {
         dto.setEmail("test_" + postfix + "@email.com");
         dto.setUsername("test_username_" + postfix);
         dto.setProvider(Provider.Constants.LOCAL_VALUE);
-        dto.setAuthorities(Collections.singleton(AuthorityType.USER));
+        dto.setAuthorities(Collections.singleton(AuthorityType.USER.getValue()));
         return dto;
     }
 

@@ -60,7 +60,7 @@ public class AuthController {
     public ResponseEntity<UserDTO> createLocal(@Valid @RequestBody LocalUserDTO localUserDTO) {
         User user = userMapper.localUserDTOToUser(localUserDTO);
         user.setProvider(Provider.LOCAL);
-        user.setAuthorities(Set.of(new Authority(AuthorityType.USER)));
+        user.setAuthorities(Set.of(new Authority(AuthorityType.USER.getValue())));
         user = userService.create(user);
         UserDTO userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
@@ -71,7 +71,7 @@ public class AuthController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> createOAuth2(@Valid @RequestBody OAuth2UserDTO oAuth2UserDTO) {
         User user = userMapper.oAuth2UserDTOToUser(oAuth2UserDTO);
-        user.setAuthorities(Set.of(new Authority(AuthorityType.USER)));
+        user.setAuthorities(Set.of(new Authority(AuthorityType.USER.getValue())));
         user = userService.create(user);
         UserDTO userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);

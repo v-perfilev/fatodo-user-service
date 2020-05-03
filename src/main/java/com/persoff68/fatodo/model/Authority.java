@@ -1,7 +1,6 @@
 package com.persoff68.fatodo.model;
 
 import com.persoff68.fatodo.config.constant.AppConstants;
-import com.persoff68.fatodo.config.constant.AuthorityType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,6 +20,6 @@ public class Authority extends AbstractModel {
 
     @Id
     @NotNull
-    private AuthorityType name;
+    private String name;
 
 }
