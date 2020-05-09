@@ -3,7 +3,6 @@ package com.persoff68.fatodo.web.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FaToDoUserServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
-import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.User;
@@ -52,6 +51,10 @@ public class AuthControllerIT {
         User currentUser = FactoryUtils.createUser_local("current", "encodedPassword");
         currentUser.setId("3");
         userRepository.save(currentUser);
+        User activatedUser = FactoryUtils.createUser_local("activated", "encodedPassword");
+        activatedUser.setId("4");
+        activatedUser.setActivated(true);
+        userRepository.save(activatedUser);
         userRepository.save(createUser_local("local", "encodedPassword"));
         userRepository.save(FactoryUtils.createUser_oAuth2("oauth2", Provider.Constants.GOOGLE_VALUE));
     }
@@ -298,6 +301,38 @@ public class AuthControllerIT {
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    public void testActivate_ok() throws Exception {
+        String url = ENDPOINT + "/activate/3";
+        mvc.perform(get(url))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    public void testActivate_conflict() throws Exception {
+        String url = ENDPOINT + "/activate/4";
+        mvc.perform(get(url))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testActivate_unauthorized() throws Exception {
+        String url = ENDPOINT + "/activate/3";
+        mvc.perform(get(url))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
+    public void testActivate_forbidden() throws Exception {
+        String url = ENDPOINT + "/activate/3";
+        mvc.perform(get(url))
                 .andExpect(status().isForbidden());
     }
 
