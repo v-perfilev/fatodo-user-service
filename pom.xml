@@ -12,7 +12,7 @@
     <artifactId>userservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>fatodo-user-service</name>
-    <description>User service for FaToDo</description>
+    <description>User service for Fatodo</description>
 
     <properties>
         <!-- Common variables -->
