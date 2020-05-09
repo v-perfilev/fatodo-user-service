@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.web.rest;
 
-import com.persoff68.fatodo.FaToDoUserServiceApplication;
+import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.repository.UserRepository;
@@ -19,7 +19,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(classes = FaToDoUserServiceApplication.class)
+@SpringBootTest(classes = FatodoUserServiceApplication.class)
 public class CheckControllerIT {
     private static final String ENDPOINT = "/api/check";
 

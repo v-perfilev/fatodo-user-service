@@ -1,7 +1,7 @@
 package com.persoff68.fatodo.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.persoff68.fatodo.FaToDoUserServiceApplication;
+import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.config.constant.Provider;
@@ -24,7 +24,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(classes = FaToDoUserServiceApplication.class)
+@SpringBootTest(classes = FatodoUserServiceApplication.class)
 public class UserControllerIT {
     private static final String ENDPOINT = "/api/user";
 

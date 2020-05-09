@@ -10,11 +10,11 @@ import java.util.Properties;
 
 @SpringBootApplication
 @EnableConfigurationProperties(AppProperties.class)
-public class FaToDoUserServiceApplication {
+public class FatodoUserServiceApplication {
 
     public static void main(String[] args) {
         Properties defaultProfileProperties = AppProfileUtils.getDefaultProfile();
-        SpringApplication app = new SpringApplication(FaToDoUserServiceApplication.class);
+        SpringApplication app = new SpringApplication(FatodoUserServiceApplication.class);
         app.setDefaultProperties(defaultProfileProperties);
         app.run();
     }
