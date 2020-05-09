@@ -28,4 +28,7 @@ public class UserDTO extends AbstractAuditingDTO {
     private String providerId;
 
     private Set<String> authorities;
+
+    private boolean activated;
+
 }

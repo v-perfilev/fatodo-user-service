@@ -7,6 +7,7 @@ import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
 import com.persoff68.fatodo.service.exception.ModelInvalidException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
+import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -65,13 +66,22 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-
     public boolean isUsernameUnique(String username) {
         return !userRepository.existsByUsername(username);
     }
 
     public boolean isEmailUnique(String email) {
         return !userRepository.existsByEmail(email);
+    }
+
+    public void activate(String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(ModelNotFoundException::new);
+        if (user.isActivated()) {
+            throw new UserAlreadyActivatedException();
+        }
+        user.setActivated(true);
+        userRepository.save(user);
     }
 
 }

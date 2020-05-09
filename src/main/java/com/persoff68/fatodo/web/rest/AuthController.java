@@ -77,4 +77,10 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
+    @GetMapping(value = "/activate/{userId}")
+    public ResponseEntity<Void> activate(@PathVariable String userId) {
+        userService.activate(userId);
+        return ResponseEntity.ok().build();
+    }
+
 }

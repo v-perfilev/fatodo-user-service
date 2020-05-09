@@ -35,4 +35,7 @@ public class User extends AbstractAuditingModel {
 
     @NotNull
     private Set<Authority> authorities;
+
+    private boolean activated = false;
+
 }
