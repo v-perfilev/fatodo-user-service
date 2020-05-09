@@ -12,7 +12,7 @@
     <artifactId>extendedmongoskeleton</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>extended-mongo-skeleton</name>
-    <description>Extended mongo skeleton for FaToDo</description>
+    <description>Extended mongo skeleton for Fatodo</description>
 
     <properties>
         <!-- Common variables -->
