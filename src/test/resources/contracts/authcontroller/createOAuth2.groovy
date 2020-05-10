@@ -42,9 +42,11 @@ Contract.make {
         body(
                 "email": "test_facebook@email.com",
                 "username": "test_facebook@email.com",
+                "password": null,
                 "provider": "FACEBOOK",
                 "providerId": "test_provider_facebook",
-                "authorities": ["ROLE_USER"]
+                "authorities": ["ROLE_USER"],
+                activated: true
         )
     }
 }

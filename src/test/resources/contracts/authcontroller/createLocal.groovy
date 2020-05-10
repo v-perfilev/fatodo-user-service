@@ -39,9 +39,14 @@ Contract.make {
                 ,
                 "email": "test_new@email.com",
                 "username": "test_username_new",
+                "password": $(
+                        producer(anyNonBlankString()),
+                        consumer('\$2a\$10$GZrq9GxkRWW1Pv7fKJHGAe4ebib6113zhlU4nZlCtH/ylebR9rkn6'))
+                ,
                 "provider": "LOCAL",
                 "providerId": null,
-                "authorities": ["ROLE_USER"]
+                "authorities": ["ROLE_USER"],
+                "activated": false
         )
     }
 }

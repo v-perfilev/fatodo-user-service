@@ -1,14 +1,13 @@
 package com.persoff68.fatodo.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
+import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
-import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -188,12 +187,14 @@ public class AuthControllerIT {
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isCreated());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
+        UserPrincipalDTO resultDTO = objectMapper.readValue(resultString, UserPrincipalDTO.class);
         assertThat(resultDTO.getId()).isNotNull();
         assertThat(resultDTO.getEmail()).isEqualTo(dto.getEmail());
         assertThat(resultDTO.getUsername()).isEqualTo(dto.getUsername());
+        assertThat(resultDTO.getPassword()).isNotEmpty();
         assertThat(resultDTO.getProvider()).isEqualTo(Provider.Constants.LOCAL_VALUE);
         assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.USER.getValue());
+        assertThat(resultDTO.isActivated()).isFalse();
     }
 
     @Test
@@ -251,13 +252,15 @@ public class AuthControllerIT {
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isCreated());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
+        UserPrincipalDTO resultDTO = objectMapper.readValue(resultString, UserPrincipalDTO.class);
         assertThat(resultDTO.getId()).isNotNull();
         assertThat(resultDTO.getEmail()).isEqualTo(dto.getEmail());
         assertThat(resultDTO.getUsername()).isEqualTo(dto.getUsername());
+        assertThat(resultDTO.getPassword()).isNull();
         assertThat(resultDTO.getProvider()).isEqualTo(dto.getProvider());
         assertThat(resultDTO.getProviderId()).isEqualTo(dto.getProviderId());
         assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.USER.getValue());
+        assertThat(resultDTO.isActivated()).isTrue();
     }
 
     @Test

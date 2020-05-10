@@ -6,7 +6,6 @@ import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
-import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.mapper.UserMapper;
 import com.persoff68.fatodo.service.UserService;
@@ -57,24 +56,25 @@ public class AuthController {
     @PostMapping(value = "/local",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> createLocal(@Valid @RequestBody LocalUserDTO localUserDTO) {
+    public ResponseEntity<UserPrincipalDTO> createLocal(@Valid @RequestBody LocalUserDTO localUserDTO) {
         User user = userMapper.localUserDTOToUser(localUserDTO);
         user.setProvider(Provider.LOCAL);
         user.setAuthorities(Set.of(new Authority(AuthorityType.USER.getValue())));
         user = userService.create(user);
-        UserDTO userDTO = userMapper.userToUserDTO(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
+        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDTO(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userPrincipalDTO);
     }
 
     @PostMapping(value = "/oauth2",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> createOAuth2(@Valid @RequestBody OAuth2UserDTO oAuth2UserDTO) {
+    public ResponseEntity<UserPrincipalDTO> createOAuth2(@Valid @RequestBody OAuth2UserDTO oAuth2UserDTO) {
         User user = userMapper.oAuth2UserDTOToUser(oAuth2UserDTO);
+        user.setActivated(true);
         user.setAuthorities(Set.of(new Authority(AuthorityType.USER.getValue())));
         user = userService.create(user);
-        UserDTO userDTO = userMapper.userToUserDTO(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
+        UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDTO(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userPrincipalDTO);
     }
 
     @GetMapping(value = "/activate/{userId}")
