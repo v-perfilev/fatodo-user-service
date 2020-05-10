@@ -71,6 +71,7 @@ public class FactoryUtils {
         dto.setProvider(Provider.Constants.LOCAL_VALUE);
         dto.setAuthorities(Collections.singleton(AuthorityType.USER.getValue()));
         dto.setLanguage("en");
+        dto.setActivated(false);
         return dto;
     }
 

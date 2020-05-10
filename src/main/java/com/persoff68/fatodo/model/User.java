@@ -39,6 +39,7 @@ public class User extends AbstractAuditingModel {
     @NotNull
     private String language;
 
-    private boolean activated = false;
+    @NotNull
+    private boolean activated;
 
 }

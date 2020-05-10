@@ -1,7 +1,6 @@
 package contracts.userresource
 
 import org.springframework.cloud.contract.spec.Contract
-import wiremock.net.minidev.json.JSONArray
 
 Contract.make {
     name 'create user'
@@ -33,7 +32,16 @@ Contract.make {
                 "authorities": $(
                         consumer(any()),
                         producer(["ROLE_USER"])
+                ),
+                "language": $(
+                        consumer(anyNonBlankString()),
+                        producer("en")
+                ),
+                "activated": $(
+                        consumer(anyBoolean()),
+                        producer(false)
                 )
+
         )
         bodyMatchers {
             jsonPath('$.provider', byType {
@@ -54,7 +62,9 @@ Contract.make {
                 "username": "test_username_new",
                 "provider": "LOCAL",
                 "providerId": null,
-                "authorities": ["ROLE_USER"]
+                "authorities": ["ROLE_USER"],
+                "language": "en",
+                "activated": false
         )
     }
 }
