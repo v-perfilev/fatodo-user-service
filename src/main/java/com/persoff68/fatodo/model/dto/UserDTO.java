@@ -29,6 +29,8 @@ public class UserDTO extends AbstractAuditingDTO {
 
     private Set<String> authorities;
 
+    private String language;
+
     private boolean activated;
 
 }

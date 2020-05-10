@@ -24,7 +24,11 @@ Contract.make {
                         consumer(regex(".{5,50}")),
                         producer("test_username_new")
                 ),
-                "password": anyNonBlankString()
+                "password": anyNonBlankString(),
+                "language": $(
+                        consumer(email()),
+                        producer("en")
+                ),
         )
     }
     response {
@@ -46,6 +50,7 @@ Contract.make {
                 "provider": "LOCAL",
                 "providerId": null,
                 "authorities": ["ROLE_USER"],
+                "language": "en",
                 "activated": false
         )
     }

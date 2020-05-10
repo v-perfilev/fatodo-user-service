@@ -20,6 +20,7 @@ public class FactoryUtils {
         user.setPassword(password);
         user.setAuthorities(Collections.singleton(new Authority(AuthorityType.USER.getValue())));
         user.setProvider(Provider.LOCAL);
+        user.setLanguage("en");
         return user;
     }
 
@@ -31,6 +32,7 @@ public class FactoryUtils {
         user.setAuthorities(Collections.singleton(new Authority(AuthorityType.USER.getValue())));
         user.setProvider(Provider.valueOf(provider));
         user.setProviderId("test_id_" + postfix);
+        user.setLanguage("en");
         return user;
     }
 
@@ -39,6 +41,7 @@ public class FactoryUtils {
         dto.setEmail("test_" + postfix + "@email.com");
         dto.setUsername("test_username_" + postfix);
         dto.setPassword("test_password");
+        dto.setLanguage("en");
         return dto;
     }
 
@@ -52,6 +55,7 @@ public class FactoryUtils {
         dto.setUsername("test_username_" + postfix);
         dto.setProvider(provider);
         dto.setProviderId("test_providerId_" + postfix);
+        dto.setLanguage("en");
         return dto;
     }
 
@@ -66,6 +70,7 @@ public class FactoryUtils {
         dto.setUsername("test_username_" + postfix);
         dto.setProvider(Provider.Constants.LOCAL_VALUE);
         dto.setAuthorities(Collections.singleton(AuthorityType.USER.getValue()));
+        dto.setLanguage("en");
         return dto;
     }
 

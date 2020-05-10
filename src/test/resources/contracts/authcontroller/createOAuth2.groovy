@@ -31,7 +31,11 @@ Contract.make {
                 "providerId": $(
                         consumer(anyNonBlankString()),
                         producer("test_provider_facebook")
-                )
+                ),
+                "language": $(
+                        consumer(email()),
+                        producer("en")
+                ),
         )
     }
     response {
@@ -46,6 +50,7 @@ Contract.make {
                 "provider": "FACEBOOK",
                 "providerId": "test_provider_facebook",
                 "authorities": ["ROLE_USER"],
+                "language": "en",
                 activated: true
         )
     }
