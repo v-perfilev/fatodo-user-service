@@ -6,6 +6,7 @@ import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
+import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.mapper.UserMapper;
 import com.persoff68.fatodo.service.UserService;
@@ -82,5 +83,12 @@ public class AuthController {
         userService.activate(userId);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping(value = "/reset-password")
+    public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordDTO resetPasswordDTO) {
+        userService.resetPassword(resetPasswordDTO.getUserId(), resetPasswordDTO.getPassword());
+        return ResponseEntity.ok().build();
+    }
+
 
 }

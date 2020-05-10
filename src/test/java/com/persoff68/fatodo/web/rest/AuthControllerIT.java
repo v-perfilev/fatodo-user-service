@@ -8,6 +8,7 @@ import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
+import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -336,6 +337,42 @@ public class AuthControllerIT {
     public void testActivate_forbidden() throws Exception {
         String url = ENDPOINT + "/activate/3";
         mvc.perform(get(url))
+                .andExpect(status().isForbidden());
+    }
+
+
+    @Test
+    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    public void testResetPassword_ok() throws Exception {
+        ResetPasswordDTO dto = FactoryUtils.createResetPasswordDTO("3");
+        String requestBody = objectMapper.writeValueAsString(dto);
+        String url = ENDPOINT + "/reset-password";
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isOk());
+        User result = userRepository.findById("3").orElse(new User());
+        assertThat(result.getPassword()).isEqualTo(dto.getPassword());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testResetPassword_unauthorized() throws Exception {
+        ResetPasswordDTO dto = FactoryUtils.createResetPasswordDTO("3");
+        String requestBody = objectMapper.writeValueAsString(dto);
+        String url = ENDPOINT + "/reset-password";
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
+    public void testResetPassword_forbidden() throws Exception {
+        ResetPasswordDTO dto = FactoryUtils.createResetPasswordDTO("3");
+        String requestBody = objectMapper.writeValueAsString(dto);
+        String url = ENDPOINT + "/reset-password";
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());
     }
 

@@ -6,6 +6,7 @@ import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
+import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 
 import java.util.Collections;
@@ -77,6 +78,13 @@ public class FactoryUtils {
 
     public static UserDTO createInvalidUserDTO_local() {
         return new UserDTO();
+    }
+
+    public static ResetPasswordDTO createResetPasswordDTO(String userId) {
+        ResetPasswordDTO dto = new ResetPasswordDTO();
+        dto.setUserId(userId);
+        dto.setPassword("reset_password");
+        return dto;
     }
 
 }

@@ -84,4 +84,11 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void resetPassword(String userId, String password) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(ModelNotFoundException::new);
+        user.setPassword(password);
+        userRepository.save(user);
+    }
+
 }
