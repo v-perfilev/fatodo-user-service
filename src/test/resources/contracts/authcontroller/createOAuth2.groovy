@@ -33,7 +33,7 @@ Contract.make {
                         producer("test_provider_facebook")
                 ),
                 "language": $(
-                        consumer(email()),
+                        consumer(anyNonBlankString()),
                         producer("en")
                 ),
         )

@@ -26,7 +26,7 @@ Contract.make {
                 ),
                 "password": anyNonBlankString(),
                 "language": $(
-                        consumer(email()),
+                        consumer(anyNonBlankString()),
                         producer("en")
                 ),
         )
