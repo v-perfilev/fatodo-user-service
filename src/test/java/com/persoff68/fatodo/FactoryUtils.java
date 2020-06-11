@@ -69,7 +69,7 @@ public class FactoryUtils {
         dto.setId("test_id_" + postfix);
         dto.setEmail("test_" + postfix + "@email.com");
         dto.setUsername("test_username_" + postfix);
-        dto.setProvider(Provider.Constants.LOCAL_VALUE);
+        dto.setProvider(Provider.LOCAL.getValue());
         dto.setAuthorities(Collections.singleton(AuthorityType.USER.getValue()));
         dto.setLanguage("en");
         dto.setActivated(false);

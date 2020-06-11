@@ -46,7 +46,7 @@ public class UserControllerIT {
         currentUser.setId("3");
         userRepository.save(currentUser);
         userRepository.save(createUser_local("local", "encodedPassword"));
-        userRepository.save(FactoryUtils.createUser_oAuth2("oauth2", Provider.Constants.GOOGLE_VALUE));
+        userRepository.save(FactoryUtils.createUser_oAuth2("oauth2", Provider.GOOGLE.getValue()));
     }
 
     @Test

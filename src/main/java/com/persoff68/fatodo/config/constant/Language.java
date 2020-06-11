@@ -18,10 +18,10 @@ public enum Language {
     }
 
     public static boolean contains(String value) {
-        return Arrays.stream(Provider.values()).anyMatch(a -> a.getValue().equals(value));
+        return Arrays.stream(values()).anyMatch(language -> language.getValue().equals(value));
     }
 
-    private static class Constants {
+    public static class Constants {
         public static final String EN_VALUE = "en";
         public static final String RU_VALUE = "ru";
 

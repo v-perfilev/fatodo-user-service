@@ -56,7 +56,7 @@ public class AuthControllerIT {
         activatedUser.setActivated(true);
         userRepository.save(activatedUser);
         userRepository.save(createUser_local("local", "encodedPassword"));
-        userRepository.save(FactoryUtils.createUser_oAuth2("oauth2", Provider.Constants.GOOGLE_VALUE));
+        userRepository.save(FactoryUtils.createUser_oAuth2("oauth2", Provider.GOOGLE.getValue()));
     }
 
     @Test
@@ -193,7 +193,7 @@ public class AuthControllerIT {
         assertThat(resultDTO.getEmail()).isEqualTo(dto.getEmail());
         assertThat(resultDTO.getUsername()).isEqualTo(dto.getUsername());
         assertThat(resultDTO.getPassword()).isNotEmpty();
-        assertThat(resultDTO.getProvider()).isEqualTo(Provider.Constants.LOCAL_VALUE);
+        assertThat(resultDTO.getProvider()).isEqualTo(Provider.LOCAL.getValue());
         assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.USER.getValue());
         assertThat(resultDTO.isActivated()).isFalse();
     }
@@ -247,7 +247,7 @@ public class AuthControllerIT {
     @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testCreateOAuth2User_created() throws Exception {
         String url = ENDPOINT + "/oauth2";
-        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("not_exists", Provider.Constants.GOOGLE_VALUE);
+        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("not_exists", Provider.GOOGLE.getValue());
         String requestBody = objectMapper.writeValueAsString(dto);
         ResultActions resultActions = mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -268,7 +268,7 @@ public class AuthControllerIT {
     @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
     public void testCreateOAuth2User_conflict_duplicated() throws Exception {
         String url = ENDPOINT + "/oauth2";
-        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Provider.Constants.GOOGLE_VALUE);
+        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Provider.GOOGLE.getValue());
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -290,7 +290,7 @@ public class AuthControllerIT {
     @WithAnonymousUser
     public void testCreateOAuth2User_unauthorized() throws Exception {
         String url = ENDPOINT + "/oauth2";
-        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Provider.Constants.GOOGLE_VALUE);
+        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Provider.GOOGLE.getValue());
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -301,7 +301,7 @@ public class AuthControllerIT {
     @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
     public void testCreateOAuth2User_forbidden() throws Exception {
         String url = ENDPOINT + "/oauth2";
-        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Provider.Constants.GOOGLE_VALUE);
+        OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Provider.GOOGLE.getValue());
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))

@@ -18,10 +18,10 @@ public enum Provider {
     }
 
     public static boolean contains(String value) {
-        return Arrays.stream(Provider.values()).anyMatch(a -> a.getValue().equals(value));
+        return Arrays.stream(values()).anyMatch(provider -> provider.getValue().equals(value));
     }
 
-    private static class Constants {
+    public static class Constants {
         public static final String LOCAL_VALUE = "LOCAL";
         public static final String GOOGLE_VALUE = "GOOGLE";
         public static final String FACEBOOK_VALUE = "FACEBOOK";
