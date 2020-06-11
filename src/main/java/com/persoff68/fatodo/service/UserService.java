@@ -2,8 +2,8 @@ package com.persoff68.fatodo.service;
 
 import com.persoff68.fatodo.config.aop.cache.annotation.RedisCacheEvict;
 import com.persoff68.fatodo.config.aop.cache.annotation.RedisCacheable;
-import com.persoff68.fatodo.config.constant.AppConstants;
 import com.persoff68.fatodo.config.constant.AuthorityType;
+import com.persoff68.fatodo.config.constant.Language;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
@@ -15,7 +15,6 @@ import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -64,8 +63,8 @@ public class UserService {
 
     private User create(User user) {
         String language = user.getLanguage();
-        if (language == null || !Arrays.asList(AppConstants.LANGUAGES).contains(language)) {
-            user.setLanguage(AppConstants.DEFAULT_LANGUAGE);
+        if (language == null || !Language.contains(language)) {
+            user.setLanguage(Language.DEFAULT.getValue());
         }
         user.setAuthorities(Set.of(new Authority(AuthorityType.USER.getValue())));
         return userRepository.save(user);
