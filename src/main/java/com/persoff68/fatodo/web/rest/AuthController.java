@@ -1,8 +1,5 @@
 package com.persoff68.fatodo.web.rest;
 
-import com.persoff68.fatodo.config.constant.AuthorityType;
-import com.persoff68.fatodo.config.constant.Provider;
-import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Set;
 
 @RestController
 @RequestMapping(AuthController.ENDPOINT)
@@ -59,9 +55,7 @@ public class AuthController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipalDTO> createLocal(@Valid @RequestBody LocalUserDTO localUserDTO) {
         User user = userMapper.localUserDTOToUser(localUserDTO);
-        user.setProvider(Provider.LOCAL);
-        user.setAuthorities(Set.of(new Authority(AuthorityType.USER.getValue())));
-        user = userService.create(user);
+        user = userService.createLocal(user);
         UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userPrincipalDTO);
     }
@@ -71,9 +65,7 @@ public class AuthController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipalDTO> createOAuth2(@Valid @RequestBody OAuth2UserDTO oAuth2UserDTO) {
         User user = userMapper.oAuth2UserDTOToUser(oAuth2UserDTO);
-        user.setActivated(true);
-        user.setAuthorities(Set.of(new Authority(AuthorityType.USER.getValue())));
-        user = userService.create(user);
+        user = userService.createOAuth2(user);
         UserPrincipalDTO userPrincipalDTO = userMapper.userToUserPrincipalDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userPrincipalDTO);
     }

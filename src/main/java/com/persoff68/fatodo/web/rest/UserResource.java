@@ -50,7 +50,7 @@ public class UserResource {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO) {
         User user = userMapper.userDTOToUser(userDTO);
-        user = userService.create(user);
+        user = userService.createLocal(user);
         userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }

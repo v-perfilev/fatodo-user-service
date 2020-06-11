@@ -28,7 +28,6 @@ public class OAuth2UserDTO extends AbstractDTO {
     @NotNull
     private String providerId;
 
-    @NotNull
     private String language;
 
 }

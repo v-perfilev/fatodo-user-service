@@ -2,6 +2,10 @@ package com.persoff68.fatodo.service;
 
 import com.persoff68.fatodo.config.aop.cache.annotation.RedisCacheEvict;
 import com.persoff68.fatodo.config.aop.cache.annotation.RedisCacheable;
+import com.persoff68.fatodo.config.constant.AppConstants;
+import com.persoff68.fatodo.config.constant.AuthorityType;
+import com.persoff68.fatodo.config.constant.Provider;
+import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
@@ -11,7 +15,9 @@ import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -40,10 +46,28 @@ public class UserService {
                 .orElseThrow(ModelNotFoundException::new);
     }
 
-    public User create(User user) {
+    public User createLocal(User user) {
         if (user.getId() != null) {
             throw new ModelAlreadyExistsException();
         }
+        user.setProvider(Provider.LOCAL);
+        return create(user);
+    }
+
+    public User createOAuth2(User user) {
+        if (user.getId() != null) {
+            throw new ModelAlreadyExistsException();
+        }
+        user.setActivated(true);
+        return create(user);
+    }
+
+    private User create(User user) {
+        String language = user.getLanguage();
+        if (language == null || !Arrays.asList(AppConstants.LANGUAGES).contains(language)) {
+            user.setLanguage(AppConstants.DEFAULT_LANGUAGE);
+        }
+        user.setAuthorities(Set.of(new Authority(AuthorityType.USER.getValue())));
         return userRepository.save(user);
     }
 

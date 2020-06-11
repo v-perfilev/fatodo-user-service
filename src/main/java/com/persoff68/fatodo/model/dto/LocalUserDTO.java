@@ -26,7 +26,6 @@ public class LocalUserDTO extends AbstractDTO {
     @Size(min = 5, max = 100)
     private String password;
 
-    @NotNull
     private String language;
 
 }
