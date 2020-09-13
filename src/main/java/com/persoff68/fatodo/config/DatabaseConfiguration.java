@@ -41,15 +41,6 @@ public class DatabaseConfiguration {
         return new LocalValidatorFactoryBean();
     }
 
-//    @Bean
-//    public SpringBootMongock mongock() {
-//        String scanPath = this.getClass().getPackageName() + ".database.migrations";
-//        return new SpringBootMongockBuilder(mongoTemplate, scanPath)
-//                .setApplicationContext(springContext)
-//                .setLockQuickConfig()
-//                .build();
-//    }
-
     @Bean
     public MongockSpring5.MongockInitializingBeanRunner mongockInitializingBeanRunner(
             ApplicationContext springContext,
