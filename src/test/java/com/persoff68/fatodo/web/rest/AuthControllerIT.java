@@ -3,6 +3,7 @@ package com.persoff68.fatodo.web.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.FatodoUserServiceApplication;
+import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.User;
@@ -17,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -60,7 +60,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testGetUserPrincipalById_ok() throws Exception {
         String id = "test_id_local";
         String url = ENDPOINT + "/id/" + id;
@@ -81,7 +81,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testGetUserPrincipalById_forbidden() throws Exception {
         String id = "test_id_local";
         String url = ENDPOINT + "/id/" + id;
@@ -90,7 +90,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testGetUserPrincipalById_notFound() throws Exception {
         String id = "test_id_not_exists";
         String url = ENDPOINT + "/id/" + id;
@@ -100,7 +100,7 @@ public class AuthControllerIT {
 
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testGetUserPrincipalByEmail_ok() throws Exception {
         String email = "test_local@email.com";
         String url = ENDPOINT + "/email/" + email;
@@ -121,7 +121,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testGetUserPrincipalByEmail_forbidden() throws Exception {
         String email = "test_local@email.com";
         String url = ENDPOINT + "/email/" + email;
@@ -130,7 +130,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testGetUserPrincipalByEmail_notFound() throws Exception {
         String email = "test_not_exists@email.com";
         String url = ENDPOINT + "/email/" + email;
@@ -140,7 +140,7 @@ public class AuthControllerIT {
 
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testGetUserPrincipalByUsername_ok() throws Exception {
         String username = "test_username_local";
         String url = ENDPOINT + "/username/" + username;
@@ -161,7 +161,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testGetUserPrincipalByUsername_forbidden() throws Exception {
         String username = "test_username_local";
         String url = ENDPOINT + "/username/" + username;
@@ -170,7 +170,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testGetUserPrincipalByUsername_notFound() throws Exception {
         String username = "test_username_not_exists";
         String url = ENDPOINT + "/username/" + username;
@@ -179,7 +179,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testCreateLocalUser_created() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = FactoryUtils.createLocalUserDTO("not_exists");
@@ -199,7 +199,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testCreateLocalUser_conflict_duplicated() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = FactoryUtils.createLocalUserDTO("local");
@@ -210,7 +210,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testCreateLocalUser_badRequest_invalid() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = FactoryUtils.createInvalidLocalUserDTO();
@@ -232,7 +232,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testCreateLocalUser_forbidden() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = FactoryUtils.createLocalUserDTO("local");
@@ -244,7 +244,7 @@ public class AuthControllerIT {
 
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testCreateOAuth2User_created() throws Exception {
         String url = ENDPOINT + "/oauth2";
         OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("not_exists", Provider.GOOGLE.getValue());
@@ -265,7 +265,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testCreateOAuth2User_conflict_duplicated() throws Exception {
         String url = ENDPOINT + "/oauth2";
         OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Provider.GOOGLE.getValue());
@@ -276,7 +276,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testCreateOAuth2User_badRequest_invalid() throws Exception {
         String url = ENDPOINT + "/oauth2";
         OAuth2UserDTO dto = FactoryUtils.createInvalidOAuth2UserDTO();
@@ -298,7 +298,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testCreateOAuth2User_forbidden() throws Exception {
         String url = ENDPOINT + "/oauth2";
         OAuth2UserDTO dto = FactoryUtils.createOAuth2UserDTO("oauth2", Provider.GOOGLE.getValue());
@@ -309,7 +309,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testActivate_ok() throws Exception {
         String url = ENDPOINT + "/activate/3";
         mvc.perform(get(url))
@@ -317,7 +317,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testActivate_conflict() throws Exception {
         String url = ENDPOINT + "/activate/4";
         mvc.perform(get(url))
@@ -333,7 +333,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testActivate_forbidden() throws Exception {
         String url = ENDPOINT + "/activate/3";
         mvc.perform(get(url))
@@ -342,7 +342,7 @@ public class AuthControllerIT {
 
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testResetPassword_ok() throws Exception {
         ResetPasswordDTO dto = FactoryUtils.createResetPasswordDTO("3");
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -366,7 +366,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.USER_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testResetPassword_forbidden() throws Exception {
         ResetPasswordDTO dto = FactoryUtils.createResetPasswordDTO("3");
         String requestBody = objectMapper.writeValueAsString(dto);

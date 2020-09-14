@@ -1,14 +1,13 @@
 package com.persoff68.fatodo.web.rest;
 
-import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.FactoryUtils;
-import com.persoff68.fatodo.config.constant.AuthorityType;
+import com.persoff68.fatodo.FatodoUserServiceApplication;
+import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -40,7 +39,7 @@ public class CheckControllerIT {
 
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testIsEmailUnique_true() throws Exception {
         String email = "test_not_exists@email.com";
         String url = ENDPOINT + "/email/" + email + "/unique";
@@ -52,7 +51,7 @@ public class CheckControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testIsEmailUnique_false() throws Exception {
         String email = "test_local@email.com";
         String url = ENDPOINT + "/email/" + email + "/unique";
@@ -64,7 +63,7 @@ public class CheckControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testIsUsernameUnique_true() throws Exception {
         String username = "test_username_not_exists";
         String url = ENDPOINT + "/username/" + username + "/unique";
@@ -76,7 +75,7 @@ public class CheckControllerIT {
     }
 
     @Test
-    @WithMockUser(authorities = AuthorityType.Constants.SYSTEM_VALUE)
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testIsUsernameUnique_false() throws Exception {
         String username = "test_username_local";
         String url = ENDPOINT + "/username/" + username + "/unique";
