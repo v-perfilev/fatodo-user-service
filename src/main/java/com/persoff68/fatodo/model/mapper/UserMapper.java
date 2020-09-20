@@ -6,6 +6,7 @@ import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
+import com.persoff68.fatodo.model.dto.UserManagementDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,14 +23,18 @@ public interface UserMapper {
     UserPrincipalDTO userToUserPrincipalDTO(User user);
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "authoritiesIntoStrings")
+    UserManagementDTO userToUserManagementDTO(User user);
+
     UserDTO userToUserDTO(User user);
 
+
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringsIntoAuthorities")
-    User userDTOToUser(UserDTO userDTO);
+    User userManagementDTOToUser(UserManagementDTO userManagementDTO);
 
     User localUserDTOToUser(LocalUserDTO localUserDTO);
 
     User oAuth2UserDTOToUser(OAuth2UserDTO oAuth2UserDTO);
+
 
     @Named("authoritiesIntoStrings")
     default Set<String> authoritiesIntoStrings(Set<Authority> authoritySet) {

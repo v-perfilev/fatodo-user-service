@@ -2,15 +2,17 @@ package com.persoff68.fatodo.model.dto;
 
 import com.persoff68.fatodo.config.constant.AppConstants;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class OAuth2UserDTO extends AbstractDTO {
+@NoArgsConstructor
+public class OAuth2UserDTO implements Serializable {
+    protected static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
     @NotNull
     @Email

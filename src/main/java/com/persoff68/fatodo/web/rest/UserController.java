@@ -2,6 +2,7 @@ package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserDTO;
+import com.persoff68.fatodo.model.dto.UserManagementDTO;
 import com.persoff68.fatodo.model.mapper.UserMapper;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;
 import com.persoff68.fatodo.security.util.SecurityUtils;
@@ -28,11 +29,11 @@ public class UserController {
     private final UserMapper userMapper;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> getCurrentUser() {
+    public ResponseEntity<UserManagementDTO> getCurrentUser() {
         String id = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
         User user = userService.getById(id);
-        UserDTO userDTO = userMapper.userToUserDTO(user);
-        return ResponseEntity.ok(userDTO);
+        UserManagementDTO userManagementDTO = userMapper.userToUserManagementDTO(user);
+        return ResponseEntity.ok(userManagementDTO);
     }
 
     @PostMapping(value = "all-by-ids", produces = MediaType.APPLICATION_JSON_VALUE)

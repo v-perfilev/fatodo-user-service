@@ -24,18 +24,20 @@ public class User extends AbstractAuditingModel {
     @Indexed(unique = true)
     private String username;
 
+    @NotNull
+    private Set<Authority> authorities;
+
+    @NotNull
+    private String language;
+
+    private String imageFilename;
+
     private String password;
 
     @NotNull
     private Provider provider;
 
     private String providerId;
-
-    @NotNull
-    private Set<Authority> authorities;
-
-    @NotNull
-    private String language;
 
     @NotNull
     private boolean activated;

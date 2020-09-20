@@ -7,7 +7,7 @@ import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
-import com.persoff68.fatodo.model.dto.UserDTO;
+import com.persoff68.fatodo.model.dto.UserManagementDTO;
 
 import java.util.Collections;
 
@@ -64,8 +64,8 @@ public class FactoryUtils {
         return new OAuth2UserDTO();
     }
 
-    public static UserDTO createUserDTO_local(String postfix) {
-        UserDTO dto = new UserDTO();
+    public static UserManagementDTO createUserDTO_local(String postfix) {
+        UserManagementDTO dto = new UserManagementDTO();
         dto.setId("test_id_" + postfix);
         dto.setEmail("test_" + postfix + "@email.com");
         dto.setUsername("test_username_" + postfix);
@@ -76,8 +76,8 @@ public class FactoryUtils {
         return dto;
     }
 
-    public static UserDTO createInvalidUserDTO_local() {
-        return new UserDTO();
+    public static UserManagementDTO createInvalidUserDTO_local() {
+        return new UserManagementDTO();
     }
 
     public static ResetPasswordDTO createResetPasswordDTO(String userId) {
