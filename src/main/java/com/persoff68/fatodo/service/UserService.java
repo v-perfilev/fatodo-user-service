@@ -1,7 +1,9 @@
 package com.persoff68.fatodo.service;
 
-import com.persoff68.fatodo.config.aop.cache.annotation.RedisCacheEvict;
-import com.persoff68.fatodo.config.aop.cache.annotation.RedisCacheable;
+import com.persoff68.fatodo.config.aop.cache.annotation.CustomCacheEvict;
+import com.persoff68.fatodo.config.aop.cache.annotation.CustomCacheable;
+import com.persoff68.fatodo.config.aop.cache.annotation.CustomListCacheEvict;
+import com.persoff68.fatodo.config.aop.cache.annotation.CustomListCacheable;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Language;
 import com.persoff68.fatodo.config.constant.Provider;
@@ -28,11 +30,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    @CustomListCacheable(cacheName = "user-lists", keyCacheName = "user-list-keys", key = "#idList")
     public List<User> getAllByIds(List<String> idList) {
         return userRepository.findAllByIdIn(idList);
     }
 
-    @RedisCacheable(cacheName = "users", key = "#id")
+    @CustomCacheable(cacheName = "users", key = "#id")
     public User getById(String id) {
         return userRepository.findById(id)
                 .orElseThrow(ModelNotFoundException::new);
@@ -73,7 +76,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @RedisCacheEvict(cacheName = "users", key = "#user.id")
+    @CustomCacheEvict(cacheName = "users", key = "#user.id")
+    @CustomListCacheEvict(cacheName = "user-lists", keyCacheName = "user-list-keys", key = "#user.id")
     public User update(User user) {
         if (user.getId() == null) {
             throw new ModelInvalidException();
@@ -84,7 +88,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @RedisCacheEvict(cacheName = "users", key = "#id")
+    @CustomCacheEvict(cacheName = "users", key = "#id")
+    @CustomListCacheEvict(cacheName = "user-lists", keyCacheName = "user-list-keys", key = "#id")
     public void delete(String id) {
         if (!userRepository.existsById(id)) {
             throw new ModelNotFoundException();
