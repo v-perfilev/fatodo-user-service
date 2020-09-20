@@ -1,6 +1,5 @@
 package com.persoff68.fatodo.model;
 
-import com.persoff68.fatodo.config.constant.AppConstants;
 import com.persoff68.fatodo.config.constant.Provider;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,10 +12,9 @@ import java.util.Set;
 
 @Document(collection = "ftd_user")
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class User extends AbstractAuditingModel {
-    private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
     @NotNull
     @Indexed(unique = true)

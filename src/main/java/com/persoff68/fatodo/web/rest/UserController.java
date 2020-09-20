@@ -10,8 +10,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(UserController.ENDPOINT)
@@ -28,6 +33,14 @@ public class UserController {
         User user = userService.getById(id);
         UserDTO userDTO = userMapper.userToUserDTO(user);
         return ResponseEntity.ok(userDTO);
+    }
+
+    @PostMapping(value = "all-by-ids", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserDTO>> getAllByIds(@RequestBody List<String> idList) {
+        List<User> userList = userService.getAllByIds(idList);
+        List<UserDTO> userDTOList = userList.stream()
+                .map(userMapper::userToUserDTO).collect(Collectors.toList());
+        return ResponseEntity.ok(userDTOList);
     }
 
 }

@@ -28,9 +28,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public List<User> getAllByIds(List<String> idList) {
+        return userRepository.findAllByIdIn(idList);
+    }
+
     @RedisCacheable(cacheName = "users", key = "#id")
     public User getById(String id) {
-
         return userRepository.findById(id)
                 .orElseThrow(ModelNotFoundException::new);
     }

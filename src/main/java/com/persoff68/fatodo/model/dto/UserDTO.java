@@ -10,9 +10,8 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class UserDTO extends AbstractAuditingDTO {
-    private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
     @NotNull
     @Email

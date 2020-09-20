@@ -9,9 +9,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class OAuth2UserDTO extends AbstractDTO {
-    private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
     @NotNull
     @Email
