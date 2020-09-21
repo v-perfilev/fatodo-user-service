@@ -24,13 +24,13 @@ public class User extends AbstractAuditingModel {
     @Indexed(unique = true)
     private String username;
 
-    @NotNull
-    private Set<Authority> authorities;
+    private String imageFilename;
 
     @NotNull
     private String language;
 
-    private String imageFilename;
+    @NotNull
+    private Set<Authority> authorities;
 
     private String password;
 

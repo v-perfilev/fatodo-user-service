@@ -7,7 +7,7 @@ import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
-import com.persoff68.fatodo.model.dto.UserManagementDTO;
+import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,8 +59,8 @@ public class UserResourceIT {
         ResultActions resultActions = mvc.perform(get(ENDPOINT))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(List.class, UserManagementDTO.class);
-        List<UserManagementDTO> resultDTOList = objectMapper.readValue(resultString, listType);
+        CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(List.class, UserDTO.class);
+        List<UserDTO> resultDTOList = objectMapper.readValue(resultString, listType);
         assertThat(resultDTOList.size()).isEqualTo(2);
     }
 
@@ -87,7 +87,7 @@ public class UserResourceIT {
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        UserManagementDTO resultDTO = objectMapper.readValue(resultString, UserManagementDTO.class);
+        UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
         assertThat(resultDTO.getId()).isEqualTo(id);
     }
 
@@ -122,14 +122,14 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testCreate_created() throws Exception {
-        UserManagementDTO dto = FactoryUtils.createUserDTO_local("not_exists");
+        UserDTO dto = FactoryUtils.createUserDTO_local("not_exists");
         dto.setId(null);
         String requestBody = objectMapper.writeValueAsString(dto);
         ResultActions resultActions = mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isCreated());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        UserManagementDTO resultDTO = objectMapper.readValue(resultString, UserManagementDTO.class);
+        UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
         assertThat(resultDTO.getId()).isNotNull();
         assertThat(resultDTO.getEmail()).isEqualTo(dto.getEmail());
         assertThat(resultDTO.getUsername()).isEqualTo(dto.getUsername());
@@ -140,7 +140,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testCreate_conflict_duplicated() throws Exception {
-        UserManagementDTO dto = FactoryUtils.createUserDTO_local("1");
+        UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setId(null);
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(ENDPOINT)
@@ -151,7 +151,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testCreate_badRequest_invalid() throws Exception {
-        UserManagementDTO dto = FactoryUtils.createInvalidUserDTO_local();
+        UserDTO dto = FactoryUtils.createInvalidUserDTO_local();
         dto.setId(null);
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(ENDPOINT)
@@ -162,7 +162,7 @@ public class UserResourceIT {
     @Test
     @WithAnonymousUser
     public void testCreate_unauthorized() throws Exception {
-        UserManagementDTO dto = FactoryUtils.createUserDTO_local("not_exists");
+        UserDTO dto = FactoryUtils.createUserDTO_local("not_exists");
         dto.setId(null);
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(ENDPOINT)
@@ -173,7 +173,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testCreate_forbidden() throws Exception {
-        UserManagementDTO dto = FactoryUtils.createUserDTO_local("not_exists");
+        UserDTO dto = FactoryUtils.createUserDTO_local("not_exists");
         dto.setId(null);
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(ENDPOINT)
@@ -185,14 +185,14 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testUpdate_ok() throws Exception {
-        UserManagementDTO dto = FactoryUtils.createUserDTO_local("1");
+        UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setEmail("test_updated@email.com");
         String requestBody = objectMapper.writeValueAsString(dto);
         ResultActions resultActions = mvc.perform(put(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        UserManagementDTO resultDTO = objectMapper.readValue(resultString, UserManagementDTO.class);
+        UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
         assertThat(resultDTO.getId()).isEqualTo(dto.getId());
         assertThat(resultDTO.getEmail()).isEqualTo(dto.getEmail());
         assertThat(resultDTO.getUsername()).isEqualTo(dto.getUsername());
@@ -203,7 +203,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testUpdate_conflict_duplicated() throws Exception {
-        UserManagementDTO dto = FactoryUtils.createUserDTO_local("1");
+        UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setEmail("test_2@email.com");
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
@@ -214,7 +214,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testUpdate_badRequest_invalidEmail() throws Exception {
-        UserManagementDTO dto = FactoryUtils.createUserDTO_local("1");
+        UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setEmail("");
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
@@ -225,7 +225,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testUpdate_badRequest_noId() throws Exception {
-        UserManagementDTO dto = FactoryUtils.createUserDTO_local("1");
+        UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setEmail("test_2@email.com");
         dto.setId(null);
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -237,7 +237,7 @@ public class UserResourceIT {
     @Test
     @WithAnonymousUser
     public void testUpdate_unauthorized() throws Exception {
-        UserManagementDTO dto = FactoryUtils.createUserDTO_local("1");
+        UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setEmail("test_updated@email.com");
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
@@ -248,7 +248,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testUpdate_forbidden() throws Exception {
-        UserManagementDTO dto = FactoryUtils.createUserDTO_local("1");
+        UserDTO dto = FactoryUtils.createUserDTO_local("1");
         dto.setEmail("test_updated@email.com");
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
@@ -259,7 +259,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testUpdate_notFound() throws Exception {
-        UserManagementDTO dto = FactoryUtils.createUserDTO_local("not_exists");
+        UserDTO dto = FactoryUtils.createUserDTO_local("not_exists");
         dto.setEmail("test_updated@email.com");
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)

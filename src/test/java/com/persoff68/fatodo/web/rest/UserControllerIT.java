@@ -6,7 +6,7 @@ import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.User;
-import com.persoff68.fatodo.model.dto.UserManagementDTO;
+import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,7 +55,7 @@ public class UserControllerIT {
         ResultActions resultActions = mvc.perform(get(ENDPOINT))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        UserManagementDTO resultDTO = objectMapper.readValue(resultString, UserManagementDTO.class);
+        UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
         assertThat(resultDTO.getId()).isEqualTo("3");
     }
 

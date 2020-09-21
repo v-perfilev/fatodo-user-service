@@ -1,8 +1,8 @@
 package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.model.User;
+import com.persoff68.fatodo.model.dto.UserSummaryDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
-import com.persoff68.fatodo.model.dto.UserManagementDTO;
 import com.persoff68.fatodo.model.mapper.UserMapper;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;
 import com.persoff68.fatodo.security.util.SecurityUtils;
@@ -29,19 +29,19 @@ public class UserController {
     private final UserMapper userMapper;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserManagementDTO> getCurrentUser() {
+    public ResponseEntity<UserDTO> getCurrentUser() {
         String id = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
         User user = userService.getById(id);
-        UserManagementDTO userManagementDTO = userMapper.userToUserManagementDTO(user);
-        return ResponseEntity.ok(userManagementDTO);
+        UserDTO userDTO = userMapper.userToUserManagementDTO(user);
+        return ResponseEntity.ok(userDTO);
     }
 
     @PostMapping(value = "all-by-ids", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<UserDTO>> getAllByIds(@RequestBody List<String> idList) {
+    public ResponseEntity<List<UserSummaryDTO>> getAllByIds(@RequestBody List<String> idList) {
         List<User> userList = userService.getAllByIds(idList);
-        List<UserDTO> userDTOList = userList.stream()
+        List<UserSummaryDTO> userSummaryDTOList = userList.stream()
                 .map(userMapper::userToUserDTO).collect(Collectors.toList());
-        return ResponseEntity.ok(userDTOList);
+        return ResponseEntity.ok(userSummaryDTOList);
     }
 
 }
