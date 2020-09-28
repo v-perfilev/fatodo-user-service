@@ -46,10 +46,6 @@ public class FactoryUtils {
         return dto;
     }
 
-    public static LocalUserDTO createInvalidLocalUserDTO() {
-        return new LocalUserDTO();
-    }
-
     public static OAuth2UserDTO createOAuth2UserDTO(String postfix, String provider) {
         OAuth2UserDTO dto = new OAuth2UserDTO();
         dto.setEmail("test_" + postfix + "@email.com");
@@ -58,10 +54,6 @@ public class FactoryUtils {
         dto.setProviderId("test_providerId_" + postfix);
         dto.setLanguage("en");
         return dto;
-    }
-
-    public static OAuth2UserDTO createInvalidOAuth2UserDTO() {
-        return new OAuth2UserDTO();
     }
 
     public static UserDTO createUserDTO_local(String postfix) {
@@ -74,10 +66,6 @@ public class FactoryUtils {
         dto.setLanguage("en");
         dto.setActivated(false);
         return dto;
-    }
-
-    public static UserDTO createInvalidUserDTO_local() {
-        return new UserDTO();
     }
 
     public static ResetPasswordDTO createResetPasswordDTO(String userId) {

@@ -36,7 +36,7 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 
-    @PostMapping(value = "all-by-ids", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/all-by-ids", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserSummaryDTO>> getAllByIds(@RequestBody List<String> idList) {
         List<User> userList = userService.getAllByIds(idList);
         List<UserSummaryDTO> userSummaryDTOList = userList.stream()

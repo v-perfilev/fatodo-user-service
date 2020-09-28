@@ -151,8 +151,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testCreate_badRequest_invalid() throws Exception {
-        UserDTO dto = FactoryUtils.createInvalidUserDTO_local();
-        dto.setId(null);
+        UserDTO dto = new UserDTO();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))

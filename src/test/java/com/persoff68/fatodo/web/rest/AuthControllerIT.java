@@ -213,7 +213,7 @@ public class AuthControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testCreateLocalUser_badRequest_invalid() throws Exception {
         String url = ENDPOINT + "/local";
-        LocalUserDTO dto = FactoryUtils.createInvalidLocalUserDTO();
+        LocalUserDTO dto = new LocalUserDTO();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -279,7 +279,7 @@ public class AuthControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testCreateOAuth2User_badRequest_invalid() throws Exception {
         String url = ENDPOINT + "/oauth2";
-        OAuth2UserDTO dto = FactoryUtils.createInvalidOAuth2UserDTO();
+        OAuth2UserDTO dto = new OAuth2UserDTO();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
