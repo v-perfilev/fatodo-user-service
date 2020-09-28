@@ -18,10 +18,11 @@ public class FactoryUtils {
         user.setId("test_id_" + postfix);
         user.setEmail("test_" + postfix + "@email.com");
         user.setUsername("test_username_" + postfix);
-        user.setPassword(password);
-        user.setAuthorities(Collections.singleton(new Authority(AuthorityType.USER.getValue())));
-        user.setProvider(Provider.LOCAL);
+        user.setImageFilename("test_image_filename");
         user.setLanguage("en");
+        user.setAuthorities(Collections.singleton(new Authority(AuthorityType.USER.getValue())));
+        user.setPassword(password);
+        user.setProvider(Provider.LOCAL);
         return user;
     }
 
@@ -30,10 +31,11 @@ public class FactoryUtils {
         user.setId("test_id_" + postfix);
         user.setEmail("test_" + postfix + "@email.com");
         user.setUsername("test_" + postfix + "@email.com");
+        user.setImageFilename("test_image_filename");
+        user.setLanguage("en");
         user.setAuthorities(Collections.singleton(new Authority(AuthorityType.USER.getValue())));
         user.setProvider(Provider.valueOf(provider));
         user.setProviderId("test_id_" + postfix);
-        user.setLanguage("en");
         return user;
     }
 
@@ -41,8 +43,8 @@ public class FactoryUtils {
         LocalUserDTO dto = new LocalUserDTO();
         dto.setEmail("test_" + postfix + "@email.com");
         dto.setUsername("test_username_" + postfix);
-        dto.setPassword("test_password");
         dto.setLanguage("en");
+        dto.setPassword("test_password");
         return dto;
     }
 
@@ -50,9 +52,9 @@ public class FactoryUtils {
         OAuth2UserDTO dto = new OAuth2UserDTO();
         dto.setEmail("test_" + postfix + "@email.com");
         dto.setUsername("test_username_" + postfix);
+        dto.setLanguage("en");
         dto.setProvider(provider);
         dto.setProviderId("test_providerId_" + postfix);
-        dto.setLanguage("en");
         return dto;
     }
 
@@ -61,9 +63,9 @@ public class FactoryUtils {
         dto.setId("test_id_" + postfix);
         dto.setEmail("test_" + postfix + "@email.com");
         dto.setUsername("test_username_" + postfix);
-        dto.setProvider(Provider.LOCAL.getValue());
-        dto.setAuthorities(Collections.singleton(AuthorityType.USER.getValue()));
         dto.setLanguage("en");
+        dto.setAuthorities(Collections.singleton(AuthorityType.USER.getValue()));
+        dto.setProvider(Provider.LOCAL.getValue());
         dto.setActivated(false);
         return dto;
     }

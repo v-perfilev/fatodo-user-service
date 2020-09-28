@@ -23,10 +23,10 @@ public class LocalUserDTO implements Serializable {
     @Size(min = 5, max = 50)
     private String username;
 
+    private String language;
+
     @NotNull
     @Size(min = 5, max = 100)
     private String password;
-
-    private String language;
 
 }
