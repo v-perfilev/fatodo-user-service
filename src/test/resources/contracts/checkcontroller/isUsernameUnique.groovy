@@ -8,7 +8,7 @@ Contract.make {
     request {
         method GET()
         url($(
-                consumer(regex('\\/api\\/check\\/username\\/[\\w-]+\\/unique')),
+                consumer(regex("/api/check/username/.+/unique")),
                 producer("/api/check/username/test_username_not_exists/unique")
         ))
     }

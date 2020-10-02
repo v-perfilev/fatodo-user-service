@@ -8,7 +8,7 @@ Contract.make {
     request {
         method GET()
         url($(
-                consumer(regex('\\/api\\/auth\\/id\\/[\\w-]+')),
+                consumer(regex("/api/auth/id/.+")),
                 producer("/api/auth/id/test_id_local")
         ))
         headers {
