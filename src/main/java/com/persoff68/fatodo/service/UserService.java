@@ -1,9 +1,5 @@
 package com.persoff68.fatodo.service;
 
-import com.persoff68.fatodo.config.aop.cache.annotation.CacheEvictMethod;
-import com.persoff68.fatodo.config.aop.cache.annotation.CacheableMethod;
-import com.persoff68.fatodo.config.aop.cache.annotation.ListCacheEvictMethod;
-import com.persoff68.fatodo.config.aop.cache.annotation.ListCacheableMethod;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Language;
 import com.persoff68.fatodo.config.constant.Provider;
@@ -30,12 +26,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    @ListCacheableMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-id-list-keys", key = "#idList")
     public List<User> getAllByIds(List<String> idList) {
         return userRepository.findAllByIdIn(idList);
     }
 
-    @CacheableMethod(cacheName = "users-by-id", key = "#id")
     public User getById(String id) {
         return userRepository.findById(id)
                 .orElseThrow(ModelNotFoundException::new);
@@ -76,25 +70,21 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @CacheEvictMethod(cacheName = "users-by-id", key = "#user.id")
-    @ListCacheEvictMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-id-list-keys", key = "#user.id")
-    public User update(User user) {
-        if (user.getId() == null) {
+    public User update(User newUser) {
+        if (newUser.getId() == null) {
             throw new ModelInvalidException();
         }
-        User oldUser = userRepository.findById(user.getId())
+        User user = userRepository.findById(newUser.getId())
                 .orElseThrow(ModelNotFoundException::new);
 
-        oldUser.setEmail(user.getEmail());
-        oldUser.setUsername(user.getUsername());
-        oldUser.setImageFilename(user.getImageFilename());
-        oldUser.setLanguage(user.getLanguage());
+        user.setEmail(newUser.getEmail());
+        user.setUsername(newUser.getUsername());
+        user.setImageFilename(newUser.getImageFilename());
+        user.setLanguage(newUser.getLanguage());
 
-        return userRepository.save(oldUser);
+        return userRepository.save(user);
     }
 
-    @CacheEvictMethod(cacheName = "users-by-id", key = "#id")
-    @ListCacheEvictMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-id-list-keys", key = "#id")
     public void delete(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(ModelNotFoundException::new);
@@ -109,8 +99,6 @@ public class UserService {
         return !userRepository.existsByEmail(email);
     }
 
-    @CacheEvictMethod(cacheName = "users-by-id", key = "#id")
-    @ListCacheEvictMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-id-list-keys", key = "#id")
     public void activate(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(ModelNotFoundException::new);
@@ -121,10 +109,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    @CacheEvictMethod(cacheName = "users-by-id", key = "#id")
-    @ListCacheEvictMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-id-list-keys", key = "#id")
-    public void resetPassword(String id, String password) {
-        User user = userRepository.findById(id)
+    public void resetPassword(String userId, String password) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(ModelNotFoundException::new);
         user.setPassword(password);
         userRepository.save(user);
