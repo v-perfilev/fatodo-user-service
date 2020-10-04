@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
 
-    @ListCacheableMethod(cacheName = "users-by-idList", keyCacheName = "users-by-idList-keys", key = "#idList")
+    @ListCacheableMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-idList-keys", key = "#idList")
     List<User> findAllByIdIn(List<String> idList);
 
     @Override
@@ -25,13 +25,13 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     @Override
     @CacheEvictMethod(cacheName = "users-by-id", key = "#user.id")
-    @ListCacheEvictMethod(cacheName = "users-by-idList", keyCacheName = "users-by-idList-keys", key = "#user.id")
+    @ListCacheEvictMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-idList-keys", key = "#user.id")
     @NonNull
     <S extends User> S save(@NonNull S user);
 
     @Override
     @CacheEvictMethod(cacheName = "users-by-id", key = "#user.id")
-    @ListCacheEvictMethod(cacheName = "users-by-idList", keyCacheName = "users-by-idList-keys", key = "#user.id")
+    @ListCacheEvictMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-idList-keys", key = "#user.id")
     void delete(@NonNull User user);
 
     Optional<User> findByUsername(String username);
