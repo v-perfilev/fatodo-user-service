@@ -8,6 +8,7 @@ import com.persoff68.fatodo.security.util.SecurityUtils;
 import com.persoff68.fatodo.service.AccountService;
 import com.persoff68.fatodo.service.UserService;
 import com.persoff68.fatodo.web.rest.exception.InvalidFormException;
+import com.persoff68.fatodo.web.rest.vm.ChangePasswordVM;
 import com.persoff68.fatodo.web.rest.vm.UserVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,6 +50,12 @@ public class AccountController {
         User user = accountService.update(newUser, imageContent);
         UserDTO userDTO = userMapper.pojoToDTO(user);
         return ResponseEntity.ok(userDTO);
+    }
+
+    @PostMapping(value = "/change-password", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> changePassword(@RequestBody @Valid ChangePasswordVM changePasswordVM) {
+        accountService.changePassword(changePasswordVM.getOldPassword(), changePasswordVM.getNewPassword());
+        return ResponseEntity.ok().build();
     }
 
     private byte[] getBytesFromMultipartFile(MultipartFile multipartFile) {

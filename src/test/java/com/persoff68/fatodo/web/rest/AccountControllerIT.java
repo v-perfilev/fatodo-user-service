@@ -9,6 +9,7 @@ import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.repository.UserRepository;
+import com.persoff68.fatodo.web.rest.vm.ChangePasswordVM;
 import com.persoff68.fatodo.web.rest.vm.UserVM;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -43,6 +45,8 @@ public class AccountControllerIT {
     UserRepository userRepository;
     @Autowired
     ObjectMapper objectMapper;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @MockBean
     ImageServiceClient imageServiceClient;
@@ -53,7 +57,8 @@ public class AccountControllerIT {
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         userRepository.deleteAll();
-        User currentUser = FactoryUtils.createUser_local("current", "encodedPassword");
+        User currentUser = FactoryUtils.createUser_local("current",
+                passwordEncoder.encode("encodedPassword"));
         currentUser.setId("3");
         userRepository.save(currentUser);
         userRepository.save(createUser_local("local", "encodedPassword"));
@@ -130,6 +135,50 @@ public class AccountControllerIT {
         mvc.perform(post(url)
                 .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithCustomSecurityContext(id = "3")
+    public void testChangePassword_ok() throws Exception {
+        ChangePasswordVM vm = FactoryUtils.createChangePasswordVM("encodedPassword");
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/change-password";
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testChangePassword_unauthorized() throws Exception {
+        ChangePasswordVM vm = FactoryUtils.createChangePasswordVM("encodedPassword");
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/change-password";
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithCustomSecurityContext(id = "test_id_oauth2")
+    public void testChangePassword_wrongProvider() throws Exception {
+        ChangePasswordVM vm = FactoryUtils.createChangePasswordVM("encodedPassword");
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/change-password";
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithCustomSecurityContext(id = "3")
+    public void testChangePassword_wrongPassword() throws Exception {
+        ChangePasswordVM vm = FactoryUtils.createChangePasswordVM("wrong_password");
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/change-password";
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isBadRequest());
     }
 
 }

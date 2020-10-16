@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.verifier.messaging.boot.AutoConfigureMessageVerifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -27,6 +28,8 @@ public class ContractBase {
     JwtTokenProvider jwtTokenProvider;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @MockBean
     ImageServiceClient imageServiceClient;
@@ -35,7 +38,7 @@ public class ContractBase {
     public void setup() {
         RestAssuredMockMvc.webAppContextSetup(context);
         userRepository.deleteAll();
-        User currentUser = FactoryUtils.createUser_local("current", "encodedPassword");
+        User currentUser = FactoryUtils.createUser_local("current", passwordEncoder.encode("test_password"));
         currentUser.setId("3");
         userRepository.save(currentUser);
         userRepository.save(FactoryUtils.createUser_local("local", "$2a$10$GZrq9GxkRWW1Pv7fKJHGAe4ebib6113zhlU4nZlCtH/ylebR9rkn6"));

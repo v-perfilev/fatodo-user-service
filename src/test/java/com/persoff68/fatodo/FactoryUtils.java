@@ -9,6 +9,7 @@ import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
+import com.persoff68.fatodo.web.rest.vm.ChangePasswordVM;
 import com.persoff68.fatodo.web.rest.vm.UserVM;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -88,6 +89,13 @@ public class FactoryUtils {
         userVM.setUsername("test_username_" + postfix);
         userVM.setLanguage("test_language_" + postfix);
         return userVM;
+    }
+
+    public static ChangePasswordVM createChangePasswordVM(String oldPassword) {
+        ChangePasswordVM vm = new ChangePasswordVM();
+        vm.setOldPassword(oldPassword);
+        vm.setNewPassword("test_password");
+        return vm;
     }
 
     public static MultiValueMap<String, String> objectToMap(Object object) throws Exception {
