@@ -6,8 +6,9 @@ import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
-import com.persoff68.fatodo.model.dto.UserSummaryDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
+import com.persoff68.fatodo.model.dto.UserSummaryDTO;
+import com.persoff68.fatodo.web.rest.vm.UserVM;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -20,20 +21,22 @@ import java.util.stream.Collectors;
 public interface UserMapper {
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "authoritiesIntoStrings")
-    UserPrincipalDTO userToUserPrincipalDTO(User user);
+    UserPrincipalDTO pojoToPrincipalDTO(User user);
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "authoritiesIntoStrings")
-    UserDTO userToUserManagementDTO(User user);
+    UserDTO pojoToDTO(User user);
 
-    UserSummaryDTO userToUserDTO(User user);
+    UserSummaryDTO pojoToSummaryDTO(User user);
 
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringsIntoAuthorities")
-    User userManagementDTOToUser(UserDTO userDTO);
+    User dtoToPojo(UserDTO userDTO);
 
-    User localUserDTOToUser(LocalUserDTO localUserDTO);
+    User localDTOToPojo(LocalUserDTO localUserDTO);
 
-    User oAuth2UserDTOToUser(OAuth2UserDTO oAuth2UserDTO);
+    User oAuth2DTOToPojo(OAuth2UserDTO oAuth2UserDTO);
+
+    User vmToPojo(UserVM userVM);
 
 
     @Named("authoritiesIntoStrings")

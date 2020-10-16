@@ -31,8 +31,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
-public class AuthControllerIT {
-    private static final String ENDPOINT = "/api/auth";
+public class SystemControllerIT {
+    private static final String ENDPOINT = "/api/system";
 
     @Autowired
     WebApplicationContext context;
@@ -339,7 +339,6 @@ public class AuthControllerIT {
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
     }
-
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")

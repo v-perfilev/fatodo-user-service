@@ -30,11 +30,6 @@ public class UserService {
         return userRepository.findAllByIdIn(idList);
     }
 
-    public User getById(String id) {
-        return userRepository.findById(id)
-                .orElseThrow(ModelNotFoundException::new);
-    }
-
     public User getByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(ModelNotFoundException::new);
@@ -61,7 +56,12 @@ public class UserService {
         return create(user);
     }
 
-    private User create(User user) {
+    public User getById(String id) {
+        return userRepository.findById(id)
+                .orElseThrow(ModelNotFoundException::new);
+    }
+
+    public User create(User user) {
         String language = user.getLanguage();
         if (language == null || !Language.contains(language)) {
             user.setLanguage(Language.DEFAULT.getValue());
@@ -79,7 +79,6 @@ public class UserService {
 
         user.setEmail(newUser.getEmail());
         user.setUsername(newUser.getUsername());
-        user.setImageFilename(newUser.getImageFilename());
         user.setLanguage(newUser.getLanguage());
 
         return userRepository.save(user);
@@ -89,14 +88,6 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(ModelNotFoundException::new);
         userRepository.delete(user);
-    }
-
-    public boolean isUsernameUnique(String username) {
-        return !userRepository.existsByUsername(username);
-    }
-
-    public boolean isEmailUnique(String email) {
-        return !userRepository.existsByEmail(email);
     }
 
     public void activate(String id) {

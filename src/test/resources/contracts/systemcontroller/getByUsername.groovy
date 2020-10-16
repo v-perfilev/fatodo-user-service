@@ -1,4 +1,4 @@
-package contracts.authcontroller
+package contracts.systemcontroller
 
 import org.springframework.cloud.contract.spec.Contract
 
@@ -8,8 +8,8 @@ Contract.make {
     request {
         method GET()
         url($(
-                consumer(regex("/api/auth/username/.+")),
-                producer("/api/auth/username/test_username_local")
+                consumer(regex("/api/system/username/.+")),
+                producer("/api/system/username/test_username_local")
         ))
         headers {
             header 'Authorization': $(
