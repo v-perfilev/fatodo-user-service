@@ -24,7 +24,6 @@ public class ImageService {
             filename = imageServiceClient.updateUserImage(imageDTO);
         } else if (oldFilename != null && newFilename == null) {
             imageServiceClient.deleteGroupImage(oldFilename);
-            filename = null;
         }
         return filename;
     }
