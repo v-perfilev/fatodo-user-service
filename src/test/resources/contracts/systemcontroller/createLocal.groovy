@@ -37,7 +37,6 @@ Contract.make {
             contentType applicationJson()
         }
         body(
-                "id": uuid().generate(),
                 "email": "test_new@email.com",
                 "username": "test_username_new",
                 "password": anyNonBlankString(),

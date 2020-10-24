@@ -44,7 +44,6 @@ Contract.make {
             contentType applicationJson()
         }
         body(
-                "id": uuid().generate(),
                 "email": "test_facebook@email.com",
                 "username": "test_facebook@email.com",
                 "password": null,
