@@ -1,6 +1,7 @@
 package com.persoff68.fatodo.model;
 
 import com.persoff68.fatodo.config.constant.Provider;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,9 @@ import java.util.Set;
 
 @Document(collection = "ftd_user")
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class User extends AbstractAuditingModel {
 
     @NotNull

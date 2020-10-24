@@ -2,11 +2,13 @@ package com.persoff68.fatodo.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
+import com.persoff68.fatodo.builder.TestUser;
+import com.persoff68.fatodo.builder.TestUserDTO;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
+import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +23,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -33,6 +36,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
 public class UserResourceIT {
     private static final String ENDPOINT = "/api/users";
+
+    private static final UUID CURRENT_ID = UUID.fromString("6e3c489b-a4fb-4654-aa39-30985b7c4656");
+    private static final String CURRENT_NAME = "current-name";
 
     @Autowired
     WebApplicationContext context;
@@ -47,9 +53,18 @@ public class UserResourceIT {
     @BeforeEach
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+
+        User currentUser = TestUser.defaultBuilder()
+                .id(CURRENT_ID)
+                .username(CURRENT_NAME)
+                .email(CURRENT_NAME + "@email.com")
+                .build();
+
+        User anotherUser = TestUser.defaultBuilder().build();
+
         userRepository.deleteAll();
-        userRepository.save(FactoryUtils.createUser_local("1", "encoded_password"));
-        userRepository.save(FactoryUtils.createUser_local("2", "encoded_password"));
+        userRepository.save(currentUser);
+        userRepository.save(anotherUser);
     }
 
 
@@ -82,7 +97,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testGetById_ok() throws Exception {
-        String id = "test_id_1";
+        UUID id = CURRENT_ID;
         String url = ENDPOINT + "/" + id;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
@@ -94,8 +109,7 @@ public class UserResourceIT {
     @Test
     @WithAnonymousUser
     public void testGetById_unauthorized() throws Exception {
-        String id = "test_id_1";
-        String url = ENDPOINT + "/" + id;
+        String url = ENDPOINT + "/" + CURRENT_ID;
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
@@ -103,8 +117,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testGetById_forbidden() throws Exception {
-        String id = "test_id_1";
-        String url = ENDPOINT + "/" + id;
+        String url = ENDPOINT + "/" + CURRENT_ID;
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
     }
@@ -112,7 +125,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testGetById_notFound() throws Exception {
-        String id = "test_id_not_exists";
+        UUID id = UUID.randomUUID();
         String url = ENDPOINT + "/" + id;
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
@@ -122,8 +135,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testCreate_created() throws Exception {
-        UserDTO dto = FactoryUtils.createUserDTO_local("not_exists");
-        dto.setId(null);
+        UserDTO dto = TestUserDTO.defaultBuilder().id(null).username("new-name").email("new-name@email.com").build();
         String requestBody = objectMapper.writeValueAsString(dto);
         ResultActions resultActions = mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -142,8 +154,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testCreate_conflict_duplicated() throws Exception {
-        UserDTO dto = FactoryUtils.createUserDTO_local("1");
-        dto.setId(null);
+        UserDTO dto = TestUserDTO.defaultBuilder().id(null).username(CURRENT_NAME).build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -163,8 +174,7 @@ public class UserResourceIT {
     @Test
     @WithAnonymousUser
     public void testCreate_unauthorized() throws Exception {
-        UserDTO dto = FactoryUtils.createUserDTO_local("not_exists");
-        dto.setId(null);
+        UserDTO dto = TestUserDTO.defaultBuilder().id(null).username("new-name").email("new-name@email.com").build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -174,8 +184,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testCreate_forbidden() throws Exception {
-        UserDTO dto = FactoryUtils.createUserDTO_local("not_exists");
-        dto.setId(null);
+        UserDTO dto = TestUserDTO.defaultBuilder().id(null).username("new-name").email("new-name@email.com").build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -186,8 +195,11 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testUpdate_ok() throws Exception {
-        UserDTO dto = FactoryUtils.createUserDTO_local("1");
-        dto.setEmail("test_updated@email.com");
+        UserDTO dto = TestUserDTO.defaultBuilder()
+                .id(CURRENT_ID)
+                .username("updated-name")
+                .email("updated-name@email.com")
+                .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         ResultActions resultActions = mvc.perform(put(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -204,8 +216,10 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testUpdate_conflict_duplicated() throws Exception {
-        UserDTO dto = FactoryUtils.createUserDTO_local("1");
-        dto.setEmail("test_2@email.com");
+        UserDTO dto = TestUserDTO.defaultBuilder()
+                .id(CURRENT_ID)
+                .username(CURRENT_NAME)
+                .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -215,8 +229,11 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testUpdate_badRequest_invalidEmail() throws Exception {
-        UserDTO dto = FactoryUtils.createUserDTO_local("1");
-        dto.setEmail("");
+        UserDTO dto = TestUserDTO.defaultBuilder()
+                .id(CURRENT_ID)
+                .username("updated-name")
+                .email("updated-name")
+                .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -226,9 +243,11 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testUpdate_badRequest_noId() throws Exception {
-        UserDTO dto = FactoryUtils.createUserDTO_local("1");
-        dto.setEmail("test_2@email.com");
-        dto.setId(null);
+        UserDTO dto = TestUserDTO.defaultBuilder()
+                .id(null)
+                .username("updated-name")
+                .email("updated-name@email.com")
+                .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -238,8 +257,11 @@ public class UserResourceIT {
     @Test
     @WithAnonymousUser
     public void testUpdate_unauthorized() throws Exception {
-        UserDTO dto = FactoryUtils.createUserDTO_local("1");
-        dto.setEmail("test_updated@email.com");
+        UserDTO dto = TestUserDTO.defaultBuilder()
+                .id(CURRENT_ID)
+                .username("updated-name")
+                .email("updated-name@email.com")
+                .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -247,10 +269,13 @@ public class UserResourceIT {
     }
 
     @Test
-    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    @WithCustomSecurityContext(authority = "ROLE_USER")
     public void testUpdate_forbidden() throws Exception {
-        UserDTO dto = FactoryUtils.createUserDTO_local("1");
-        dto.setEmail("test_updated@email.com");
+        UserDTO dto = TestUserDTO.defaultBuilder()
+                .id(CURRENT_ID)
+                .username("updated-name")
+                .email("updated-name@email.com")
+                .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -260,8 +285,11 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testUpdate_notFound() throws Exception {
-        UserDTO dto = FactoryUtils.createUserDTO_local("not_exists");
-        dto.setEmail("test_updated@email.com");
+        UserDTO dto = TestUserDTO.defaultBuilder()
+                .id(UUID.randomUUID())
+                .username("updated-name")
+                .email("updated-name@email.com")
+                .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -272,8 +300,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testDelete_ok() throws Exception {
-        String id = "test_id_1";
-        String url = ENDPOINT + "/" + id;
+        String url = ENDPOINT + "/" + CURRENT_ID;
         mvc.perform(delete(url))
                 .andExpect(status().isOk());
         mvc.perform(get(url))
@@ -283,8 +310,7 @@ public class UserResourceIT {
     @Test
     @WithAnonymousUser
     public void testDelete_unauthorized() throws Exception {
-        String id = "test_id_1";
-        String url = ENDPOINT + "/" + id;
+        String url = ENDPOINT + "/" + CURRENT_ID;
         mvc.perform(delete(url))
                 .andExpect(status().isUnauthorized());
     }
@@ -292,8 +318,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testDelete_forbidden() throws Exception {
-        String id = "test_id_1";
-        String url = ENDPOINT + "/" + id;
+        String url = ENDPOINT + "/" + CURRENT_ID;
         mvc.perform(delete(url))
                 .andExpect(status().isForbidden());
     }
@@ -301,7 +326,7 @@ public class UserResourceIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
     public void testDelete_notFound() throws Exception {
-        String id = "test_id_not_exists";
+        UUID id = UUID.randomUUID();
         String url = ENDPOINT + "/" + id;
         mvc.perform(delete(url))
                 .andExpect(status().isNotFound());

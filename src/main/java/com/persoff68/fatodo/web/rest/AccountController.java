@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(AccountController.ENDPOINT)
@@ -36,7 +37,7 @@ public class AccountController {
 
     @GetMapping(value = "/current")
     public ResponseEntity<UserDTO> getCurrentUser() {
-        String id = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
+        UUID id = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
         User user = userService.getById(id);
         UserDTO userDTO = userMapper.pojoToDTO(user);
         return ResponseEntity.ok(userDTO);

@@ -9,17 +9,18 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, String> {
+public interface UserRepository extends MongoRepository<User, UUID> {
 
     @CacheableMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-id-list-keys", key = "#idList")
-    List<User> findAllByIdIn(List<String> idList);
+    List<User> findAllByIdIn(List<UUID> idList);
 
     @Override
     @CacheableMethod(cacheName = "users-by-id", key = "#id")
     @NonNull
-    Optional<User> findById(@NonNull String id);
+    Optional<User> findById(@NonNull UUID id);
 
     @Override
     @CacheEvictMethod(cacheName = "users-by-id", key = "#user.id")

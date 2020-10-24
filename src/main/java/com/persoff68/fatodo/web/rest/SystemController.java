@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(SystemController.ENDPOINT)
@@ -30,7 +31,7 @@ public class SystemController {
     private final UserMapper userMapper;
 
     @GetMapping(value = "/activate/{userId}")
-    public ResponseEntity<Void> activate(@PathVariable String userId) {
+    public ResponseEntity<Void> activate(@PathVariable UUID userId) {
         userService.activate(userId);
         return ResponseEntity.ok().build();
     }
@@ -42,7 +43,7 @@ public class SystemController {
     }
 
     @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserPrincipalDTO> getUserPrincipalById(@PathVariable String id) {
+    public ResponseEntity<UserPrincipalDTO> getUserPrincipalById(@PathVariable UUID id) {
         User user = userService.getById(id);
         UserPrincipalDTO userPrincipalDTO = userMapper.pojoToPrincipalDTO(user);
         return ResponseEntity.ok(userPrincipalDTO);

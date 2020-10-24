@@ -1,9 +1,12 @@
 package com.persoff68.fatodo.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.FatodoUserServiceApplication;
+import com.persoff68.fatodo.TestUtils;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
+import com.persoff68.fatodo.builder.TestChangePasswordVM;
+import com.persoff68.fatodo.builder.TestUser;
+import com.persoff68.fatodo.builder.TestUserVM;
 import com.persoff68.fatodo.client.ImageServiceClient;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.User;
@@ -25,7 +28,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.persoff68.fatodo.FactoryUtils.createUser_local;
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -38,6 +42,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
 public class AccountControllerIT {
     private static final String ENDPOINT = "/api/account";
+
+    private static final UUID CURRENT_ID = UUID.fromString("6e3c489b-a4fb-4654-aa39-30985b7c4656");
+    private static final UUID GOOGLE_ID = UUID.fromString("71afdeec-cffd-479f-90ca-12fca4167cda");
+    private static final String CURRENT_NAME = "current-name";
+    private static final String LOCAL_NAME = "local-name";
+    private static final String GOOGLE_NAME = "google-name";
 
     @Autowired
     WebApplicationContext context;
@@ -56,13 +66,31 @@ public class AccountControllerIT {
     @BeforeEach
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+
+        User currentUser = TestUser.defaultBuilder()
+                .id(CURRENT_ID)
+                .username(CURRENT_NAME)
+                .email(CURRENT_NAME + "@email.com")
+                .password(passwordEncoder.encode("test_password"))
+                .build();
+
+        User localUser = TestUser.defaultBuilder()
+                .username(LOCAL_NAME)
+                .email(LOCAL_NAME + "@email.com")
+                .password(passwordEncoder.encode("test_password"))
+                .build();
+
+        User googleUser = TestUser.defaultBuilder()
+                .id(GOOGLE_ID)
+                .username(GOOGLE_NAME)
+                .email(GOOGLE_NAME + "@email.com")
+                .provider(Provider.GOOGLE)
+                .build();
+
         userRepository.deleteAll();
-        User currentUser = FactoryUtils.createUser_local("current",
-                passwordEncoder.encode("encodedPassword"));
-        currentUser.setId("3");
         userRepository.save(currentUser);
-        userRepository.save(createUser_local("local", "encodedPassword"));
-        userRepository.save(FactoryUtils.createUser_oAuth2("oauth2", Provider.GOOGLE.getValue()));
+        userRepository.save(localUser);
+        userRepository.save(googleUser);
 
         when(imageServiceClient.createUserImage(any())).thenReturn("filename");
         when(imageServiceClient.updateUserImage(any())).thenReturn("filename");
@@ -70,14 +98,14 @@ public class AccountControllerIT {
     }
 
     @Test
-    @WithCustomSecurityContext(id = "3")
+    @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
     public void testGetCurrentUser_ok() throws Exception {
         String url = ENDPOINT + "/current";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
-        assertThat(resultDTO.getId()).isEqualTo("3");
+        assertThat(resultDTO.getId()).isEqualTo(CURRENT_ID);
     }
 
     @Test
@@ -89,11 +117,11 @@ public class AccountControllerIT {
     }
 
     @Test
-    @WithCustomSecurityContext(id = "3")
+    @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
     public void testUpdate_ok() throws Exception {
         String url = ENDPOINT + "/update";
-        UserVM vm = FactoryUtils.createUserVM("3", "updated");
-        MultiValueMap<String, String> multiValueMap = FactoryUtils.objectToMap(vm);
+        UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
+        MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
         ResultActions resultActions = mvc.perform(post(url)
                 .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
                 .andExpect(status().isOk());
@@ -108,39 +136,39 @@ public class AccountControllerIT {
     @WithAnonymousUser
     public void testUpdate_unauthorized() throws Exception {
         String url = ENDPOINT + "/update";
-        UserVM vm = FactoryUtils.createUserVM("3", "updated");
-        MultiValueMap<String, String> multiValueMap = FactoryUtils.objectToMap(vm);
+        UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
+        MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
         mvc.perform(post(url)
                 .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
-    @WithCustomSecurityContext(id = "5")
+    @WithCustomSecurityContext
     public void testUpdate_badRequest_wrongUser() throws Exception {
         String url = ENDPOINT + "/update";
-        UserVM vm = FactoryUtils.createUserVM("3", "updated");
-        MultiValueMap<String, String> multiValueMap = FactoryUtils.objectToMap(vm);
+        UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
+        MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
         mvc.perform(post(url)
                 .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    @WithCustomSecurityContext(id = "5")
+    @WithCustomSecurityContext(id = "bafc4e0e-75d4-4059-9d4d-209855dd91c1")
     public void testUpdate_badRequest_notExists() throws Exception {
         String url = ENDPOINT + "/update";
-        UserVM vm = FactoryUtils.createUserVM("5", "updated");
-        MultiValueMap<String, String> multiValueMap = FactoryUtils.objectToMap(vm);
+        UserVM vm = TestUserVM.defaultBuilder().id(UUID.fromString("bafc4e0e-75d4-4059-9d4d-209855dd91c1")).build();
+        MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
         mvc.perform(post(url)
                 .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    @WithCustomSecurityContext(id = "3")
+    @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
     public void testChangePassword_ok() throws Exception {
-        ChangePasswordVM vm = FactoryUtils.createChangePasswordVM("encodedPassword");
+        ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/change-password";
         mvc.perform(post(url)
@@ -151,7 +179,7 @@ public class AccountControllerIT {
     @Test
     @WithAnonymousUser
     public void testChangePassword_unauthorized() throws Exception {
-        ChangePasswordVM vm = FactoryUtils.createChangePasswordVM("encodedPassword");
+        ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/change-password";
         mvc.perform(post(url)
@@ -160,9 +188,9 @@ public class AccountControllerIT {
     }
 
     @Test
-    @WithCustomSecurityContext(id = "test_id_oauth2")
+    @WithCustomSecurityContext(id = "71afdeec-cffd-479f-90ca-12fca4167cda")
     public void testChangePassword_wrongProvider() throws Exception {
-        ChangePasswordVM vm = FactoryUtils.createChangePasswordVM("encodedPassword");
+        ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/change-password";
         mvc.perform(post(url)
@@ -171,9 +199,9 @@ public class AccountControllerIT {
     }
 
     @Test
-    @WithCustomSecurityContext(id = "3")
+    @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
     public void testChangePassword_wrongPassword() throws Exception {
-        ChangePasswordVM vm = FactoryUtils.createChangePasswordVM("wrong_password");
+        ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/change-password";
         mvc.perform(post(url)

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,7 +42,7 @@ public class UserResource {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> getById(@PathVariable String id) {
+    public ResponseEntity<UserDTO> getById(@PathVariable UUID id) {
         User user = userService.getById(id);
         UserDTO userDTO = userMapper.pojoToDTO(user);
         return ResponseEntity.ok(userDTO);
@@ -64,7 +65,7 @@ public class UserResource {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable String id) {
+    public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
         userService.delete(id);
         return ResponseEntity.ok().build();
     }

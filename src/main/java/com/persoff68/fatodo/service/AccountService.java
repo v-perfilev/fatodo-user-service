@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class AccountService {
@@ -22,7 +24,7 @@ public class AccountService {
     private final PasswordEncoder passwordEncoder;
 
     public User update(User newUser, byte[] image) {
-        String userId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
+        UUID userId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
         if (!userId.equals(newUser.getId())) {
             throw new PermissionException();
         }
@@ -38,7 +40,7 @@ public class AccountService {
     }
 
     public void changePassword(String oldPassword, String newPassword) {
-        String id = SecurityUtils.getCurrentId()
+        UUID id = SecurityUtils.getCurrentId()
                 .orElseThrow(UnauthorizedException::new);
         User user = userRepository.findById(id)
                 .orElseThrow(ModelNotFoundException::new);

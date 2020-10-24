@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public List<User> getAllByIds(List<String> idList) {
+    public List<User> getAllByIds(List<UUID> idList) {
         return userRepository.findAllByIdIn(idList);
     }
 
@@ -56,7 +57,7 @@ public class UserService {
         return create(user);
     }
 
-    public User getById(String id) {
+    public User getById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(ModelNotFoundException::new);
     }
@@ -84,13 +85,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void delete(String id) {
+    public void delete(UUID id) {
         User user = userRepository.findById(id)
                 .orElseThrow(ModelNotFoundException::new);
         userRepository.delete(user);
     }
 
-    public void activate(String id) {
+    public void activate(UUID id) {
         User user = userRepository.findById(id)
                 .orElseThrow(ModelNotFoundException::new);
         if (user.isActivated()) {
@@ -100,7 +101,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void resetPassword(String userId, String password) {
+    public void resetPassword(UUID userId, String password) {
         User user = userRepository.findById(userId)
                 .orElseThrow(ModelNotFoundException::new);
         user.setPassword(password);

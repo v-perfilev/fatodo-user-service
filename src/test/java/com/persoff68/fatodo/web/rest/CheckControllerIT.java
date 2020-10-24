@@ -1,8 +1,9 @@
 package com.persoff68.fatodo.web.rest;
 
-import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
+import com.persoff68.fatodo.builder.TestUser;
+import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CheckControllerIT {
     private static final String ENDPOINT = "/api/check";
 
+    private static final String LOCAL_NAME = "local-name";
+    private static final String NOT_EXISTING_NAME = "not-existing-name";
+
     @Autowired
     WebApplicationContext context;
     @Autowired
@@ -33,15 +37,21 @@ public class CheckControllerIT {
     @BeforeEach
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+
+        User localUser = TestUser.defaultBuilder()
+                .username(LOCAL_NAME)
+                .email(LOCAL_NAME + "@email.com")
+                .build();
+
         userRepository.deleteAll();
-        userRepository.save(FactoryUtils.createUser_local("local", "encodedPassword"));
+        userRepository.save(localUser);
     }
 
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testIsEmailUnique_true() throws Exception {
-        String email = "test_not_exists@email.com";
+        String email = NOT_EXISTING_NAME + "@email.com";
         String url = ENDPOINT + "/email/" + email + "/unique";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
@@ -53,7 +63,7 @@ public class CheckControllerIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testIsEmailUnique_false() throws Exception {
-        String email = "test_local@email.com";
+        String email = LOCAL_NAME + "@email.com";
         String url = ENDPOINT + "/email/" + email + "/unique";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
@@ -65,8 +75,7 @@ public class CheckControllerIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testIsUsernameUnique_true() throws Exception {
-        String username = "test_username_not_exists";
-        String url = ENDPOINT + "/username/" + username + "/unique";
+        String url = ENDPOINT + "/username/" + NOT_EXISTING_NAME + "/unique";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -77,8 +86,7 @@ public class CheckControllerIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testIsUsernameUnique_false() throws Exception {
-        String username = "test_username_local";
-        String url = ENDPOINT + "/username/" + username + "/unique";
+        String url = ENDPOINT + "/username/" + LOCAL_NAME + "/unique";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();

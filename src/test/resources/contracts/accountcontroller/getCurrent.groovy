@@ -3,7 +3,7 @@ package contracts.accountcontroller
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'get user principal by id'
+    name 'get current user'
     description 'should return status 200 and UserPrincipalDTO'
     request {
         method GET()
@@ -11,7 +11,7 @@ Contract.make {
         headers {
             header 'Authorization': $(
                     consumer(containing("Bearer")),
-                    producer("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwidXNlcm5hbWUiOiJ0ZXN0X3VzZXIiLCJhdXRob3JpdGllcyI6IlJPTEVfVVNFUiIsImlhdCI6MCwiZXhwIjozMjUwMzY3NjQwMH0.ggV38p_Fnqo2OZNtwR3NWKZhMXPd-vf4PrRxN0NmTWsHPrKwWZJSGO2dJBBPWXWs4OI6tjsNV2TM3Kf6NK92hw")
+                    producer("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4ZjlhN2NhZS03M2M4LTRhZDYtYjEzNS01YmQxMDliNTFkMmUiLCJ1c2VybmFtZSI6InRlc3RfdXNlciIsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSIiwiaWF0IjowLCJleHAiOjMyNTAzNjc2NDAwfQ.Go0MIqfjREMHOLeqoX2Ej3DbeSG7ZxlL4UAvcxqNeO-RgrKUCrgEu77Ty1vgR_upxVGDAWZS-JfuSYPHSRtv-w")
             )
         }
     }
@@ -21,11 +21,11 @@ Contract.make {
             contentType applicationJson()
         }
         body(
-                "id": "3",
-                "email": "test_current@email.com",
-                "username": "test_username_current",
+                "id": "8f9a7cae-73c8-4ad6-b135-5bd109b51d2e",
+                "email": "current-name@email.com",
+                "username": "current-name",
                 "authorities": ["ROLE_USER"],
-                "imageFilename": "test_image_filename",
+                "imageFilename": "test_value",
                 "language": "en",
                 "provider": "LOCAL",
                 "providerId": null,

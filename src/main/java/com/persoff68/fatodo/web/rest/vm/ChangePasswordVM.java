@@ -1,10 +1,12 @@
 package com.persoff68.fatodo.web.rest.vm;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ChangePasswordVM {
 
     private String oldPassword;

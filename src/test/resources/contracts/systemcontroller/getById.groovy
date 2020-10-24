@@ -8,13 +8,13 @@ Contract.make {
     request {
         method GET()
         url($(
-                consumer(regex("/api/system/id/.+")),
-                producer("/api/system/id/test_id_local")
+                consumer(regex("/api/system/id/" + uuid().toString())),
+                producer("/api/system/id/8f9a7cae-73c8-4ad6-b135-5bd109b51d2e")
         ))
         headers {
             header 'Authorization': $(
                     consumer(containing("Bearer")),
-                    producer("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidXNlcm5hbWUiOiJ0ZXN0X3N5c3RlbSIsImF1dGhvcml0aWVzIjoiUk9MRV9TWVNURU0iLCJpYXQiOjAsImV4cCI6MzI1MDM2NzY0MDB9.EV6TMwQSB2XSTnQuB6LQbLETQmWEullfxSOmGDrlsdk93DDWfqr3VQGti6pMmmbUfgCyP9yyWjlWK50dYHYnEg")
+                    producer("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAiLCJ1c2VybmFtZSI6InRlc3Rfc3lzdGVtIiwiYXV0aG9yaXRpZXMiOiJST0xFX1NZU1RFTSIsImlhdCI6MCwiZXhwIjozMjUwMzY3NjQwMH0.roNFKrM7NjEzXvRFRHlJXw0YxSFZ-4Afqvn7eFatpGF14olhXBvCvR9CkPkmlnlCAOYbpDO18krfi6SEX0tQ6Q")
             )
         }
     }
@@ -24,13 +24,14 @@ Contract.make {
             contentType applicationJson()
         }
         body(
-                "id": "test_id_local",
-                "email": "test_local@email.com",
-                "username": "test_username_local",
-                "password": '$2a$10$GZrq9GxkRWW1Pv7fKJHGAe4ebib6113zhlU4nZlCtH/ylebR9rkn6',
+                "id": "8f9a7cae-73c8-4ad6-b135-5bd109b51d2e",
+                "email": "current-name@email.com",
+                "username": "current-name",
+                "authorities": ["ROLE_USER"],
+                "imageFilename": "test_value",
+                "language": "en",
                 "provider": "LOCAL",
                 "providerId": null,
-                "authorities": ["ROLE_USER"]
         )
     }
 }

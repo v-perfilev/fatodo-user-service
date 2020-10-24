@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,9 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class UserDTO extends AbstractAuditingDTO {
 
     @NotNull

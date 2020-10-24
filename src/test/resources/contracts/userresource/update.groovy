@@ -12,13 +12,13 @@ Contract.make {
             contentType applicationJson()
             header 'Authorization': $(
                     consumer(containing("Bearer")),
-                    producer("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwidXNlcm5hbWUiOiJ0ZXN0X2FkbWluIiwiYXV0aG9yaXRpZXMiOiJST0xFX0FETUlOIiwiaWF0IjowLCJleHAiOjMyNTAzNjc2NDAwfQ.RwSPieOfY1iwF5Tz8ZMw8tiWVZc-nGx4JGgVh08wzV_HrNYZelT9Auo2mcKp6L1PTIBc8cRRlcsvR7YjbiI9qA")
+                    producer("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmMjkxYmFkMy1iYzFhLTQwZjYtODhlNC1iODFkNDVmNWY4YzgiLCJ1c2VybmFtZSI6InRlc3RfYWRtaW4iLCJhdXRob3JpdGllcyI6IlJPTEVfQURNSU4iLCJpYXQiOjAsImV4cCI6MzI1MDM2NzY0MDB9.ln5MMyCUx1EjdgVWn1MODz6_34lvzHLNNyzWfP2i4LKTNDYaWw_PC-6WxksP2o8UvpeuFjIlZkNhM_wrkYAV3w")
             )
         }
         body(
                 "id": $(
-                        consumer(regex('[\\w-]+')),
-                        producer("test_id_local")
+                        consumer(uuid()),
+                        producer("8f9a7cae-73c8-4ad6-b135-5bd109b51d2e")
                 ),
                 "email": $(
                         consumer(email()),
@@ -61,14 +61,14 @@ Contract.make {
             contentType applicationJson()
         }
         body(
-                "id": "test_id_local",
+                "id": "8f9a7cae-73c8-4ad6-b135-5bd109b51d2e",
                 "email": "test_updated@email.com",
                 "username": "test_username_updated",
                 "provider": "LOCAL",
                 "providerId": null,
                 "authorities": ["ROLE_USER"],
                 "language": "en",
-                "activated": false
+                "activated": true
         )
     }
 }

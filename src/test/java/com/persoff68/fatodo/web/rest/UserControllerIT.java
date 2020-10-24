@@ -2,10 +2,9 @@ package com.persoff68.fatodo.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import com.persoff68.fatodo.FactoryUtils;
 import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
-import com.persoff68.fatodo.config.constant.Provider;
+import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserSummaryDTO;
 import com.persoff68.fatodo.repository.UserRepository;
@@ -21,8 +20,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
+import java.util.UUID;
 
-import static com.persoff68.fatodo.FactoryUtils.createUser_local;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -31,6 +30,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
 public class UserControllerIT {
     private static final String ENDPOINT = "/api/user";
+
+    private static final UUID CURRENT_ID = UUID.fromString("6e3c489b-a4fb-4654-aa39-30985b7c4656");
+    private static final String CURRENT_NAME = "current-name";
+    private static final String LOCAL_NAME = "local-name";
 
     @Autowired
     WebApplicationContext context;
@@ -44,23 +47,29 @@ public class UserControllerIT {
     @BeforeEach
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+
+        User currentUser = TestUser.defaultBuilder()
+                .id(CURRENT_ID)
+                .username(CURRENT_NAME)
+                .email(CURRENT_NAME + "@email.com")
+                .activated(false)
+                .build();
+
+        User localUser = TestUser.defaultBuilder()
+                .username(LOCAL_NAME)
+                .email(LOCAL_NAME + "@email.com")
+                .build();
+
         userRepository.deleteAll();
-        User currentUser = FactoryUtils.createUser_local("current", "encodedPassword");
-        currentUser.setId("3");
         userRepository.save(currentUser);
-        User activatedUser = FactoryUtils.createUser_local("activated", "encodedPassword");
-        activatedUser.setId("4");
-        activatedUser.setActivated(true);
-        userRepository.save(activatedUser);
-        userRepository.save(createUser_local("local", "encodedPassword"));
-        userRepository.save(FactoryUtils.createUser_oAuth2("oauth2", Provider.GOOGLE.getValue()));
+        userRepository.save(localUser);
     }
 
     @Test
     @WithCustomSecurityContext
     public void testGetAllByIds_ok() throws Exception {
         String url = ENDPOINT + "/all-by-ids";
-        String requestBody = objectMapper.writeValueAsString(List.of("3"));
+        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
         ResultActions resultActions = mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
@@ -74,7 +83,7 @@ public class UserControllerIT {
     @WithAnonymousUser
     public void testGetAllByIds_unauthorized() throws Exception {
         String url = ENDPOINT + "/all-by-ids";
-        String requestBody = objectMapper.writeValueAsString(List.of("3"));
+        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isUnauthorized());

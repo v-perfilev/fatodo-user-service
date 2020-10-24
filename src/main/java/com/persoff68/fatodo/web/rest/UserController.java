@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,7 +26,7 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping(value = "/all-by-ids", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<UserSummaryDTO>> getAllByIds(@RequestBody List<String> idList) {
+    public ResponseEntity<List<UserSummaryDTO>> getAllByIds(@RequestBody List<UUID> idList) {
         List<User> userList = userService.getAllByIds(idList);
         List<UserSummaryDTO> userSummaryDTOList = userList.stream()
                 .map(userMapper::pojoToSummaryDTO).collect(Collectors.toList());
