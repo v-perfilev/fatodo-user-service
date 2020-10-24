@@ -22,7 +22,7 @@ Contract.make {
         }
         body([
                 [
-                        "id"         : uuid(),
+                        "id"         : uuid().generate(),
                         "email"      : "current-name@email.com",
                         "username"   : "current-name",
                         "provider"   : "LOCAL",
@@ -30,7 +30,7 @@ Contract.make {
                         "authorities": ["ROLE_USER"]
                 ],
                 [
-                        "id"         : uuid(),
+                        "id"         : uuid().generate(),
                         "email"      : "local-name@email.com",
                         "username"   : "local-name",
                         "provider"   : "GOOGLE",
@@ -38,7 +38,7 @@ Contract.make {
                         "authorities": ["ROLE_USER"]
                 ],
                 [
-                        "id"         : uuid(),
+                        "id"         : uuid().generate(),
                         "email"      : "google-name@email.com",
                         "username"   : "google-name",
                         "provider"   : "GOOGLE",
