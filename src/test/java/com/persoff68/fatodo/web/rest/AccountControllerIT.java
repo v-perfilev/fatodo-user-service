@@ -94,7 +94,7 @@ public class AccountControllerIT {
 
         when(imageServiceClient.createUserImage(any())).thenReturn("filename");
         when(imageServiceClient.updateUserImage(any())).thenReturn("filename");
-        doNothing().when(imageServiceClient).deleteGroupImage(any());
+        doNothing().when(imageServiceClient).deleteUserImage(any());
     }
 
     @Test

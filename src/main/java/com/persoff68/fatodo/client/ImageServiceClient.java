@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-@FeignClient(name = "image-service", fallbackFactory = ImageServiceFallbackFactory.class)
+@FeignClient(name = "image-service", primary = false)
 public interface ImageServiceClient {
 
     @PostMapping(value = "/api/user-images",
@@ -20,6 +20,6 @@ public interface ImageServiceClient {
     String updateUserImage(ImageDTO imageDTO);
 
     @DeleteMapping(value = "/api/user-images/{filename}")
-    void deleteGroupImage(@PathVariable String filename);
+    void deleteUserImage(@PathVariable String filename);
 
 }

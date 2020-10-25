@@ -40,7 +40,7 @@ public class ImageServiceCT {
 
     @Test
     void testDeleteGroupImage() {
-        imageServiceClient.deleteGroupImage("test_filename");
+        imageServiceClient.deleteUserImage("test_filename");
         assertThat(true).isTrue();
     }
 

@@ -23,7 +23,7 @@ public class ImageService {
             ImageDTO imageDTO = new ImageDTO(oldFilename, image);
             filename = imageServiceClient.updateUserImage(imageDTO);
         } else if (oldFilename != null && newFilename == null) {
-            imageServiceClient.deleteGroupImage(oldFilename);
+            imageServiceClient.deleteUserImage(oldFilename);
         }
         return filename;
     }
