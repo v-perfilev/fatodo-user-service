@@ -13,17 +13,16 @@ public class ImageService {
     private final ImageServiceClient imageServiceClient;
 
     public String updateUser(User oldUser, User newUser, byte[] image) {
-        String oldFilename = oldUser.getImageFilename();
+        String filename = oldUser.getImageFilename();
         String newFilename = newUser.getImageFilename();
-        String filename = null;
-        if (image != null && oldFilename == null) {
+        if (image != null && filename == null) {
             ImageDTO imageDTO = new ImageDTO(null, image);
             filename = imageServiceClient.createUserImage(imageDTO);
         } else if (image != null) {
-            ImageDTO imageDTO = new ImageDTO(oldFilename, image);
+            ImageDTO imageDTO = new ImageDTO(filename, image);
             filename = imageServiceClient.updateUserImage(imageDTO);
-        } else if (oldFilename != null && newFilename == null) {
-            imageServiceClient.deleteUserImage(oldFilename);
+        } else if (filename != null && newFilename == null) {
+            imageServiceClient.deleteUserImage(filename);
         }
         return filename;
     }
