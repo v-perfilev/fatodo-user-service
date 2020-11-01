@@ -28,10 +28,14 @@ Contract.make {
                 "email": "current-name@email.com",
                 "username": "current-name",
                 "authorities": ["ROLE_USER"],
-                "imageFilename": "test_value",
-                "language": "en",
                 "provider": "LOCAL",
                 "providerId": null,
+                "info": [
+                        "firstname"    : "test_value",
+                        "lastname"     : "test_value",
+                        "language"     : "en",
+                        "imageFilename": "test_value"
+                ]
         )
     }
 }

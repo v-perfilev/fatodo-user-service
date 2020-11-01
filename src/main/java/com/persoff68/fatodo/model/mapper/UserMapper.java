@@ -26,16 +26,25 @@ public interface UserMapper {
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "authoritiesIntoStrings")
     UserDTO pojoToDTO(User user);
 
+    @Mapping(source = "info.firstname", target = "firstname")
+    @Mapping(source = "info.lastname", target = "lastname")
+    @Mapping(source = "info.imageFilename", target = "imageFilename")
     UserSummaryDTO pojoToSummaryDTO(User user);
 
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringsIntoAuthorities")
     User dtoToPojo(UserDTO userDTO);
 
+    @Mapping(source = "language", target = "info.language")
     User localDTOToPojo(LocalUserDTO localUserDTO);
 
+    @Mapping(source = "language", target = "info.language")
     User oAuth2DTOToPojo(OAuth2UserDTO oAuth2UserDTO);
 
+    @Mapping(source = "firstname", target = "info.firstname")
+    @Mapping(source = "lastname", target = "info.lastname")
+    @Mapping(source = "language", target = "info.language")
+    @Mapping(source = "imageFilename", target = "info.imageFilename")
     User vmToPojo(UserVM userVM);
 
 

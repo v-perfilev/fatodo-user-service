@@ -22,25 +22,46 @@ Contract.make {
         }
         body([
                 [
+                        "id"         : anyUuid(),
                         "email"      : "current-name@email.com",
                         "username"   : "current-name",
                         "provider"   : "LOCAL",
                         "providerId" : null,
-                        "authorities": ["ROLE_USER"]
+                        "authorities": ["ROLE_USER"],
+                        "info"       : [
+                                "firstname"    : "test_value",
+                                "lastname"     : "test_value",
+                                "language"     : "en",
+                                "imageFilename": "test_value",
+                        ]
                 ],
                 [
+                        "id"         : anyUuid(),
                         "email"      : "local-name@email.com",
                         "username"   : "local-name",
                         "provider"   : "GOOGLE",
                         "providerId" : null,
-                        "authorities": ["ROLE_USER"]
+                        "authorities": ["ROLE_USER"],
+                        "info"       : [
+                                "firstname"    : "test_value",
+                                "lastname"     : "test_value",
+                                "language"     : "en",
+                                "imageFilename": "test_value",
+                        ]
                 ],
                 [
+                        "id"         : anyUuid(),
                         "email"      : "google-name@email.com",
                         "username"   : "google-name",
                         "provider"   : "GOOGLE",
                         "providerId" : null,
-                        "authorities": ["ROLE_USER"]
+                        "authorities": ["ROLE_USER"],
+                        "info"       : [
+                                "firstname"    : "test_value",
+                                "lastname"     : "test_value",
+                                "language"     : "en",
+                                "imageFilename": "test_value",
+                        ]
                 ]
         ])
     }

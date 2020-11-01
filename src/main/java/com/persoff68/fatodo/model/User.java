@@ -26,11 +26,6 @@ public class User extends AbstractAuditingModel {
     @Indexed(unique = true)
     private String username;
 
-    private String imageFilename;
-
-    @NotNull
-    private String language;
-
     @NotNull
     private Set<Authority> authorities;
 
@@ -43,5 +38,8 @@ public class User extends AbstractAuditingModel {
 
     @NotNull
     private boolean activated;
+
+    @NotNull
+    private Info info = new Info();
 
 }

@@ -11,15 +11,18 @@ public class TestUserVM extends UserVM {
     private static final String DEFAULT_VALUE = "test_value";
 
     @Builder
-    public TestUserVM(@NotNull UUID id, @NotNull String username, @NotNull String language, String imageFilename, MultipartFile imageContent) {
-        super(id, username, language, imageFilename, imageContent);
+    public TestUserVM(@NotNull UUID id, @NotNull String username, String firstname, String lastname, @NotNull String language, String imageFilename, MultipartFile imageContent) {
+        super(id, username, firstname, lastname, language, imageFilename, imageContent);
     }
 
     public static TestUserVMBuilder defaultBuilder() {
         return TestUserVM.builder()
                 .id(UUID.randomUUID())
                 .username(DEFAULT_VALUE)
-                .language("en");
+                .firstname(DEFAULT_VALUE)
+                .lastname(DEFAULT_VALUE)
+                .language("en")
+                .imageFilename(DEFAULT_VALUE);
     }
 
 }

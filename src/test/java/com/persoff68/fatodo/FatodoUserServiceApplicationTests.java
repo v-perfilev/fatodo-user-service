@@ -1,5 +1,6 @@
 package com.persoff68.fatodo;
 
+import com.persoff68.fatodo.model.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 class FatodoUserServiceApplicationTests {
+
+    @Autowired
+    UserMapper userMapper;
 
     @Autowired
     private WebApplicationContext context;

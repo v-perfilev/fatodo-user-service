@@ -29,7 +29,13 @@ Contract.make {
                 "username": "current-name",
                 "provider": "LOCAL",
                 "providerId": null,
-                "authorities": ["ROLE_USER"]
+                "authorities": ["ROLE_USER"],
+                "info": [
+                        "firstname"    : "test_value",
+                        "lastname"     : "test_value",
+                        "language"     : "en",
+                        "imageFilename": "test_value",
+                ]
         )
     }
 }

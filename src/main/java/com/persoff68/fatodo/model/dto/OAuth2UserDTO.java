@@ -25,6 +25,7 @@ public class OAuth2UserDTO implements Serializable {
     @Size(min = 5, max = 50)
     private String username;
 
+    @NotNull
     private String language;
 
     @NotNull

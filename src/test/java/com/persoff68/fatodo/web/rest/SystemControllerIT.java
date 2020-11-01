@@ -225,6 +225,7 @@ public class SystemControllerIT {
         assertThat(resultDTO.getProvider()).isEqualTo(Provider.LOCAL.getValue());
         assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.USER.getValue());
         assertThat(resultDTO.isActivated()).isFalse();
+        assertThat(resultDTO.getInfo().getLanguage()).isEqualTo(dto.getLanguage());
     }
 
     @Test
@@ -294,6 +295,7 @@ public class SystemControllerIT {
         assertThat(resultDTO.getProviderId()).isEqualTo(dto.getProviderId());
         assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.USER.getValue());
         assertThat(resultDTO.isActivated()).isTrue();
+        assertThat(resultDTO.getInfo().getLanguage()).isEqualTo(dto.getLanguage());
     }
 
     @Test

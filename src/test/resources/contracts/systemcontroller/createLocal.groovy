@@ -37,14 +37,20 @@ Contract.make {
             contentType applicationJson()
         }
         body(
+                "id": anyUuid(),
                 "email": "test_new@email.com",
                 "username": "test_username_new",
                 "password": anyNonBlankString(),
                 "provider": "LOCAL",
                 "providerId": null,
                 "authorities": ["ROLE_USER"],
-                "language": "en",
-                "activated": false
+                "activated": false,
+                "info": [
+                        "firstname"    : null,
+                        "lastname"     : null,
+                        "language"     : "en",
+                        "imageFilename": null,
+                ]
         )
     }
 }

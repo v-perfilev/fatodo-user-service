@@ -24,9 +24,21 @@ Contract.make {
                         consumer(any()),
                         producer("test_username_new")
                 ),
+                "firstname": $(
+                        consumer(any()),
+                        producer("test_firstname_new")
+                ),
+                "lastname": $(
+                        consumer(any()),
+                        producer("test_lastname_new")
+                ),
                 "language": $(
                         consumer(any()),
                         producer("test_language_new")
+                ),
+                "imageFilename": $(
+                        consumer(any()),
+                        producer("test_value")
                 ),
         )
     }
@@ -37,8 +49,17 @@ Contract.make {
         }
         body(
                 "id": "8f9a7cae-73c8-4ad6-b135-5bd109b51d2e",
+                "email": "current-name@email.com",
                 "username": "test_username_new",
-                "language": "test_language_new",
+                "authorities": ["ROLE_USER"],
+                "provider": "LOCAL",
+                "providerId": null,
+                "info": [
+                        "firstname"    : "test_firstname_new",
+                        "lastname"     : "test_lastname_new",
+                        "language"     : "test_language_new",
+                        "imageFilename": "test_value",
+                ]
         )
     }
 }

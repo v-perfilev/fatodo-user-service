@@ -32,10 +32,11 @@ public class AccountService {
                 .orElseThrow(ModelNotFoundException::new);
 
         user.setUsername(newUser.getUsername());
-        user.setLanguage(newUser.getLanguage());
+        user.setInfo(newUser.getInfo());
 
         String imageFilename = imageService.updateUser(user, newUser, image);
-        user.setImageFilename(imageFilename);
+        user.getInfo().setImageFilename(imageFilename);
+
         return userRepository.save(user);
     }
 

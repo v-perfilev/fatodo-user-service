@@ -50,8 +50,13 @@ Contract.make {
                 "provider": "FACEBOOK",
                 "providerId": "test_provider_facebook",
                 "authorities": ["ROLE_USER"],
-                "language": "en",
-                "activated": true
+                "activated": true,
+                "info": [
+                        "firstname"    : null,
+                        "lastname"     : null,
+                        "language"     : "en",
+                        "imageFilename": null,
+                ]
         )
     }
 }

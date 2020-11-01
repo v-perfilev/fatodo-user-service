@@ -13,8 +13,8 @@ public class ImageService {
     private final ImageServiceClient imageServiceClient;
 
     public String updateUser(User oldUser, User newUser, byte[] image) {
-        String filename = oldUser.getImageFilename();
-        String newFilename = newUser.getImageFilename();
+        String filename = oldUser.getInfo().getImageFilename();
+        String newFilename = newUser.getInfo().getImageFilename();
         if (image != null && filename == null) {
             ImageDTO imageDTO = new ImageDTO(null, image);
             filename = imageServiceClient.createUserImage(imageDTO);

@@ -63,9 +63,9 @@ public class UserService {
     }
 
     public User create(User user) {
-        String language = user.getLanguage();
+        String language = user.getInfo().getLanguage();
         if (language == null || !Language.contains(language)) {
-            user.setLanguage(Language.DEFAULT.getValue());
+            user.getInfo().setLanguage(Language.DEFAULT.getValue());
         }
         user.setAuthorities(Set.of(new Authority(AuthorityType.USER.getValue())));
         return userRepository.save(user);
@@ -80,7 +80,8 @@ public class UserService {
 
         user.setEmail(newUser.getEmail());
         user.setUsername(newUser.getUsername());
-        user.setLanguage(newUser.getLanguage());
+
+        user.setInfo(newUser.getInfo());
 
         return userRepository.save(user);
     }

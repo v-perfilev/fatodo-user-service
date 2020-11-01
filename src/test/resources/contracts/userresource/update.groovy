@@ -37,13 +37,18 @@ Contract.make {
                         consumer(any()),
                         producer(["ROLE_USER"])
                 ),
-                "language": $(
-                        consumer(anyNonBlankString()),
-                        producer("en")
-                ),
                 "activated": $(
                         consumer(anyBoolean()),
                         producer(false)
+                ),
+                "info": $(
+                        consumer(any()),
+                        producer([
+                                "firstname"    : "test_firstname",
+                                "lastname"     : "test_lastname",
+                                "language"     : "en",
+                                "imageFilename": "test_image",
+                        ])
                 )
         )
         bodyMatchers {
@@ -67,8 +72,13 @@ Contract.make {
                 "provider": "LOCAL",
                 "providerId": null,
                 "authorities": ["ROLE_USER"],
-                "language": "en",
-                "activated": true
+                "activated": true,
+                "info": [
+                        "firstname"    : "test_firstname",
+                        "lastname"     : "test_lastname",
+                        "language"     : "en",
+                        "imageFilename": "test_image",
+                ]
         )
     }
 }

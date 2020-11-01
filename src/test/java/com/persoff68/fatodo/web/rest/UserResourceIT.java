@@ -145,8 +145,7 @@ public class UserResourceIT {
         assertThat(resultDTO.getId()).isNotNull();
         assertThat(resultDTO.getEmail()).isEqualTo(dto.getEmail());
         assertThat(resultDTO.getUsername()).isEqualTo(dto.getUsername());
-        assertThat(resultDTO.getImageFilename()).isEqualTo(dto.getImageFilename());
-        assertThat(resultDTO.getLanguage()).isEqualTo(dto.getLanguage());
+        assertThat(resultDTO.getInfo()).isEqualTo(dto.getInfo());
         assertThat(resultDTO.getProvider()).isEqualTo(Provider.LOCAL.getValue());
         assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.USER.getValue());
     }

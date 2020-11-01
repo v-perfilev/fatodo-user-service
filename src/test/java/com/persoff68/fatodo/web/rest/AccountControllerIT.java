@@ -129,7 +129,10 @@ public class AccountControllerIT {
         UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
         assertThat(resultDTO.getId()).isNotNull();
         assertThat(resultDTO.getUsername()).isEqualTo(vm.getUsername());
-        assertThat(resultDTO.getLanguage()).isEqualTo(vm.getLanguage());
+        assertThat(resultDTO.getInfo().getFirstname()).isEqualTo(vm.getFirstname());
+        assertThat(resultDTO.getInfo().getLastname()).isEqualTo(vm.getLastname());
+        assertThat(resultDTO.getInfo().getLanguage()).isEqualTo(vm.getLanguage());
+        assertThat(resultDTO.getInfo().getImageFilename()).isEqualTo(vm.getImageFilename());
     }
 
     @Test

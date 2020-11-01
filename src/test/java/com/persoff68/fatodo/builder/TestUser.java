@@ -3,6 +3,7 @@ package com.persoff68.fatodo.builder;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.Authority;
+import com.persoff68.fatodo.model.Info;
 import com.persoff68.fatodo.model.User;
 import lombok.Builder;
 
@@ -15,9 +16,14 @@ public class TestUser extends User {
     private static final String DEFAULT_VALUE = "test_value";
 
     @Builder
-    TestUser(UUID id, @NotNull String email, @NotNull String username, String imageFilename, @NotNull String language, @NotNull Set<Authority> authorities, String password, @NotNull Provider provider, String providerId, @NotNull boolean activated) {
-        super(email, username, imageFilename, language, authorities, password, provider, providerId, activated);
-        this.setId(id);
+    public TestUser(UUID id, @NotNull String email, @NotNull String username, @NotNull Set<Authority> authorities, String password, @NotNull Provider provider, String providerId, @NotNull boolean activated, @NotNull Info info) {
+        super(email, username, authorities, password, provider, providerId, activated, info);
+        super.setId(id);
+        super.setInfo(new Info());
+        super.getInfo().setFirstname(DEFAULT_VALUE);
+        super.getInfo().setLastname(DEFAULT_VALUE);
+        super.getInfo().setLanguage("en");
+        super.getInfo().setImageFilename(DEFAULT_VALUE);
     }
 
     public static TestUserBuilder defaultBuilder() {
@@ -25,8 +31,6 @@ public class TestUser extends User {
                 .id(UUID.randomUUID())
                 .email(DEFAULT_VALUE + "@email.com")
                 .username(DEFAULT_VALUE)
-                .imageFilename(DEFAULT_VALUE)
-                .language("en")
                 .authorities(Collections.singleton(new Authority(AuthorityType.USER.getValue())))
                 .password(DEFAULT_VALUE)
                 .provider(Provider.LOCAL)

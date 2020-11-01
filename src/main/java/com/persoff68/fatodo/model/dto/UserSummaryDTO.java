@@ -10,6 +10,11 @@ import lombok.NoArgsConstructor;
 public class UserSummaryDTO extends AbstractDTO {
 
     private String username;
+
+    private String firstname;
+
+    private String lastname;
+
     private String imageFilename;
 
 }

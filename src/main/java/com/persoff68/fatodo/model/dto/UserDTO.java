@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.model.dto;
 
+import com.persoff68.fatodo.model.Info;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,10 +26,6 @@ public class UserDTO extends AbstractAuditingDTO {
     @Size(min = 5, max = 50)
     private String username;
 
-    private String imageFilename;
-
-    private String language;
-
     private Set<String> authorities;
 
     private String provider;
@@ -36,5 +33,8 @@ public class UserDTO extends AbstractAuditingDTO {
     private String providerId;
 
     private boolean activated;
+
+    private Info info;
+
 
 }

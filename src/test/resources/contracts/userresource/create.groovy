@@ -33,15 +33,16 @@ Contract.make {
                         consumer(any()),
                         producer(["ROLE_USER"])
                 ),
-                "language": $(
-                        consumer(anyNonBlankString()),
-                        producer("en")
-                ),
                 "activated": $(
                         consumer(anyBoolean()),
                         producer(false)
+                ),
+                "info": $(
+                        consumer(any()),
+                        producer([
+                                "language": "en"
+                        ])
                 )
-
         )
         bodyMatchers {
             jsonPath('$.provider', byType {
@@ -63,8 +64,13 @@ Contract.make {
                 "provider": "LOCAL",
                 "providerId": null,
                 "authorities": ["ROLE_USER"],
-                "language": "en",
-                "activated": false
+                "activated": false,
+                "info": [
+                        "firstname"    : null,
+                        "lastname"     : null,
+                        "language"     : "en",
+                        "imageFilename": null,
+                ]
         )
     }
 }

@@ -15,12 +15,19 @@ public class UserVM {
 
     @NotNull
     private UUID id;
+
     @NotNull
     private String username;
+
+    private String firstname;
+
+    private String lastname;
+
     @NotNull
     private String language;
 
     private String imageFilename;
+
     private MultipartFile imageContent;
 
 }
