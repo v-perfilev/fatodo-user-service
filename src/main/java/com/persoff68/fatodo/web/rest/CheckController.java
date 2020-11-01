@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping(CheckController.ENDPOINT)
 @RequiredArgsConstructor
@@ -16,16 +18,22 @@ public class CheckController {
 
     private final CheckService checkService;
 
-    @GetMapping(value = "/email/{email}/unique")
-    public ResponseEntity<Boolean> isEmailUnique(@PathVariable("email") String email) {
-        boolean isUnique = checkService.isEmailUnique(email);
-        return ResponseEntity.ok(isUnique);
+    @GetMapping(value = "/email-exists/{email}")
+    public ResponseEntity<Boolean> doesEmailExist(@PathVariable String email) {
+        boolean emailExists = checkService.doesEmailExist(email);
+        return ResponseEntity.ok(emailExists);
     }
 
-    @GetMapping(value = "/username/{username}/unique")
-    public ResponseEntity<Boolean> isUsernameUnique(@PathVariable("username") String username) {
-        boolean isUnique = checkService.isUsernameUnique(username);
-        return ResponseEntity.ok(isUnique);
+    @GetMapping(value = "/username-exists/{username}")
+    public ResponseEntity<Boolean> doesUsernameExist(@PathVariable String username) {
+        boolean usernameExists = checkService.doesUsernameExist(username);
+        return ResponseEntity.ok(usernameExists);
+    }
+
+    @GetMapping(value = "/id-exists/{id}")
+    public ResponseEntity<Boolean> doesIdExist(@PathVariable UUID id) {
+        boolean idExists = checkService.doesIdExist(id);
+        return ResponseEntity.ok(idExists);
     }
 
 }

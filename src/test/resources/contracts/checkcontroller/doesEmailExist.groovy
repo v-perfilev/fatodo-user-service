@@ -8,8 +8,8 @@ Contract.make {
     request {
         method GET()
         url($(
-                consumer(regex("/api/check/email/.+/unique")),
-                producer("/api/check/email/test_not_exists@email.com/unique")
+                consumer(regex("/api/check/email-exists/.+")),
+                producer("/api/check/email-exists/test_not_exists@email.com")
         ))
     }
     response {
@@ -17,6 +17,6 @@ Contract.make {
         headers {
             contentType applicationJson()
         }
-        body("true")
+        body("false")
     }
 }
