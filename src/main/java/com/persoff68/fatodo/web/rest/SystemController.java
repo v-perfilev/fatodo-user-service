@@ -63,6 +63,13 @@ public class SystemController {
         return ResponseEntity.ok(userPrincipalDTO);
     }
 
+    @GetMapping(value = "/username-or-email/{usernameOrEmail}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserPrincipalDTO> getUserPrincipalByUsernameOrEmail(@PathVariable String usernameOrEmail) {
+        User user = userService.getByUsernameOrEmail(usernameOrEmail);
+        UserPrincipalDTO userPrincipalDTO = userMapper.pojoToPrincipalDTO(user);
+        return ResponseEntity.ok(userPrincipalDTO);
+    }
+
     @PostMapping(value = "/local",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)

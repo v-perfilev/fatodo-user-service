@@ -10,6 +10,7 @@ import com.persoff68.fatodo.service.exception.ModelAlreadyExistsException;
 import com.persoff68.fatodo.service.exception.ModelInvalidException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
+import com.persoff68.fatodo.service.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,21 @@ public class UserService {
 
     public List<User> getAllByIds(List<UUID> idList) {
         return userRepository.findAllByIdIn(idList);
+    }
+
+    public User getByUsernameOrEmail(String usernameOrEmail) {
+        boolean isEmail = UserUtils.isEmail(usernameOrEmail);
+        User user = null;
+        if (isEmail) {
+            user = userRepository.findByEmail(usernameOrEmail).orElse(null);
+        }
+        if (user == null) {
+            user = userRepository.findByUsername(usernameOrEmail).orElse(null);
+        }
+        if (user == null) {
+            throw new ModelNotFoundException();
+        }
+        return user;
     }
 
     public User getByEmail(String email) {

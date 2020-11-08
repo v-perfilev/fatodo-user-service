@@ -6,6 +6,7 @@ import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.model.User;
+import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.dto.UserSummaryDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -87,6 +89,47 @@ public class UserControllerIT {
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    public void testGetByUsernameOrEmail_ok_username() throws Exception {
+        String username = LOCAL_NAME;
+        String url = ENDPOINT + "/username-or-email/" + username;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        UserSummaryDTO resultDTO = objectMapper.readValue(resultString, UserSummaryDTO.class);
+        assertThat(resultDTO.getUsername()).isEqualTo(username);
+    }
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    public void testGetByUsernameOrEmail_ok_email() throws Exception {
+        String email = LOCAL_NAME + "@email.com";
+        String url = ENDPOINT + "/username-or-email/" + email;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        UserSummaryDTO resultDTO = objectMapper.readValue(resultString, UserSummaryDTO.class);
+        assertThat(resultDTO).isNotNull();
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testGetByUsernameOrEmail_unauthorized() throws Exception {
+        String url = ENDPOINT + "/username-or-email/" + LOCAL_NAME;
+        mvc.perform(get(url))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    public void testGetByUsernameOrEmail_notFound() throws Exception {
+        String username = "not_exists";
+        String url = ENDPOINT + "/username-or-email/" + username;
+        mvc.perform(get(url))
+                .andExpect(status().isNotFound());
     }
 
 }

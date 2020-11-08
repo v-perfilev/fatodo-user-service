@@ -7,6 +7,8 @@ import com.persoff68.fatodo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,13 @@ public class UserController {
         List<UserSummaryDTO> userSummaryDTOList = userList.stream()
                 .map(userMapper::pojoToSummaryDTO).collect(Collectors.toList());
         return ResponseEntity.ok(userSummaryDTOList);
+    }
+
+    @GetMapping(value = "/username-or-email/{usernameOrEmail}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserSummaryDTO> getByUsernameOrEmail(@PathVariable String usernameOrEmail) {
+        User user = userService.getByUsernameOrEmail(usernameOrEmail);
+        UserSummaryDTO userSummaryDTO = userMapper.pojoToSummaryDTO(user);
+        return ResponseEntity.ok(userSummaryDTO);
     }
 
 }

@@ -209,6 +209,55 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    public void testGetUserPrincipalByUsernameOrEmail_ok_username() throws Exception {
+        String username = LOCAL_NAME;
+        String url = ENDPOINT + "/username-or-email/" + username;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        UserPrincipalDTO resultDTO = objectMapper.readValue(resultString, UserPrincipalDTO.class);
+        assertThat(resultDTO.getUsername()).isEqualTo(username);
+    }
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    public void testGetUserPrincipalByUsernameOrEmail_ok_email() throws Exception {
+        String email = LOCAL_NAME + "@email.com";
+        String url = ENDPOINT + "/username-or-email/" + email;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        UserPrincipalDTO resultDTO = objectMapper.readValue(resultString, UserPrincipalDTO.class);
+        assertThat(resultDTO.getEmail()).isEqualTo(email);
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testGetUserPrincipalByUsernameOrEmail_unauthorized() throws Exception {
+        String url = ENDPOINT + "/username-or-email/" + LOCAL_NAME;
+        mvc.perform(get(url))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_USER")
+    public void testGetUserPrincipalByUsernameOrEmail_forbidden() throws Exception {
+        String url = ENDPOINT + "/username-or-email/" + LOCAL_NAME;
+        mvc.perform(get(url))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    public void testGetUserPrincipalByUsernameOrEmail_notFound() throws Exception {
+        String username = "not_exists";
+        String url = ENDPOINT + "/username-or-email/" + username;
+        mvc.perform(get(url))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testCreateLocalUser_created() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = TestLocalUserDTO.defaultBuilder().email("new-name@email.com").username("new-name").build();
