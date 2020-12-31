@@ -23,6 +23,16 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    private static final String[] publicUrls = {
+            "/actuator/**",
+            "/v2/api-docs",
+            "/configuration/ui",
+            "/swagger-resources/**",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**"
+    };
+
     private final SecurityProblemSupport securityProblemSupport;
     private final JwtTokenFilter jwtTokenFilter;
     private final SecurityLocaleFilter securityLocaleFilter;
@@ -55,9 +65,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(securityLocaleFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/actuator/**").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/v2/api-docs").permitAll()
+                .antMatchers(publicUrls).permitAll()
                 .antMatchers("/api/check/**").permitAll()
                 .antMatchers("/api/system/**").hasAuthority(AuthorityType.Constants.SYSTEM_VALUE)
                 .antMatchers("/api/users/**").hasAuthority(AuthorityType.Constants.ADMIN_VALUE)
