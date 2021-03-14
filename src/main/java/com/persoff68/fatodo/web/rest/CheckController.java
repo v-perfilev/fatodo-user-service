@@ -30,6 +30,12 @@ public class CheckController {
         return ResponseEntity.ok(usernameExists);
     }
 
+    @GetMapping(value = "/username-or-email-exists/{user}")
+    public ResponseEntity<Boolean> doesUsernameOrEmailExist(@PathVariable String user) {
+        boolean emailOrUsernameExists = checkService.doesUsernameOrEmailExist(user);
+        return ResponseEntity.ok(emailOrUsernameExists);
+    }
+
     @GetMapping(value = "/id-exists/{id}")
     public ResponseEntity<Boolean> doesIdExist(@PathVariable UUID id) {
         boolean idExists = checkService.doesIdExist(id);

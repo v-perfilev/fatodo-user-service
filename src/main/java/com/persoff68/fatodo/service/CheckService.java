@@ -1,6 +1,7 @@
 package com.persoff68.fatodo.service;
 
 import com.persoff68.fatodo.repository.UserRepository;
+import com.persoff68.fatodo.service.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,18 @@ public class CheckService {
 
     public boolean doesEmailExist(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    public boolean doesUsernameOrEmailExist(String user) {
+        boolean isEmail = UserUtils.isEmail(user);
+        boolean usernameOrEmailExists = false;
+        if (isEmail) {
+            usernameOrEmailExists = userRepository.existsByEmail(user);
+        }
+        if (!usernameOrEmailExists) {
+            usernameOrEmailExists = userRepository.existsByUsername(user);
+        }
+        return usernameOrEmailExists;
     }
 
     public boolean doesIdExist(UUID id) {
