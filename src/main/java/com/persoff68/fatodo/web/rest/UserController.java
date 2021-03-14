@@ -35,6 +35,13 @@ public class UserController {
         return ResponseEntity.ok(userSummaryDTOList);
     }
 
+    @GetMapping(value = "/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserSummaryDTO> getByUsername(@PathVariable String username) {
+        User user = userService.getByUsername(username);
+        UserSummaryDTO userSummaryDTO = userMapper.pojoToSummaryDTO(user);
+        return ResponseEntity.ok(userSummaryDTO);
+    }
+
     @GetMapping(value = "/username-or-email/{usernameOrEmail}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserSummaryDTO> getByUsernameOrEmail(@PathVariable String usernameOrEmail) {
         User user = userService.getByUsernameOrEmail(usernameOrEmail);
