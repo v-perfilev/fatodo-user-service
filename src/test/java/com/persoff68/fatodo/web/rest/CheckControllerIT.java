@@ -100,6 +100,40 @@ public class CheckControllerIT {
 
     @Test
     @WithAnonymousUser
+    public void testDoesUsernameOrEmailExist_false() throws Exception {
+        String url = ENDPOINT + "/username-or-email-exists/" + NOT_EXISTING_NAME;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        boolean doesExist = Boolean.parseBoolean(resultString);
+        assertThat(doesExist).isFalse();
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testDoesUsernameOrEmailExist_true_email() throws Exception {
+        String email = LOCAL_NAME + "@email.com";
+        String url = ENDPOINT + "/username-or-email-exists/" + email;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        boolean doesExist = Boolean.parseBoolean(resultString);
+        assertThat(doesExist).isTrue();
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testDoesUsernameOrEmailExist_true_username() throws Exception {
+        String url = ENDPOINT + "/username-or-email-exists/" + LOCAL_NAME;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        boolean doesExist = Boolean.parseBoolean(resultString);
+        assertThat(doesExist).isTrue();
+    }
+
+    @Test
+    @WithAnonymousUser
     public void testDoesIdExist_false() throws Exception {
         String url = ENDPOINT + "/id-exists/" + UUID.randomUUID();
         ResultActions resultActions = mvc.perform(get(url))
