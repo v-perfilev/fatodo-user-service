@@ -91,6 +91,30 @@ public class UserControllerIT {
     }
 
     @Test
+    @WithCustomSecurityContext
+    public void testGetAllUsernamesByIds_ok() throws Exception {
+        String url = ENDPOINT + "/all-usernames-by-ids";
+        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
+        ResultActions resultActions = mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, String.class);
+        List<String> usernameList = objectMapper.readValue(resultString, collectionType);
+        assertThat(usernameList.size()).isEqualTo(1);
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testGetAllUsernamesByIds_unauthorized() throws Exception {
+        String url = ENDPOINT + "/all-usernames-by-ids";
+        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
+        mvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testGetByUsernameOrEmail_ok_username() throws Exception {
         String username = LOCAL_NAME;

@@ -35,6 +35,15 @@ public class UserController {
         return ResponseEntity.ok(userSummaryDTOList);
     }
 
+    @PostMapping(value = "/all-usernames-by-ids", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<String>> getAllUsernamesByIds(@RequestBody List<UUID> idList) {
+        List<User> userList = userService.getAllByIds(idList);
+        List<String> usernameList = userList.stream()
+                .map(User::getUsername)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(usernameList);
+    }
+
     @GetMapping(value = "/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserSummaryDTO> getByUsername(@PathVariable String username) {
         User user = userService.getByUsername(username);
