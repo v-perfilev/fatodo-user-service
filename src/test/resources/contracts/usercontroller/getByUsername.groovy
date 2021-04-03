@@ -3,13 +3,13 @@ package contracts.usercontroller
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'get user summary by username or email'
+    name 'get user summary by username'
     description 'should return status 200 and UserSummaryDTO'
     request {
         method GET()
         url($(
-                consumer(regex("/api/user/username-or-email/.+")),
-                producer("/api/user/username-or-email/current-name")
+                consumer(regex("/api/user/username/.+")),
+                producer("/api/user/username/current-name")
         ))
         headers {
             header 'Authorization': $(
