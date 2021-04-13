@@ -33,6 +33,8 @@ public interface UserRepository extends MongoRepository<User, UUID> {
     @CacheEvictMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-id-list-keys", key = "#user.id")
     void delete(@NonNull User user);
 
+    List<User> findAllByUsernameStartsWithIgnoreCase(String username);
+
     Optional<User> findByUsername(String username);
 
     Optional<User> findByEmail(String email);

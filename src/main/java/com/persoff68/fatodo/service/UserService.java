@@ -32,6 +32,10 @@ public class UserService {
         return userRepository.findAllByIdIn(idList);
     }
 
+    public List<User> getAllByUsernamePart(String username) {
+        return userRepository.findAllByUsernameStartsWithIgnoreCase(username);
+    }
+
     public User getByUsernameOrEmail(String usernameOrEmail) {
         boolean isEmail = UserUtils.isEmail(usernameOrEmail);
         User user = null;

@@ -92,6 +92,42 @@ public class UserControllerIT {
 
     @Test
     @WithCustomSecurityContext
+    public void testGetAllByUsername_ok() throws Exception {
+        String usernamePart = CURRENT_NAME.substring(0, 4);
+        String url = ENDPOINT + "/all-by-username/" + usernamePart;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, UserSummaryDTO.class);
+        List<UserSummaryDTO> dtoList = objectMapper.readValue(resultString, collectionType);
+        assertThat(dtoList.size()).isEqualTo(1);
+        assertThat(dtoList.get(0).getUsername()).isEqualTo(CURRENT_NAME);
+    }
+
+    @Test
+    @WithCustomSecurityContext
+    public void testGetAllByUsername_ok_empty() throws Exception {
+        String usernamePart = CURRENT_NAME.substring(1, 4);
+        String url = ENDPOINT + "/all-by-username/" + usernamePart;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, UserSummaryDTO.class);
+        List<UserSummaryDTO> dtoList = objectMapper.readValue(resultString, collectionType);
+        assertThat(dtoList.size()).isEqualTo(0);
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testGetAllByUsername_unauthorized() throws Exception {
+        String usernamePart = "current";
+        String url = ENDPOINT + "/all-by-username/" + usernamePart;
+        mvc.perform(get(url))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithCustomSecurityContext
     public void testGetAllUsernamesByIds_ok() throws Exception {
         String url = ENDPOINT + "/all-usernames-by-ids";
         String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
