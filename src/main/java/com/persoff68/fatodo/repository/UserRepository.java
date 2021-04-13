@@ -4,6 +4,8 @@ import com.mongodb.lang.NonNull;
 import com.persoff68.fatodo.config.aop.cache.annotation.CacheEvictMethod;
 import com.persoff68.fatodo.config.aop.cache.annotation.CacheableMethod;
 import com.persoff68.fatodo.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -33,7 +35,7 @@ public interface UserRepository extends MongoRepository<User, UUID> {
     @CacheEvictMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-id-list-keys", key = "#user.id")
     void delete(@NonNull User user);
 
-    List<User> findAllByUsernameStartsWithIgnoreCase(String username);
+    Page<User> findAllByUsernameStartsWithIgnoreCase(String username, Pageable pageable);
 
     Optional<User> findByUsername(String username);
 

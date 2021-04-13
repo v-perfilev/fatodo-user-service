@@ -93,7 +93,7 @@ public class UserControllerIT {
     @Test
     @WithCustomSecurityContext
     public void testGetAllByUsername_ok() throws Exception {
-        String usernamePart = CURRENT_NAME.substring(0, 4);
+        String usernamePart = CURRENT_NAME.substring(0, 4).toUpperCase();
         String url = ENDPOINT + "/all-by-username/" + usernamePart;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());

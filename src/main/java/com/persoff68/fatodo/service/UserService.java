@@ -12,6 +12,8 @@ import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.UserAlreadyActivatedException;
 import com.persoff68.fatodo.service.util.UserUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    public static final int DEFAULT_SEARCH_SIZE = 10;
 
     private final UserRepository userRepository;
 
@@ -33,7 +36,9 @@ public class UserService {
     }
 
     public List<User> getAllByUsernamePart(String username) {
-        return userRepository.findAllByUsernameStartsWithIgnoreCase(username);
+        PageRequest pageRequest = PageRequest.of(0, DEFAULT_SEARCH_SIZE);
+        Page<User> userPage = userRepository.findAllByUsernameStartsWithIgnoreCase(username, pageRequest);
+        return userPage.toList();
     }
 
     public User getByUsernameOrEmail(String usernameOrEmail) {
