@@ -128,6 +128,42 @@ public class UserControllerIT {
 
     @Test
     @WithCustomSecurityContext
+    public void testGetAllIdsByUsername_ok() throws Exception {
+        String usernamePart = CURRENT_NAME.substring(0, 4).toUpperCase();
+        String url = ENDPOINT + "/all-ids-by-username/" + usernamePart;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, UUID.class);
+        List<UUID> idsList = objectMapper.readValue(resultString, collectionType);
+        assertThat(idsList.size()).isEqualTo(1);
+        assertThat(idsList.get(0)).isNotNull();
+    }
+
+    @Test
+    @WithCustomSecurityContext
+    public void testGetAllIdsByUsername_ok_empty() throws Exception {
+        String usernamePart = CURRENT_NAME.substring(1, 4);
+        String url = ENDPOINT + "/all-ids-by-username/" + usernamePart;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, UUID.class);
+        List<UUID> idsList = objectMapper.readValue(resultString, collectionType);
+        assertThat(idsList.size()).isEqualTo(0);
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testGetAllIdsByUsername_unauthorized() throws Exception {
+        String usernamePart = "current";
+        String url = ENDPOINT + "/all-ids-by-username/" + usernamePart;
+        mvc.perform(get(url))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithCustomSecurityContext
     public void testGetAllUsernamesByIds_ok() throws Exception {
         String url = ENDPOINT + "/all-usernames-by-ids";
         String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
