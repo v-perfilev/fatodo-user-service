@@ -29,8 +29,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
-public class UserControllerIT {
-    private static final String ENDPOINT = "/api/user";
+public class UserDataControllerIT {
+    private static final String ENDPOINT = "/api/user-data";
 
     private static final UUID CURRENT_ID = UUID.fromString("6e3c489b-a4fb-4654-aa39-30985b7c4656");
     private static final String CURRENT_NAME = "current-name";
@@ -69,7 +69,7 @@ public class UserControllerIT {
     @Test
     @WithCustomSecurityContext
     public void testGetAllByIds_ok() throws Exception {
-        String url = ENDPOINT + "/all-by-ids";
+        String url = ENDPOINT + "/all/ids";
         String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
         ResultActions resultActions = mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -83,7 +83,7 @@ public class UserControllerIT {
     @Test
     @WithAnonymousUser
     public void testGetAllByIds_unauthorized() throws Exception {
-        String url = ENDPOINT + "/all-by-ids";
+        String url = ENDPOINT + "/all/ids";
         String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -94,7 +94,7 @@ public class UserControllerIT {
     @WithCustomSecurityContext
     public void testGetAllByUsername_ok() throws Exception {
         String usernamePart = CURRENT_NAME.substring(0, 4).toUpperCase();
-        String url = ENDPOINT + "/all-by-username/" + usernamePart;
+        String url = ENDPOINT + "/all/" + usernamePart + "/username-part";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -108,7 +108,7 @@ public class UserControllerIT {
     @WithCustomSecurityContext
     public void testGetAllByUsername_ok_empty() throws Exception {
         String usernamePart = CURRENT_NAME.substring(1, 4);
-        String url = ENDPOINT + "/all-by-username/" + usernamePart;
+        String url = ENDPOINT + "/all/" + usernamePart + "/username-part";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -121,7 +121,7 @@ public class UserControllerIT {
     @WithAnonymousUser
     public void testGetAllByUsername_unauthorized() throws Exception {
         String usernamePart = "current";
-        String url = ENDPOINT + "/all-by-username/" + usernamePart;
+        String url = ENDPOINT + "/all/" + usernamePart + "/username-part";
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
@@ -130,7 +130,7 @@ public class UserControllerIT {
     @WithCustomSecurityContext
     public void testGetAllIdsByUsername_ok() throws Exception {
         String usernamePart = CURRENT_NAME.substring(0, 4).toUpperCase();
-        String url = ENDPOINT + "/all-ids-by-username/" + usernamePart;
+        String url = ENDPOINT + "/ids/" + usernamePart + "/username-part";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -144,7 +144,7 @@ public class UserControllerIT {
     @WithCustomSecurityContext
     public void testGetAllIdsByUsername_ok_empty() throws Exception {
         String usernamePart = CURRENT_NAME.substring(1, 4);
-        String url = ENDPOINT + "/all-ids-by-username/" + usernamePart;
+        String url = ENDPOINT + "/ids/" + usernamePart + "/username-part";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -157,7 +157,7 @@ public class UserControllerIT {
     @WithAnonymousUser
     public void testGetAllIdsByUsername_unauthorized() throws Exception {
         String usernamePart = "current";
-        String url = ENDPOINT + "/all-ids-by-username/" + usernamePart;
+        String url = ENDPOINT + "/ids/" + usernamePart + "/username-part";
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
@@ -165,7 +165,7 @@ public class UserControllerIT {
     @Test
     @WithCustomSecurityContext
     public void testGetAllUsernamesByIds_ok() throws Exception {
-        String url = ENDPOINT + "/all-usernames-by-ids";
+        String url = ENDPOINT + "/usernames/ids";
         String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
         ResultActions resultActions = mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -179,7 +179,7 @@ public class UserControllerIT {
     @Test
     @WithAnonymousUser
     public void testGetAllUsernamesByIds_unauthorized() throws Exception {
-        String url = ENDPOINT + "/all-usernames-by-ids";
+        String url = ENDPOINT + "/usernames/ids";
         String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody))
@@ -190,7 +190,7 @@ public class UserControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testGetByUsernameOrEmail_ok_username() throws Exception {
         String username = LOCAL_NAME;
-        String url = ENDPOINT + "/username-or-email/" + username;
+        String url = ENDPOINT + "/" + username + "/username-or-email";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -202,7 +202,7 @@ public class UserControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testGetByUsernameOrEmail_ok_email() throws Exception {
         String email = LOCAL_NAME + "@email.com";
-        String url = ENDPOINT + "/username-or-email/" + email;
+        String url = ENDPOINT + "/" + email + "/username-or-email";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -213,7 +213,7 @@ public class UserControllerIT {
     @Test
     @WithAnonymousUser
     public void testGetByUsernameOrEmail_unauthorized() throws Exception {
-        String url = ENDPOINT + "/username-or-email/" + LOCAL_NAME;
+        String url = ENDPOINT + "/" + LOCAL_NAME + "/username-or-email";
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
@@ -222,7 +222,7 @@ public class UserControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testGetByUsernameOrEmail_notFound() throws Exception {
         String username = "not_exists";
-        String url = ENDPOINT + "/username-or-email/" + username;
+        String url = ENDPOINT + "/" + username + "/username-or-email";
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
@@ -231,7 +231,7 @@ public class UserControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testGetByUsername_ok() throws Exception {
         String username = LOCAL_NAME;
-        String url = ENDPOINT + "/username/" + username;
+        String url = ENDPOINT + "/" + username + "/username";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -242,7 +242,7 @@ public class UserControllerIT {
     @Test
     @WithAnonymousUser
     public void testGetByUsername_unauthorized() throws Exception {
-        String url = ENDPOINT + "/username/" + LOCAL_NAME;
+        String url = ENDPOINT + "/" + LOCAL_NAME + "/username";
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
@@ -251,7 +251,7 @@ public class UserControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     public void testGetByUsername_notFound() throws Exception {
         String username = "not_exists";
-        String url = ENDPOINT + "/username/" + username;
+        String url = ENDPOINT + "/" + username + "/username";
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }

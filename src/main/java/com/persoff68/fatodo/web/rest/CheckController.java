@@ -18,25 +18,25 @@ public class CheckController {
 
     private final CheckService checkService;
 
-    @GetMapping(value = "/email-exists/{email}")
+    @GetMapping(value = "/email/{email}")
     public ResponseEntity<Boolean> doesEmailExist(@PathVariable String email) {
         boolean emailExists = checkService.doesEmailExist(email);
         return ResponseEntity.ok(emailExists);
     }
 
-    @GetMapping(value = "/username-exists/{username}")
+    @GetMapping(value = "/username/{username}")
     public ResponseEntity<Boolean> doesUsernameExist(@PathVariable String username) {
         boolean usernameExists = checkService.doesUsernameExist(username);
         return ResponseEntity.ok(usernameExists);
     }
 
-    @GetMapping(value = "/username-or-email-exists/{user}")
+    @GetMapping(value = "/username-or-email/{user}")
     public ResponseEntity<Boolean> doesUsernameOrEmailExist(@PathVariable String user) {
         boolean emailOrUsernameExists = checkService.doesUsernameOrEmailExist(user);
         return ResponseEntity.ok(emailOrUsernameExists);
     }
 
-    @GetMapping(value = "/id-exists/{id}")
+    @GetMapping(value = "/id/{id}")
     public ResponseEntity<Boolean> doesIdExist(@PathVariable UUID id) {
         boolean idExists = checkService.doesIdExist(id);
         return ResponseEntity.ok(idExists);

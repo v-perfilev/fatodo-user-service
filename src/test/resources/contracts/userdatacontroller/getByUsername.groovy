@@ -1,4 +1,4 @@
-package contracts.usercontroller
+package contracts.userdatacontroller
 
 import org.springframework.cloud.contract.spec.Contract
 
@@ -8,8 +8,8 @@ Contract.make {
     request {
         method GET()
         url($(
-                consumer(regex("/api/user/username/.+")),
-                producer("/api/user/username/current-name")
+                consumer(regex("/api/user-data/.+/username")),
+                producer("/api/user-data/current-name/username")
         ))
         headers {
             header 'Authorization': $(

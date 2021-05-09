@@ -56,7 +56,7 @@ public class CheckControllerIT {
     @WithAnonymousUser
     public void testDoesEmailExist_false() throws Exception {
         String email = NOT_EXISTING_NAME + "@email.com";
-        String url = ENDPOINT + "/email-exists/" + email;
+        String url = ENDPOINT + "/email/" + email;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -68,7 +68,7 @@ public class CheckControllerIT {
     @WithAnonymousUser
     public void testDoesEmailExist_true() throws Exception {
         String email = LOCAL_NAME + "@email.com";
-        String url = ENDPOINT + "/email-exists/" + email;
+        String url = ENDPOINT + "/email/" + email;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -79,7 +79,7 @@ public class CheckControllerIT {
     @Test
     @WithAnonymousUser
     public void testDoesUsernameExist_false() throws Exception {
-        String url = ENDPOINT + "/username-exists/" + NOT_EXISTING_NAME;
+        String url = ENDPOINT + "/username/" + NOT_EXISTING_NAME;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -90,7 +90,7 @@ public class CheckControllerIT {
     @Test
     @WithAnonymousUser
     public void testDoesUsernameExist_true() throws Exception {
-        String url = ENDPOINT + "/username-exists/" + LOCAL_NAME;
+        String url = ENDPOINT + "/username/" + LOCAL_NAME;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -101,7 +101,7 @@ public class CheckControllerIT {
     @Test
     @WithAnonymousUser
     public void testDoesUsernameOrEmailExist_false() throws Exception {
-        String url = ENDPOINT + "/username-or-email-exists/" + NOT_EXISTING_NAME;
+        String url = ENDPOINT + "/username-or-email/" + NOT_EXISTING_NAME;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -113,7 +113,7 @@ public class CheckControllerIT {
     @WithAnonymousUser
     public void testDoesUsernameOrEmailExist_true_email() throws Exception {
         String email = LOCAL_NAME + "@email.com";
-        String url = ENDPOINT + "/username-or-email-exists/" + email;
+        String url = ENDPOINT + "/username-or-email/" + email;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -124,7 +124,7 @@ public class CheckControllerIT {
     @Test
     @WithAnonymousUser
     public void testDoesUsernameOrEmailExist_true_username() throws Exception {
-        String url = ENDPOINT + "/username-or-email-exists/" + LOCAL_NAME;
+        String url = ENDPOINT + "/username-or-email/" + LOCAL_NAME;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -135,7 +135,7 @@ public class CheckControllerIT {
     @Test
     @WithAnonymousUser
     public void testDoesIdExist_false() throws Exception {
-        String url = ENDPOINT + "/id-exists/" + UUID.randomUUID();
+        String url = ENDPOINT + "/id/" + UUID.randomUUID();
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -146,7 +146,7 @@ public class CheckControllerIT {
     @Test
     @WithAnonymousUser
     public void testDoesIdExist_true() throws Exception {
-        String url = ENDPOINT + "/id-exists/" + USER_ID;
+        String url = ENDPOINT + "/id/" + USER_ID;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();

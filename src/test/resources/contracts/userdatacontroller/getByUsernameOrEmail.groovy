@@ -1,15 +1,15 @@
-package contracts.usercontroller
+package contracts.userdatacontroller
 
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'get all user ids by username part'
-    description 'should return status 200 and list of uuid'
+    name 'get user summary by username or email'
+    description 'should return status 200 and UserSummaryDTO'
     request {
         method GET()
         url($(
-                consumer(regex("/api/user/all-ids-by-username/.+")),
-                producer("/api/user/all-ids-by-username/current-name")
+                consumer(regex("/api/user-data/.+/username-or-email")),
+                producer("/api/user-data/current-name/username-or-email")
         ))
         headers {
             header 'Authorization': $(
@@ -23,8 +23,12 @@ Contract.make {
         headers {
             contentType applicationJson()
         }
-        body([
-                "8f9a7cae-73c8-4ad6-b135-5bd109b51d2e"
-        ])
+        body(
+                "id": "8f9a7cae-73c8-4ad6-b135-5bd109b51d2e",
+                "username": "current-name",
+                "firstname": "test_value",
+                "lastname": "test_value",
+                "imageFilename": "test_value"
+        )
     }
 }

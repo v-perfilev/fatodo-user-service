@@ -1,4 +1,4 @@
-package contracts.usercontroller
+package contracts.userdatacontroller
 
 import org.springframework.cloud.contract.spec.Contract
 
@@ -7,7 +7,7 @@ Contract.make {
     description 'should return status 200 and list of usernames'
     request {
         method POST()
-        url("/api/user/all-usernames-by-ids")
+        url("/api/user-data/usernames/ids")
         headers {
             contentType applicationJson()
             header 'Authorization': $(
