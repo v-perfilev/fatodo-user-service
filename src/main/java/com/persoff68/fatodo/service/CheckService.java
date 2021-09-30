@@ -1,10 +1,12 @@
 package com.persoff68.fatodo.service;
 
+import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.service.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,6 +37,11 @@ public class CheckService {
 
     public boolean doesIdExist(UUID id) {
         return userRepository.existsById(id);
+    }
+
+    public boolean doIdsExist(List<UUID> idList) {
+        List<User> userList = userRepository.findAllByIdIn(idList);
+        return userList.size() == idList.size();
     }
 
 }

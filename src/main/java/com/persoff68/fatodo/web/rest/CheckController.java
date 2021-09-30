@@ -2,12 +2,16 @@ package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.service.CheckService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -40,6 +44,12 @@ public class CheckController {
     public ResponseEntity<Boolean> doesIdExist(@PathVariable UUID id) {
         boolean idExists = checkService.doesIdExist(id);
         return ResponseEntity.ok(idExists);
+    }
+
+    @PostMapping(value = "/id", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> doIdsExist(@RequestBody List<UUID> idList) {
+        boolean idsExist = checkService.doIdsExist(idList);
+        return ResponseEntity.ok(idsExist);
     }
 
 }

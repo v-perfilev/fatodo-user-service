@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.web.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.model.User;
@@ -8,17 +9,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
@@ -33,6 +37,8 @@ public class CheckControllerIT {
     WebApplicationContext context;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    ObjectMapper objectMapper;
 
     MockMvc mvc;
 
@@ -152,6 +158,32 @@ public class CheckControllerIT {
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         boolean doesExist = Boolean.parseBoolean(resultString);
         assertThat(doesExist).isTrue();
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testDoIdsExist_false() throws Exception {
+        String url = ENDPOINT + "/id";
+        String requestBody = objectMapper.writeValueAsString(List.of(USER_ID, UUID.randomUUID()));
+        ResultActions resultActions = mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        boolean doesExist = Boolean.parseBoolean(resultString);
+        assertThat(doesExist).isFalse();
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testDoIdsExist_true() throws Exception {
+        String url = ENDPOINT + "/id";
+        String requestBody = objectMapper.writeValueAsString(List.of(USER_ID));
+        ResultActions resultActions = mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        boolean doesExist = Boolean.parseBoolean(resultString);
+        assertThat(doesExist).isFalse();
     }
 
 }
