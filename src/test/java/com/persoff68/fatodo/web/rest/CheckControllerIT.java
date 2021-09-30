@@ -183,7 +183,7 @@ public class CheckControllerIT {
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         boolean doesExist = Boolean.parseBoolean(resultString);
-        assertThat(doesExist).isFalse();
+        assertThat(doesExist).isTrue();
     }
 
 }
