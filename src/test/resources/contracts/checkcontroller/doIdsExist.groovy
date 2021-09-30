@@ -8,6 +8,9 @@ Contract.make {
     request {
         method POST()
         url("/api/check/id")
+        headers {
+            contentType applicationJson()
+        }
         body($(
                 consumer(regex(".+")),
                 producer([
