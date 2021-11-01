@@ -6,6 +6,7 @@ import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.model.User;
+import com.persoff68.fatodo.model.dto.UserInfoDTO;
 import com.persoff68.fatodo.model.dto.UserSummaryDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -72,7 +73,7 @@ public class UserDataControllerIT {
         String url = ENDPOINT + "/all/ids";
         String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
         ResultActions resultActions = mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, UserSummaryDTO.class);
@@ -86,7 +87,31 @@ public class UserDataControllerIT {
         String url = ENDPOINT + "/all/ids";
         String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithCustomSecurityContext
+    public void testGetInfoByIds_ok() throws Exception {
+        String url = ENDPOINT + "/info/ids";
+        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
+        ResultActions resultActions = mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, UserSummaryDTO.class);
+        List<UserInfoDTO> userSummaryDTOList = objectMapper.readValue(resultString, collectionType);
+        assertThat(userSummaryDTOList.size()).isEqualTo(1);
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testGetInfoByIds_unauthorized() throws Exception {
+        String url = ENDPOINT + "/info/ids";
+        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -168,7 +193,7 @@ public class UserDataControllerIT {
         String url = ENDPOINT + "/usernames/ids";
         String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
         ResultActions resultActions = mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, String.class);
@@ -182,7 +207,7 @@ public class UserDataControllerIT {
         String url = ENDPOINT + "/usernames/ids";
         String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isUnauthorized());
     }
 

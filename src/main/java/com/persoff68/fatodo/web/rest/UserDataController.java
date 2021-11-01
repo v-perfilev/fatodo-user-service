@@ -1,6 +1,7 @@
 package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.model.User;
+import com.persoff68.fatodo.model.dto.UserInfoDTO;
 import com.persoff68.fatodo.model.dto.UserSummaryDTO;
 import com.persoff68.fatodo.model.mapper.UserMapper;
 import com.persoff68.fatodo.service.UserService;
@@ -34,6 +35,14 @@ public class UserDataController {
         List<UserSummaryDTO> userSummaryDTOList = userList.stream()
                 .map(userMapper::pojoToSummaryDTO).collect(Collectors.toList());
         return ResponseEntity.ok(userSummaryDTOList);
+    }
+
+    @PostMapping(value = "/info/ids", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserInfoDTO>> getAllInfoByIds(@RequestBody List<UUID> idList) {
+        List<User> userList = userService.getAllByIds(idList);
+        List<UserInfoDTO> userInfoDTOList = userList.stream()
+                .map(userMapper::pojoToInfoDTO).collect(Collectors.toList());
+        return ResponseEntity.ok(userInfoDTOList);
     }
 
     @PostMapping(value = "/usernames/ids", produces = MediaType.APPLICATION_JSON_VALUE)
