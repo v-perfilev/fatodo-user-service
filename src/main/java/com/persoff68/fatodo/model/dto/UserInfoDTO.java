@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserInfoDTO extends AbstractDTO {
 
+    private String email;
+
     private String username;
 
     private String firstname;
