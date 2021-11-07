@@ -123,7 +123,7 @@ public class AccountControllerIT {
         UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
         MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
         ResultActions resultActions = mvc.perform(post(url)
-                .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
+                        .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
@@ -142,19 +142,19 @@ public class AccountControllerIT {
         UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
         MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
         mvc.perform(post(url)
-                .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
+                        .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithCustomSecurityContext
-    public void testUpdate_badRequest_wrongUser() throws Exception {
+    public void testUpdate_forbidden_wrongUser() throws Exception {
         String url = ENDPOINT + "/update";
         UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
         MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
         mvc.perform(post(url)
-                .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
-                .andExpect(status().isBadRequest());
+                        .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -164,7 +164,7 @@ public class AccountControllerIT {
         UserVM vm = TestUserVM.defaultBuilder().id(UUID.fromString("bafc4e0e-75d4-4059-9d4d-209855dd91c1")).build();
         MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
         mvc.perform(post(url)
-                .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
+                        .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
                 .andExpect(status().isNotFound());
     }
 
@@ -175,7 +175,7 @@ public class AccountControllerIT {
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/change-password";
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
     }
 
@@ -186,7 +186,7 @@ public class AccountControllerIT {
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/change-password";
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -197,7 +197,7 @@ public class AccountControllerIT {
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/change-password";
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
     }
 
@@ -208,7 +208,7 @@ public class AccountControllerIT {
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/change-password";
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
     }
 
