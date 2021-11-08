@@ -26,9 +26,14 @@ Contract.make {
             contentType applicationJson()
         }
         body([
-                "id"      : "8f9a7cae-73c8-4ad6-b135-5bd109b51d2e",
-                "username": "current-name",
-                "language": "en",
+                [
+                        "id"       : "8f9a7cae-73c8-4ad6-b135-5bd109b51d2e",
+                        "email"    : "current-name@email.com",
+                        "username" : "current-name",
+                        "firstname": "test_value",
+                        "lastname" : "test_value",
+                        "language" : "en",
+                ]
         ])
     }
 }
