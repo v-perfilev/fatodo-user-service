@@ -26,6 +26,9 @@ public class UserVM {
     @NotNull
     private String language;
 
+    @NotNull
+    private String timezone;
+
     private String imageFilename;
 
     private MultipartFile imageContent;

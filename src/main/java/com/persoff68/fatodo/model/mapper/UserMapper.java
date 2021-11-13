@@ -48,8 +48,9 @@ public interface UserMapper {
 
     @Mapping(source = "firstname", target = "info.firstname")
     @Mapping(source = "lastname", target = "info.lastname")
-    @Mapping(source = "language", target = "info.language")
     @Mapping(source = "imageFilename", target = "info.imageFilename")
+    @Mapping(source = "language", target = "info.language")
+    @Mapping(source = "timezone", target = "info.timezone")
     User vmToPojo(UserVM userVM);
 
 
