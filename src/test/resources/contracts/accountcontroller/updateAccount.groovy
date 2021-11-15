@@ -36,6 +36,10 @@ Contract.make {
                         consumer(any()),
                         producer("test_language_new")
                 ),
+                "timezone": $(
+                        consumer(any()),
+                        producer("Europe/Berlin")
+                ),
                 "imageFilename": $(
                         consumer(any()),
                         producer("test_value")
