@@ -12,8 +12,13 @@ public class TestOAuth2UserDTO extends OAuth2UserDTO {
     private static final String DEFAULT_VALUE = "test_value";
 
     @Builder
-    TestOAuth2UserDTO(@NotNull @Email @Size(min = 5, max = 50) String email, @NotNull @Size(min = 5, max = 50) String username, String language, @NotNull String provider, @NotNull String providerId) {
-        super(email, username, language, provider, providerId);
+    TestOAuth2UserDTO(@NotNull @Email @Size(min = 5, max = 50) String email,
+                      @NotNull @Size(min = 5, max = 50) String username,
+                      @NotNull String language,
+                      @NotNull String timezone,
+                      @NotNull String provider,
+                      @NotNull String providerId) {
+        super(email, username, language, timezone, provider, providerId);
     }
 
     public static TestOAuth2UserDTOBuilder defaultBuilder() {
@@ -21,6 +26,7 @@ public class TestOAuth2UserDTO extends OAuth2UserDTO {
                 .email(DEFAULT_VALUE + "@email.com")
                 .username(DEFAULT_VALUE)
                 .language("en")
+                .timezone(DEFAULT_VALUE)
                 .provider(Provider.GOOGLE.getValue())
                 .providerId(DEFAULT_VALUE);
     }

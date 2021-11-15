@@ -29,6 +29,9 @@ public class LocalUserDTO implements Serializable {
     private String language;
 
     @NotNull
+    private String timezone;
+
+    @NotNull
     @Size(min = 5, max = 100)
     private String password;
 

@@ -41,9 +41,11 @@ public interface UserMapper {
     User dtoToPojo(UserDTO userDTO);
 
     @Mapping(source = "language", target = "info.language")
+    @Mapping(source = "timezone", target = "info.timezone")
     User localDTOToPojo(LocalUserDTO localUserDTO);
 
     @Mapping(source = "language", target = "info.language")
+    @Mapping(source = "timezone", target = "info.timezone")
     User oAuth2DTOToPojo(OAuth2UserDTO oAuth2UserDTO);
 
     @Mapping(source = "firstname", target = "info.firstname")

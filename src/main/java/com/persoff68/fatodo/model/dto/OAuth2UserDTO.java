@@ -29,6 +29,9 @@ public class OAuth2UserDTO implements Serializable {
     private String language;
 
     @NotNull
+    private String timezone;
+
+    @NotNull
     private String provider;
 
     @NotNull

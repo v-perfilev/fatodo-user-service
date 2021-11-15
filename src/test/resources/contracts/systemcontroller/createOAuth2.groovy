@@ -36,6 +36,10 @@ Contract.make {
                         consumer(anyNonBlankString()),
                         producer("en")
                 ),
+                "timezone": $(
+                        consumer(anyNonBlankString()),
+                        producer("Europe/Berlin")
+                ),
         )
     }
     response {

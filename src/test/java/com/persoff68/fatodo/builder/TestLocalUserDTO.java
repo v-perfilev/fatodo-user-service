@@ -11,8 +11,12 @@ public class TestLocalUserDTO extends LocalUserDTO {
     private static final String DEFAULT_VALUE = "test_value";
 
     @Builder
-    TestLocalUserDTO(@NotNull @Email @Size(min = 5, max = 50) String email, @NotNull @Size(min = 5, max = 50) String username, String language, @NotNull @Size(min = 5, max = 100) String password) {
-        super(email, username, language, password);
+    TestLocalUserDTO(@NotNull @Email @Size(min = 5, max = 50) String email,
+                     @NotNull @Size(min = 5, max = 50) String username,
+                     @NotNull String language,
+                     @NotNull String timezone,
+                     @NotNull @Size(min = 5, max = 100) String password) {
+        super(email, username, language, timezone, password);
     }
 
     public static TestLocalUserDTOBuilder defaultBuilder() {
@@ -20,6 +24,7 @@ public class TestLocalUserDTO extends LocalUserDTO {
                 .email(DEFAULT_VALUE + "@email.com")
                 .username(DEFAULT_VALUE)
                 .language("en")
+                .timezone(DEFAULT_VALUE)
                 .password(DEFAULT_VALUE);
     }
 
