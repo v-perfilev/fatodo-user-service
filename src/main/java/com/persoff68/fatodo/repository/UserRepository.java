@@ -3,6 +3,7 @@ package com.persoff68.fatodo.repository;
 import com.mongodb.lang.NonNull;
 import com.persoff68.fatodo.config.aop.cache.annotation.CacheEvictMethod;
 import com.persoff68.fatodo.config.aop.cache.annotation.CacheableMethod;
+import com.persoff68.fatodo.config.aop.cache.annotation.MultiCacheEvictMethod;
 import com.persoff68.fatodo.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,14 +26,18 @@ public interface UserRepository extends MongoRepository<User, UUID> {
     Optional<User> findById(@NonNull UUID id);
 
     @Override
-    @CacheEvictMethod(cacheName = "users-by-id", key = "#user.id")
-    @CacheEvictMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-id-list-keys", key = "#user.id")
+    @MultiCacheEvictMethod({
+            @CacheEvictMethod(cacheName = "users-by-id", key = "#user.id"),
+            @CacheEvictMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-id-list-keys", key = "#user.id")
+    })
     @NonNull
     <S extends User> S save(@NonNull S user);
 
     @Override
-    @CacheEvictMethod(cacheName = "users-by-id", key = "#user.id")
-    @CacheEvictMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-id-list-keys", key = "#user.id")
+    @MultiCacheEvictMethod({
+            @CacheEvictMethod(cacheName = "users-by-id", key = "#user.id"),
+            @CacheEvictMethod(cacheName = "users-by-id-list", keyCacheName = "users-by-id-list-keys", key = "#user.id")
+    })
     void delete(@NonNull User user);
 
     Page<User> findAllByUsernameStartsWithIgnoreCase(String username, Pageable pageable);
