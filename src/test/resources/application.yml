@@ -47,7 +47,7 @@ spring:
     type: none
   mongodb:
     embedded:
-      version: 4.4.5
+      version: 4.0.2
 
 mongock:
   change-logs-scan-package:
