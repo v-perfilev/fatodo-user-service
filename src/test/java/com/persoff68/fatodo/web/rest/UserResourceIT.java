@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
-public class UserResourceIT {
+class UserResourceIT {
     private static final String ENDPOINT = "/api/users";
 
     private static final UUID CURRENT_ID = UUID.fromString("6e3c489b-a4fb-4654-aa39-30985b7c4656");
@@ -51,7 +51,7 @@ public class UserResourceIT {
 
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
         User currentUser = TestUser.defaultBuilder()
@@ -70,25 +70,25 @@ public class UserResourceIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    public void testGetAll_ok() throws Exception {
+    void testGetAll_ok() throws Exception {
         ResultActions resultActions = mvc.perform(get(ENDPOINT))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(List.class, UserDTO.class);
         List<UserDTO> resultDTOList = objectMapper.readValue(resultString, listType);
-        assertThat(resultDTOList.size()).isEqualTo(2);
+        assertThat(resultDTOList).hasSize(2);
     }
 
     @Test
     @WithAnonymousUser
-    public void testGetAll_unauthorized() throws Exception {
+    void testGetAll_unauthorized() throws Exception {
         mvc.perform(get(ENDPOINT))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testGetAll_forbidden() throws Exception {
+    void testGetAll_forbidden() throws Exception {
         mvc.perform(get(ENDPOINT))
                 .andExpect(status().isForbidden());
     }
@@ -96,7 +96,7 @@ public class UserResourceIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    public void testGetById_ok() throws Exception {
+    void testGetById_ok() throws Exception {
         UUID id = CURRENT_ID;
         String url = ENDPOINT + "/" + id;
         ResultActions resultActions = mvc.perform(get(url))
@@ -108,7 +108,7 @@ public class UserResourceIT {
 
     @Test
     @WithAnonymousUser
-    public void testGetById_unauthorized() throws Exception {
+    void testGetById_unauthorized() throws Exception {
         String url = ENDPOINT + "/" + CURRENT_ID;
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
@@ -116,7 +116,7 @@ public class UserResourceIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testGetById_forbidden() throws Exception {
+    void testGetById_forbidden() throws Exception {
         String url = ENDPOINT + "/" + CURRENT_ID;
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
@@ -124,7 +124,7 @@ public class UserResourceIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    public void testGetById_notFound() throws Exception {
+    void testGetById_notFound() throws Exception {
         UUID id = UUID.randomUUID();
         String url = ENDPOINT + "/" + id;
         mvc.perform(get(url))
@@ -134,11 +134,11 @@ public class UserResourceIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    public void testCreate_created() throws Exception {
+    void testCreate_created() throws Exception {
         UserDTO dto = TestUserDTO.defaultBuilder().id(null).username("new-name").email("new-name@email.com").build();
         String requestBody = objectMapper.writeValueAsString(dto);
         ResultActions resultActions = mvc.perform(post(ENDPOINT)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isCreated());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
@@ -152,48 +152,48 @@ public class UserResourceIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    public void testCreate_conflict_duplicated() throws Exception {
+    void testCreate_conflict_duplicated() throws Exception {
         UserDTO dto = TestUserDTO.defaultBuilder().id(null).username(CURRENT_NAME).build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(ENDPOINT)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isConflict());
     }
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    public void testCreate_badRequest_invalid() throws Exception {
+    void testCreate_badRequest_invalid() throws Exception {
         UserDTO dto = new UserDTO();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(ENDPOINT)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithAnonymousUser
-    public void testCreate_unauthorized() throws Exception {
+    void testCreate_unauthorized() throws Exception {
         UserDTO dto = TestUserDTO.defaultBuilder().id(null).username("new-name").email("new-name@email.com").build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(ENDPOINT)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testCreate_forbidden() throws Exception {
+    void testCreate_forbidden() throws Exception {
         UserDTO dto = TestUserDTO.defaultBuilder().id(null).username("new-name").email("new-name@email.com").build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(ENDPOINT)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());
     }
 
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    public void testUpdate_ok() throws Exception {
+    void testUpdate_ok() throws Exception {
         UserDTO dto = TestUserDTO.defaultBuilder()
                 .id(CURRENT_ID)
                 .username("updated-name")
@@ -201,7 +201,7 @@ public class UserResourceIT {
                 .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         ResultActions resultActions = mvc.perform(put(ENDPOINT)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
@@ -214,20 +214,20 @@ public class UserResourceIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    public void testUpdate_conflict_duplicated() throws Exception {
+    void testUpdate_conflict_duplicated() throws Exception {
         UserDTO dto = TestUserDTO.defaultBuilder()
                 .id(CURRENT_ID)
                 .username(CURRENT_NAME)
                 .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isConflict());
     }
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    public void testUpdate_badRequest_invalidEmail() throws Exception {
+    void testUpdate_badRequest_invalidEmail() throws Exception {
         UserDTO dto = TestUserDTO.defaultBuilder()
                 .id(CURRENT_ID)
                 .username("updated-name")
@@ -235,13 +235,13 @@ public class UserResourceIT {
                 .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    public void testUpdate_badRequest_noId() throws Exception {
+    void testUpdate_badRequest_noId() throws Exception {
         UserDTO dto = TestUserDTO.defaultBuilder()
                 .id(null)
                 .username("updated-name")
@@ -249,13 +249,13 @@ public class UserResourceIT {
                 .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithAnonymousUser
-    public void testUpdate_unauthorized() throws Exception {
+    void testUpdate_unauthorized() throws Exception {
         UserDTO dto = TestUserDTO.defaultBuilder()
                 .id(CURRENT_ID)
                 .username("updated-name")
@@ -263,13 +263,13 @@ public class UserResourceIT {
                 .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
-    public void testUpdate_forbidden() throws Exception {
+    void testUpdate_forbidden() throws Exception {
         UserDTO dto = TestUserDTO.defaultBuilder()
                 .id(CURRENT_ID)
                 .username("updated-name")
@@ -277,13 +277,13 @@ public class UserResourceIT {
                 .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    public void testUpdate_notFound() throws Exception {
+    void testUpdate_notFound() throws Exception {
         UserDTO dto = TestUserDTO.defaultBuilder()
                 .id(UUID.randomUUID())
                 .username("updated-name")
@@ -291,14 +291,14 @@ public class UserResourceIT {
                 .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isNotFound());
     }
 
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    public void testDelete_ok() throws Exception {
+    void testDelete_ok() throws Exception {
         String url = ENDPOINT + "/" + CURRENT_ID;
         mvc.perform(delete(url))
                 .andExpect(status().isOk());
@@ -308,7 +308,7 @@ public class UserResourceIT {
 
     @Test
     @WithAnonymousUser
-    public void testDelete_unauthorized() throws Exception {
+    void testDelete_unauthorized() throws Exception {
         String url = ENDPOINT + "/" + CURRENT_ID;
         mvc.perform(delete(url))
                 .andExpect(status().isUnauthorized());
@@ -316,7 +316,7 @@ public class UserResourceIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testDelete_forbidden() throws Exception {
+    void testDelete_forbidden() throws Exception {
         String url = ENDPOINT + "/" + CURRENT_ID;
         mvc.perform(delete(url))
                 .andExpect(status().isForbidden());
@@ -324,7 +324,7 @@ public class UserResourceIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    public void testDelete_notFound() throws Exception {
+    void testDelete_notFound() throws Exception {
         UUID id = UUID.randomUUID();
         String url = ENDPOINT + "/" + id;
         mvc.perform(delete(url))

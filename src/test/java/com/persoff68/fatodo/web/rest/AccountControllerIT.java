@@ -40,7 +40,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
-public class AccountControllerIT {
+class AccountControllerIT {
     private static final String ENDPOINT = "/api/account";
 
     private static final UUID CURRENT_ID = UUID.fromString("6e3c489b-a4fb-4654-aa39-30985b7c4656");
@@ -64,7 +64,7 @@ public class AccountControllerIT {
     MockMvc mvc;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
         User currentUser = TestUser.defaultBuilder()
@@ -99,7 +99,7 @@ public class AccountControllerIT {
 
     @Test
     @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
-    public void testGetCurrentUser_ok() throws Exception {
+    void testGetCurrentUser_ok() throws Exception {
         String url = ENDPOINT + "/current";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
@@ -110,7 +110,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testGetCurrentUser_unauthorized() throws Exception {
+    void testGetCurrentUser_unauthorized() throws Exception {
         String url = ENDPOINT + "/current";
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
@@ -118,7 +118,7 @@ public class AccountControllerIT {
 
     @Test
     @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
-    public void testUpdate_ok() throws Exception {
+    void testUpdate_ok() throws Exception {
         String url = ENDPOINT + "/update";
         UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
         MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
@@ -137,7 +137,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testUpdate_unauthorized() throws Exception {
+    void testUpdate_unauthorized() throws Exception {
         String url = ENDPOINT + "/update";
         UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
         MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
@@ -148,7 +148,7 @@ public class AccountControllerIT {
 
     @Test
     @WithCustomSecurityContext
-    public void testUpdate_forbidden_wrongUser() throws Exception {
+    void testUpdate_forbidden_wrongUser() throws Exception {
         String url = ENDPOINT + "/update";
         UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
         MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
@@ -159,7 +159,7 @@ public class AccountControllerIT {
 
     @Test
     @WithCustomSecurityContext(id = "bafc4e0e-75d4-4059-9d4d-209855dd91c1")
-    public void testUpdate_badRequest_notExists() throws Exception {
+    void testUpdate_badRequest_notExists() throws Exception {
         String url = ENDPOINT + "/update";
         UserVM vm = TestUserVM.defaultBuilder().id(UUID.fromString("bafc4e0e-75d4-4059-9d4d-209855dd91c1")).build();
         MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
@@ -170,7 +170,7 @@ public class AccountControllerIT {
 
     @Test
     @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
-    public void testChangePassword_ok() throws Exception {
+    void testChangePassword_ok() throws Exception {
         ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/change-password";
@@ -181,7 +181,7 @@ public class AccountControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testChangePassword_unauthorized() throws Exception {
+    void testChangePassword_unauthorized() throws Exception {
         ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/change-password";
@@ -192,7 +192,7 @@ public class AccountControllerIT {
 
     @Test
     @WithCustomSecurityContext(id = "71afdeec-cffd-479f-90ca-12fca4167cda")
-    public void testChangePassword_wrongProvider() throws Exception {
+    void testChangePassword_wrongProvider() throws Exception {
         ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/change-password";
@@ -203,7 +203,7 @@ public class AccountControllerIT {
 
     @Test
     @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
-    public void testChangePassword_wrongPassword() throws Exception {
+    void testChangePassword_wrongPassword() throws Exception {
         ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/change-password";

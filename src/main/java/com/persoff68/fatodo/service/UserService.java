@@ -97,10 +97,11 @@ public class UserService {
     }
 
     public User update(User newUser) {
-        if (newUser.getId() == null) {
+        UUID newUserId = newUser.getId();
+        if (newUserId == null) {
             throw new ModelInvalidException();
         }
-        User user = userRepository.findById(newUser.getId())
+        User user = userRepository.findById(newUserId)
                 .orElseThrow(ModelNotFoundException::new);
 
         user.setEmail(newUser.getEmail());

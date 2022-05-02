@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
-public class CheckControllerIT {
+class CheckControllerIT {
     private static final String ENDPOINT = "/api/check";
 
     private static final UUID USER_ID = UUID.randomUUID();
@@ -44,7 +44,7 @@ public class CheckControllerIT {
 
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
         User localUser = TestUser.defaultBuilder()
@@ -60,7 +60,7 @@ public class CheckControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testDoesEmailExist_false() throws Exception {
+    void testDoesEmailExist_false() throws Exception {
         String email = NOT_EXISTING_NAME + "@email.com";
         String url = ENDPOINT + "/email/" + email;
         ResultActions resultActions = mvc.perform(get(url))
@@ -72,7 +72,7 @@ public class CheckControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testDoesEmailExist_true() throws Exception {
+    void testDoesEmailExist_true() throws Exception {
         String email = LOCAL_NAME + "@email.com";
         String url = ENDPOINT + "/email/" + email;
         ResultActions resultActions = mvc.perform(get(url))
@@ -84,7 +84,7 @@ public class CheckControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testDoesUsernameExist_false() throws Exception {
+    void testDoesUsernameExist_false() throws Exception {
         String url = ENDPOINT + "/username/" + NOT_EXISTING_NAME;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
@@ -95,7 +95,7 @@ public class CheckControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testDoesUsernameExist_true() throws Exception {
+    void testDoesUsernameExist_true() throws Exception {
         String url = ENDPOINT + "/username/" + LOCAL_NAME;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
@@ -106,7 +106,7 @@ public class CheckControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testDoesUsernameOrEmailExist_false() throws Exception {
+    void testDoesUsernameOrEmailExist_false() throws Exception {
         String url = ENDPOINT + "/username-or-email/" + NOT_EXISTING_NAME;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
@@ -117,7 +117,7 @@ public class CheckControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testDoesUsernameOrEmailExist_true_email() throws Exception {
+    void testDoesUsernameOrEmailExist_true_email() throws Exception {
         String email = LOCAL_NAME + "@email.com";
         String url = ENDPOINT + "/username-or-email/" + email;
         ResultActions resultActions = mvc.perform(get(url))
@@ -129,7 +129,7 @@ public class CheckControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testDoesUsernameOrEmailExist_true_username() throws Exception {
+    void testDoesUsernameOrEmailExist_true_username() throws Exception {
         String url = ENDPOINT + "/username-or-email/" + LOCAL_NAME;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
@@ -140,7 +140,7 @@ public class CheckControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testDoesIdExist_false() throws Exception {
+    void testDoesIdExist_false() throws Exception {
         String url = ENDPOINT + "/id/" + UUID.randomUUID();
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
@@ -151,7 +151,7 @@ public class CheckControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testDoesIdExist_true() throws Exception {
+    void testDoesIdExist_true() throws Exception {
         String url = ENDPOINT + "/id/" + USER_ID;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
@@ -162,7 +162,7 @@ public class CheckControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testDoIdsExist_false() throws Exception {
+    void testDoIdsExist_false() throws Exception {
         String url = ENDPOINT + "/id";
         String requestBody = objectMapper.writeValueAsString(List.of(USER_ID, UUID.randomUUID()));
         ResultActions resultActions = mvc.perform(post(url)
@@ -175,7 +175,7 @@ public class CheckControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testDoIdsExist_true() throws Exception {
+    void testDoIdsExist_true() throws Exception {
         String url = ENDPOINT + "/id";
         String requestBody = objectMapper.writeValueAsString(List.of(USER_ID));
         ResultActions resultActions = mvc.perform(post(url)

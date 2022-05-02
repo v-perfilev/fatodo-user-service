@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(UserDataController.ENDPOINT)
@@ -33,7 +32,8 @@ public class UserDataController {
     public ResponseEntity<List<UserSummaryDTO>> getAllByIds(@RequestBody List<UUID> idList) {
         List<User> userList = userService.getAllByIds(idList);
         List<UserSummaryDTO> userSummaryDTOList = userList.stream()
-                .map(userMapper::pojoToSummaryDTO).collect(Collectors.toList());
+                .map(userMapper::pojoToSummaryDTO)
+                .toList();
         return ResponseEntity.ok(userSummaryDTOList);
     }
 
@@ -41,7 +41,8 @@ public class UserDataController {
     public ResponseEntity<List<UserInfoDTO>> getAllInfoByIds(@RequestBody List<UUID> idList) {
         List<User> userList = userService.getAllByIds(idList);
         List<UserInfoDTO> userInfoDTOList = userList.stream()
-                .map(userMapper::pojoToInfoDTO).collect(Collectors.toList());
+                .map(userMapper::pojoToInfoDTO)
+                .toList();
         return ResponseEntity.ok(userInfoDTOList);
     }
 
@@ -50,7 +51,7 @@ public class UserDataController {
         List<User> userList = userService.getAllByIds(idList);
         List<String> usernameList = userList.stream()
                 .map(User::getUsername)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(usernameList);
     }
 
@@ -59,7 +60,7 @@ public class UserDataController {
         List<User> userList = userService.getAllByUsernamePart(username);
         List<UserSummaryDTO> userSummaryDTOList = userList.stream()
                 .map(userMapper::pojoToSummaryDTO)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(userSummaryDTOList);
     }
 
@@ -68,7 +69,7 @@ public class UserDataController {
         List<User> userList = userService.getAllByUsernamePart(username);
         List<UUID> userSummaryDTOList = userList.stream()
                 .map(User::getId)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(userSummaryDTOList);
     }
 

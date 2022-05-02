@@ -21,7 +21,6 @@ import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(UserResource.ENDPOINT)
@@ -37,7 +36,8 @@ public class UserResource {
     public ResponseEntity<Collection<UserDTO>> getAll() {
         List<User> userList = userService.getAll();
         List<UserDTO> userDTOList = userList.stream()
-                .map(userMapper::pojoToDTO).collect(Collectors.toList());
+                .map(userMapper::pojoToDTO)
+                .toList();
         return ResponseEntity.ok(userDTOList);
     }
 

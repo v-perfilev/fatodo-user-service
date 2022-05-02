@@ -5,6 +5,7 @@ import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;
 import com.persoff68.fatodo.security.util.SecurityUtils;
+import com.persoff68.fatodo.service.exception.ModelInvalidException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.PermissionException;
 import com.persoff68.fatodo.service.exception.WrongPasswordException;
@@ -24,11 +25,15 @@ public class AccountService {
     private final PasswordEncoder passwordEncoder;
 
     public User update(User newUser, byte[] image) {
-        UUID userId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
-        if (!userId.equals(newUser.getId())) {
+        UUID currentUserId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
+        UUID newUserId = newUser.getId();
+        if (newUserId == null) {
+            throw new ModelInvalidException();
+        }
+        if (!currentUserId.equals(newUser.getId())) {
             throw new PermissionException();
         }
-        User user = userRepository.findById(newUser.getId())
+        User user = userRepository.findById(newUserId)
                 .orElseThrow(ModelNotFoundException::new);
 
         user.setUsername(newUser.getUsername());

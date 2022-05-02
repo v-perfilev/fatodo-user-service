@@ -59,14 +59,19 @@ public interface UserMapper {
     @Named("authoritiesIntoStrings")
     default Set<String> authoritiesIntoStrings(Set<Authority> authoritySet) {
         return authoritySet != null
-                ? authoritySet.stream().map(Authority::getName).collect(Collectors.toSet())
+                ? authoritySet.stream()
+                .map(Authority::getName)
+                .collect(Collectors.toSet())
                 : null;
     }
 
     @Named("stringsIntoAuthorities")
     default Set<Authority> stringsIntoAuthorities(Set<String> stringSet) {
         return stringSet != null
-                ? stringSet.stream().filter(AuthorityType::contains).map(Authority::new).collect(Collectors.toSet())
+                ? stringSet.stream()
+                .filter(AuthorityType::contains)
+                .map(Authority::new)
+                .collect(Collectors.toSet())
                 : null;
     }
 

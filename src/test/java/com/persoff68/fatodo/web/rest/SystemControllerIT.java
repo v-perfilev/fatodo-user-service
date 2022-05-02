@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
-public class SystemControllerIT {
+class SystemControllerIT {
     private static final String ENDPOINT = "/api/system";
 
     private static final UUID CURRENT_ID = UUID.fromString("6e3c489b-a4fb-4654-aa39-30985b7c4656");
@@ -57,7 +57,7 @@ public class SystemControllerIT {
 
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
         User currentUser = TestUser.defaultBuilder()
@@ -94,7 +94,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testGetUserPrincipalById_ok() throws Exception {
+    void testGetUserPrincipalById_ok() throws Exception {
         UUID id = LOCAL_ID;
         String url = ENDPOINT + "/id/" + id;
         ResultActions resultActions = mvc.perform(get(url))
@@ -106,7 +106,7 @@ public class SystemControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testGetUserPrincipalById_unauthorized() throws Exception {
+    void testGetUserPrincipalById_unauthorized() throws Exception {
         String url = ENDPOINT + "/id/" + LOCAL_ID;
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
@@ -114,7 +114,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
-    public void testGetUserPrincipalById_forbidden() throws Exception {
+    void testGetUserPrincipalById_forbidden() throws Exception {
         String url = ENDPOINT + "/id/" + LOCAL_ID;
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
@@ -122,7 +122,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testGetUserPrincipalById_notFound() throws Exception {
+    void testGetUserPrincipalById_notFound() throws Exception {
         UUID id = UUID.randomUUID();
         String url = ENDPOINT + "/id/" + id;
         mvc.perform(get(url))
@@ -132,7 +132,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testGetUserPrincipalByEmail_ok() throws Exception {
+    void testGetUserPrincipalByEmail_ok() throws Exception {
         String email = LOCAL_NAME + "@email.com";
         String url = ENDPOINT + "/email/" + email;
         ResultActions resultActions = mvc.perform(get(url))
@@ -144,7 +144,7 @@ public class SystemControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testGetUserPrincipalByEmail_unauthorized() throws Exception {
+    void testGetUserPrincipalByEmail_unauthorized() throws Exception {
         String email = LOCAL_NAME + "@email.com";
         String url = ENDPOINT + "/email/" + email;
         mvc.perform(get(url))
@@ -153,7 +153,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
-    public void testGetUserPrincipalByEmail_forbidden() throws Exception {
+    void testGetUserPrincipalByEmail_forbidden() throws Exception {
         String email = LOCAL_NAME + "@email.com";
         String url = ENDPOINT + "/email/" + email;
         mvc.perform(get(url))
@@ -162,7 +162,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testGetUserPrincipalByEmail_notFound() throws Exception {
+    void testGetUserPrincipalByEmail_notFound() throws Exception {
         String email = "not-exists@email.com";
         String url = ENDPOINT + "/email/" + email;
         mvc.perform(get(url))
@@ -172,7 +172,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testGetUserPrincipalByUsername_ok() throws Exception {
+    void testGetUserPrincipalByUsername_ok() throws Exception {
         String username = LOCAL_NAME;
         String url = ENDPOINT + "/username/" + username;
         ResultActions resultActions = mvc.perform(get(url))
@@ -184,7 +184,7 @@ public class SystemControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testGetUserPrincipalByUsername_unauthorized() throws Exception {
+    void testGetUserPrincipalByUsername_unauthorized() throws Exception {
         String url = ENDPOINT + "/username/" + LOCAL_NAME;
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
@@ -192,7 +192,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
-    public void testGetUserPrincipalByUsername_forbidden() throws Exception {
+    void testGetUserPrincipalByUsername_forbidden() throws Exception {
         String url = ENDPOINT + "/username/" + LOCAL_NAME;
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
@@ -200,7 +200,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testGetUserPrincipalByUsername_notFound() throws Exception {
+    void testGetUserPrincipalByUsername_notFound() throws Exception {
         String username = "not_exists";
         String url = ENDPOINT + "/username/" + username;
         mvc.perform(get(url))
@@ -209,7 +209,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testGetUserPrincipalByUsernameOrEmail_ok_username() throws Exception {
+    void testGetUserPrincipalByUsernameOrEmail_ok_username() throws Exception {
         String username = LOCAL_NAME;
         String url = ENDPOINT + "/username-or-email/" + username;
         ResultActions resultActions = mvc.perform(get(url))
@@ -221,7 +221,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testGetUserPrincipalByUsernameOrEmail_ok_email() throws Exception {
+    void testGetUserPrincipalByUsernameOrEmail_ok_email() throws Exception {
         String email = LOCAL_NAME + "@email.com";
         String url = ENDPOINT + "/username-or-email/" + email;
         ResultActions resultActions = mvc.perform(get(url))
@@ -233,7 +233,7 @@ public class SystemControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testGetUserPrincipalByUsernameOrEmail_unauthorized() throws Exception {
+    void testGetUserPrincipalByUsernameOrEmail_unauthorized() throws Exception {
         String url = ENDPOINT + "/username-or-email/" + LOCAL_NAME;
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
@@ -241,7 +241,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
-    public void testGetUserPrincipalByUsernameOrEmail_forbidden() throws Exception {
+    void testGetUserPrincipalByUsernameOrEmail_forbidden() throws Exception {
         String url = ENDPOINT + "/username-or-email/" + LOCAL_NAME;
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
@@ -249,7 +249,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testGetUserPrincipalByUsernameOrEmail_notFound() throws Exception {
+    void testGetUserPrincipalByUsernameOrEmail_notFound() throws Exception {
         String username = "not_exists";
         String url = ENDPOINT + "/username-or-email/" + username;
         mvc.perform(get(url))
@@ -258,7 +258,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testCreateLocalUser_created() throws Exception {
+    void testCreateLocalUser_created() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = TestLocalUserDTO.defaultBuilder().email("new-name@email.com").username("new-name").build();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -279,7 +279,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testCreateLocalUser_conflict_duplicated() throws Exception {
+    void testCreateLocalUser_conflict_duplicated() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = TestLocalUserDTO.defaultBuilder().username(LOCAL_NAME).build();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -290,7 +290,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testCreateLocalUser_badRequest_invalid() throws Exception {
+    void testCreateLocalUser_badRequest_invalid() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = new LocalUserDTO();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -301,7 +301,7 @@ public class SystemControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testCreateLocalUser_unauthorized() throws Exception {
+    void testCreateLocalUser_unauthorized() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = TestLocalUserDTO.defaultBuilder().email("new-name@email.com").username("new-name").build();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -312,7 +312,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
-    public void testCreateLocalUser_forbidden() throws Exception {
+    void testCreateLocalUser_forbidden() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = TestLocalUserDTO.defaultBuilder().email("new-name@email.com").username("new-name").build();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -324,7 +324,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testCreateOAuth2User_created() throws Exception {
+    void testCreateOAuth2User_created() throws Exception {
         String url = ENDPOINT + "/oauth2";
         OAuth2UserDTO dto = TestOAuth2UserDTO.defaultBuilder()
                 .email("not-exists@email.com")
@@ -349,7 +349,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testCreateOAuth2User_conflict_duplicated() throws Exception {
+    void testCreateOAuth2User_conflict_duplicated() throws Exception {
         String url = ENDPOINT + "/oauth2";
         OAuth2UserDTO dto = TestOAuth2UserDTO.defaultBuilder()
                 .username(GOOGLE_NAME)
@@ -363,7 +363,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testCreateOAuth2User_badRequest_invalid() throws Exception {
+    void testCreateOAuth2User_badRequest_invalid() throws Exception {
         String url = ENDPOINT + "/oauth2";
         OAuth2UserDTO dto = new OAuth2UserDTO();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -374,7 +374,7 @@ public class SystemControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testCreateOAuth2User_unauthorized() throws Exception {
+    void testCreateOAuth2User_unauthorized() throws Exception {
         String url = ENDPOINT + "/oauth2";
         OAuth2UserDTO dto = TestOAuth2UserDTO.defaultBuilder().build();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -385,7 +385,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
-    public void testCreateOAuth2User_forbidden() throws Exception {
+    void testCreateOAuth2User_forbidden() throws Exception {
         String url = ENDPOINT + "/oauth2";
         OAuth2UserDTO dto = TestOAuth2UserDTO.defaultBuilder().build();
         String requestBody = objectMapper.writeValueAsString(dto);
@@ -396,7 +396,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testActivate_ok() throws Exception {
+    void testActivate_ok() throws Exception {
         String url = ENDPOINT + "/activate/" + CURRENT_ID;
         mvc.perform(get(url))
                 .andExpect(status().isOk());
@@ -404,7 +404,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testActivate_conflict() throws Exception {
+    void testActivate_conflict() throws Exception {
         String url = ENDPOINT + "/activate/" + ACTIVATED_ID;
         mvc.perform(get(url))
                 .andExpect(status().isConflict());
@@ -412,7 +412,7 @@ public class SystemControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testActivate_unauthorized() throws Exception {
+    void testActivate_unauthorized() throws Exception {
         String url = ENDPOINT + "/activate/" + CURRENT_ID;
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
@@ -420,7 +420,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
-    public void testActivate_forbidden() throws Exception {
+    void testActivate_forbidden() throws Exception {
         String url = ENDPOINT + "/activate/" + CURRENT_ID;
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
@@ -428,7 +428,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    public void testResetPassword_ok() throws Exception {
+    void testResetPassword_ok() throws Exception {
         ResetPasswordDTO dto = TestResetPasswordDTO.defaultBuilder().userId(CURRENT_ID).build();
         String requestBody = objectMapper.writeValueAsString(dto);
         String url = ENDPOINT + "/reset-password";
@@ -441,7 +441,7 @@ public class SystemControllerIT {
 
     @Test
     @WithAnonymousUser
-    public void testResetPassword_unauthorized() throws Exception {
+    void testResetPassword_unauthorized() throws Exception {
         ResetPasswordDTO dto = TestResetPasswordDTO.defaultBuilder().userId(CURRENT_ID).build();
         String requestBody = objectMapper.writeValueAsString(dto);
         String url = ENDPOINT + "/reset-password";
@@ -452,7 +452,7 @@ public class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
-    public void testResetPassword_forbidden() throws Exception {
+    void testResetPassword_forbidden() throws Exception {
         ResetPasswordDTO dto = TestResetPasswordDTO.defaultBuilder().userId(CURRENT_ID).build();
         String requestBody = objectMapper.writeValueAsString(dto);
         String url = ENDPOINT + "/reset-password";
