@@ -8,15 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-@FeignClient(name = "image-service", primary = false)
+@FeignClient(name = "image-service", primary = false, qualifiers = {"feignImageServiceClient"})
 public interface ImageServiceClient {
 
-    @PostMapping(value = "/api/user-images",
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/api/user-images", consumes = MediaType.APPLICATION_JSON_VALUE)
     String createUserImage(ImageDTO imageDTO);
 
-    @PutMapping(value = "/api/user-images",
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/api/user-images", consumes = MediaType.APPLICATION_JSON_VALUE)
     String updateUserImage(ImageDTO imageDTO);
 
     @DeleteMapping(value = "/api/user-images/{filename}")
