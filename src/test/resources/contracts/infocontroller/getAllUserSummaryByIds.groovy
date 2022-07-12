@@ -1,13 +1,13 @@
-package contracts.userdatacontroller
+package contracts.infocontroller
 
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'get user info by ids'
-    description 'should return status 200 and list of UserInfoDTOs'
+    name 'get user summaries by ids'
+    description 'should return status 200 and list of UserSummaryDTOs'
     request {
         method POST()
-        url("/api/user-data/info/ids")
+        url("/api/info/summary")
         headers {
             contentType applicationJson()
             header 'Authorization': $(
@@ -26,14 +26,9 @@ Contract.make {
             contentType applicationJson()
         }
         body([
-                [
-                        "id"       : "8f9a7cae-73c8-4ad6-b135-5bd109b51d2e",
-                        "email"    : "current-name@email.com",
-                        "username" : "current-name",
-                        "firstname": "test_value",
-                        "lastname" : "test_value",
-                        "language" : "en",
-                ]
+                "id"           : "8f9a7cae-73c8-4ad6-b135-5bd109b51d2e",
+                "username"     : "current-name",
+                "imageFilename": "test_value",
         ])
     }
 }

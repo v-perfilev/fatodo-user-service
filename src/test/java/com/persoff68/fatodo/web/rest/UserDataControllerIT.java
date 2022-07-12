@@ -6,30 +6,29 @@ import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.model.User;
-import com.persoff68.fatodo.model.dto.UserInfoDTO;
 import com.persoff68.fatodo.model.dto.UserSummaryDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
+@AutoConfigureMockMvc
 class UserDataControllerIT {
     private static final String ENDPOINT = "/api/user-data";
 
@@ -38,18 +37,18 @@ class UserDataControllerIT {
     private static final String LOCAL_NAME = "local-name";
 
     @Autowired
+    MockMvc mvc;
+
+    @Autowired
     WebApplicationContext context;
     @Autowired
     UserRepository userRepository;
     @Autowired
     ObjectMapper objectMapper;
 
-    MockMvc mvc;
 
     @BeforeEach
     void setup() {
-        mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
-
         User currentUser = TestUser.defaultBuilder()
                 .id(CURRENT_ID)
                 .username(CURRENT_NAME)
@@ -69,61 +68,14 @@ class UserDataControllerIT {
 
     @Test
     @WithCustomSecurityContext
-    void testGetAllByIds_ok() throws Exception {
-        String url = ENDPOINT + "/all/ids";
-        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
-        ResultActions resultActions = mvc.perform(post(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isOk());
-        String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, UserSummaryDTO.class);
-        List<UserSummaryDTO> userSummaryDTOList = objectMapper.readValue(resultString, collectionType);
-        assertThat(userSummaryDTOList).hasSize(1);
-    }
-
-    @Test
-    @WithAnonymousUser
-    void testGetAllByIds_unauthorized() throws Exception {
-        String url = ENDPOINT + "/all/ids";
-        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
-        mvc.perform(post(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    @WithCustomSecurityContext
-    void testGetInfoByIds_ok() throws Exception {
-        String url = ENDPOINT + "/info/ids";
-        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
-        ResultActions resultActions = mvc.perform(post(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isOk());
-        String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, UserSummaryDTO.class);
-        List<UserInfoDTO> userSummaryDTOList = objectMapper.readValue(resultString, collectionType);
-        assertThat(userSummaryDTOList).hasSize(1);
-    }
-
-    @Test
-    @WithAnonymousUser
-    void testGetInfoByIds_unauthorized() throws Exception {
-        String url = ENDPOINT + "/info/ids";
-        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
-        mvc.perform(post(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    @WithCustomSecurityContext
     void testGetAllByUsername_ok() throws Exception {
         String usernamePart = CURRENT_NAME.substring(0, 4).toUpperCase();
         String url = ENDPOINT + "/all/" + usernamePart + "/username-part";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, UserSummaryDTO.class);
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class,
+                UserSummaryDTO.class);
         List<UserSummaryDTO> dtoList = objectMapper.readValue(resultString, collectionType);
         assertThat(dtoList).hasSize(1);
         assertThat(dtoList.get(0).getUsername()).isEqualTo(CURRENT_NAME);
@@ -137,7 +89,8 @@ class UserDataControllerIT {
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, UserSummaryDTO.class);
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class,
+                UserSummaryDTO.class);
         List<UserSummaryDTO> dtoList = objectMapper.readValue(resultString, collectionType);
         assertThat(dtoList).isEmpty();
     }
