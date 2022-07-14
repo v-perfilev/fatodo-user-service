@@ -3,7 +3,7 @@ package com.persoff68.fatodo.web.rest;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserInfoDTO;
 import com.persoff68.fatodo.model.dto.UserSummaryDTO;
-import com.persoff68.fatodo.model.mapper.UserMapper;
+import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

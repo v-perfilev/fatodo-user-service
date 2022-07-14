@@ -5,6 +5,7 @@ import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;
 import com.persoff68.fatodo.security.util.SecurityUtils;
+import com.persoff68.fatodo.service.client.ImageService;
 import com.persoff68.fatodo.service.exception.ModelInvalidException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.PermissionException;
@@ -20,9 +21,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AccountService {
 
-    private final UserRepository userRepository;
     private final ImageService imageService;
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     public User update(User newUser, byte[] image) {
         UUID currentUserId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);

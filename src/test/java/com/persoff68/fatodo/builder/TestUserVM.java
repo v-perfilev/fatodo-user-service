@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.builder;
 
-import com.persoff68.fatodo.web.rest.vm.UserVM;
+import com.persoff68.fatodo.model.vm.UserVM;
 import lombok.Builder;
 import org.springframework.web.multipart.MultipartFile;
 

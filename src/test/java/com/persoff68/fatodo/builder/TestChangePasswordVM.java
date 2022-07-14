@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.builder;
 
-import com.persoff68.fatodo.web.rest.vm.ChangePasswordVM;
+import com.persoff68.fatodo.model.vm.ChangePasswordVM;
 import lombok.Builder;
 
 public class TestChangePasswordVM extends ChangePasswordVM {

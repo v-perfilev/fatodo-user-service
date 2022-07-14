@@ -1,6 +1,6 @@
 package com.persoff68.fatodo;
 
-import com.persoff68.fatodo.model.mapper.UserMapper;
+import com.persoff68.fatodo.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

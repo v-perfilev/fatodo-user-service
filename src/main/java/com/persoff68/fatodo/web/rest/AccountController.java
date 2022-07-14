@@ -2,14 +2,14 @@ package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserDTO;
-import com.persoff68.fatodo.model.mapper.UserMapper;
+import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;
 import com.persoff68.fatodo.security.util.SecurityUtils;
 import com.persoff68.fatodo.service.AccountService;
 import com.persoff68.fatodo.service.UserService;
 import com.persoff68.fatodo.web.rest.exception.InvalidFormException;
-import com.persoff68.fatodo.web.rest.vm.ChangePasswordVM;
-import com.persoff68.fatodo.web.rest.vm.UserVM;
+import com.persoff68.fatodo.model.vm.ChangePasswordVM;
+import com.persoff68.fatodo.model.vm.UserVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
