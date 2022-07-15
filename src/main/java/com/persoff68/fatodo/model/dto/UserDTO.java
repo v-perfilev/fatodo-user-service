@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.model.dto;
 
+import com.persoff68.fatodo.config.constant.AppConstants;
 import com.persoff68.fatodo.model.Info;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serial;
 import java.util.Set;
 
 @Data
@@ -16,6 +18,8 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class UserDTO extends AbstractAuditingDTO {
+    @Serial
+    private static final long serialVersionUID = AppConstants.SERIAL_VERSION_UID;
 
     @NotNull
     @Email
