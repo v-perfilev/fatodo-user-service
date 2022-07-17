@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.contract;
 
+import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.client.ImageServiceClient;
 import com.persoff68.fatodo.model.dto.ImageDTO;
 import org.junit.jupiter.api.Test;
@@ -22,15 +23,18 @@ class ImageServiceCT {
     ImageServiceClient imageServiceClient;
 
     @Test
+    @WithCustomSecurityContext
     void testCreateGroupImage() {
         byte[] bytes = new byte[100];
         Arrays.fill(bytes, (byte) 41);
         ImageDTO imageDTO = new ImageDTO(null, bytes);
         String filename = imageServiceClient.createUserImage(imageDTO);
         assertThat(filename).isNotBlank();
+
     }
 
     @Test
+    @WithCustomSecurityContext
     void testUpdateGroupImage() {
         byte[] bytes = new byte[100];
         Arrays.fill(bytes, (byte) 41);
@@ -40,6 +44,7 @@ class ImageServiceCT {
     }
 
     @Test
+    @WithCustomSecurityContext
     void testDeleteGroupImage() {
         assertDoesNotThrow(() -> imageServiceClient.deleteUserImage("test_filename"));
     }
