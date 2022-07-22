@@ -15,26 +15,27 @@ import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
+@AutoConfigureMockMvc
 class SystemControllerIT {
     private static final String ENDPOINT = "/api/system";
 
@@ -47,19 +48,17 @@ class SystemControllerIT {
     private static final String GOOGLE_NAME = "google-name";
 
     @Autowired
+    MockMvc mvc;
+
+    @Autowired
     WebApplicationContext context;
     @Autowired
     UserRepository userRepository;
     @Autowired
     ObjectMapper objectMapper;
 
-    MockMvc mvc;
-
-
     @BeforeEach
     void setup() {
-        mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
-
         User currentUser = TestUser.defaultBuilder()
                 .id(CURRENT_ID)
                 .username(CURRENT_NAME)
@@ -85,11 +84,15 @@ class SystemControllerIT {
                 .provider(Provider.GOOGLE)
                 .build();
 
-        userRepository.deleteAll();
         userRepository.save(currentUser);
         userRepository.save(activatedUser);
         userRepository.save(localUser);
         userRepository.save(googleUser);
+    }
+
+    @AfterEach
+    void cleanup() {
+        userRepository.deleteAll();
     }
 
     @Test
@@ -263,7 +266,7 @@ class SystemControllerIT {
         LocalUserDTO dto = TestLocalUserDTO.defaultBuilder().email("new-name@email.com").username("new-name").build();
         String requestBody = objectMapper.writeValueAsString(dto);
         ResultActions resultActions = mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isCreated());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         UserPrincipalDTO resultDTO = objectMapper.readValue(resultString, UserPrincipalDTO.class);
@@ -284,7 +287,7 @@ class SystemControllerIT {
         LocalUserDTO dto = TestLocalUserDTO.defaultBuilder().username(LOCAL_NAME).build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isConflict());
     }
 
@@ -295,7 +298,7 @@ class SystemControllerIT {
         LocalUserDTO dto = new LocalUserDTO();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
     }
 
@@ -306,7 +309,7 @@ class SystemControllerIT {
         LocalUserDTO dto = TestLocalUserDTO.defaultBuilder().email("new-name@email.com").username("new-name").build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -317,7 +320,7 @@ class SystemControllerIT {
         LocalUserDTO dto = TestLocalUserDTO.defaultBuilder().email("new-name@email.com").username("new-name").build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());
     }
 
@@ -332,7 +335,7 @@ class SystemControllerIT {
                 .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         ResultActions resultActions = mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isCreated());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         UserPrincipalDTO resultDTO = objectMapper.readValue(resultString, UserPrincipalDTO.class);
@@ -357,7 +360,7 @@ class SystemControllerIT {
                 .build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isConflict());
     }
 
@@ -368,7 +371,7 @@ class SystemControllerIT {
         OAuth2UserDTO dto = new OAuth2UserDTO();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
     }
 
@@ -379,7 +382,7 @@ class SystemControllerIT {
         OAuth2UserDTO dto = TestOAuth2UserDTO.defaultBuilder().build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -390,7 +393,7 @@ class SystemControllerIT {
         OAuth2UserDTO dto = TestOAuth2UserDTO.defaultBuilder().build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());
     }
 
@@ -433,7 +436,7 @@ class SystemControllerIT {
         String requestBody = objectMapper.writeValueAsString(dto);
         String url = ENDPOINT + "/reset-password";
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
         User result = userRepository.findById(CURRENT_ID).orElse(new User());
         assertThat(result.getPassword()).isEqualTo(dto.getPassword());
@@ -446,7 +449,7 @@ class SystemControllerIT {
         String requestBody = objectMapper.writeValueAsString(dto);
         String url = ENDPOINT + "/reset-password";
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -457,7 +460,7 @@ class SystemControllerIT {
         String requestBody = objectMapper.writeValueAsString(dto);
         String url = ENDPOINT + "/reset-password";
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isForbidden());
     }
 

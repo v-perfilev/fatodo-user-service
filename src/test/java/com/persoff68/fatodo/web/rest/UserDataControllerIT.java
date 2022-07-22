@@ -8,12 +8,12 @@ import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserSummaryDTO;
 import com.persoff68.fatodo.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -24,7 +24,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
@@ -61,48 +60,36 @@ class UserDataControllerIT {
                 .email(LOCAL_NAME + "@email.com")
                 .build();
 
-        userRepository.deleteAll();
         userRepository.save(currentUser);
         userRepository.save(localUser);
     }
 
-    @Test
-    @WithCustomSecurityContext
-    void testGetAllByUsername_ok() throws Exception {
-        String usernamePart = CURRENT_NAME.substring(0, 4).toUpperCase();
-        String url = ENDPOINT + "/all/" + usernamePart + "/username-part";
-        ResultActions resultActions = mvc.perform(get(url))
-                .andExpect(status().isOk());
-        String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class,
-                UserSummaryDTO.class);
-        List<UserSummaryDTO> dtoList = objectMapper.readValue(resultString, collectionType);
-        assertThat(dtoList).hasSize(1);
-        assertThat(dtoList.get(0).getUsername()).isEqualTo(CURRENT_NAME);
+    @AfterEach
+    void cleanup() {
+        userRepository.deleteAll();
     }
+
 
     @Test
     @WithCustomSecurityContext
-    void testGetAllByUsername_ok_empty() throws Exception {
-        String usernamePart = CURRENT_NAME.substring(1, 4);
-        String url = ENDPOINT + "/all/" + usernamePart + "/username-part";
+    void testGetAllUsernamesByIds_ok() throws Exception {
+        String url = ENDPOINT + "/username?ids=" + CURRENT_ID;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class,
-                UserSummaryDTO.class);
-        List<UserSummaryDTO> dtoList = objectMapper.readValue(resultString, collectionType);
-        assertThat(dtoList).isEmpty();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, String.class);
+        List<String> usernameList = objectMapper.readValue(resultString, collectionType);
+        assertThat(usernameList).hasSize(1);
     }
 
     @Test
     @WithAnonymousUser
-    void testGetAllByUsername_unauthorized() throws Exception {
-        String usernamePart = "current";
-        String url = ENDPOINT + "/all/" + usernamePart + "/username-part";
+    void testGetAllUsernamesByIds_unauthorized() throws Exception {
+        String url = ENDPOINT + "/username?ids=" + CURRENT_ID;
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
+
 
     @Test
     @WithCustomSecurityContext
@@ -140,35 +127,51 @@ class UserDataControllerIT {
                 .andExpect(status().isUnauthorized());
     }
 
+
     @Test
     @WithCustomSecurityContext
-    void testGetAllUsernamesByIds_ok() throws Exception {
-        String url = ENDPOINT + "/usernames/ids";
-        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
-        ResultActions resultActions = mvc.perform(post(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+    void testGetAllByUsername_ok() throws Exception {
+        String usernamePart = CURRENT_NAME.substring(0, 4).toUpperCase();
+        String url = ENDPOINT + "/summary/" + usernamePart + "/username-part";
+        ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, String.class);
-        List<String> usernameList = objectMapper.readValue(resultString, collectionType);
-        assertThat(usernameList).hasSize(1);
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class,
+                UserSummaryDTO.class);
+        List<UserSummaryDTO> dtoList = objectMapper.readValue(resultString, collectionType);
+        assertThat(dtoList).hasSize(1);
+        assertThat(dtoList.get(0).getUsername()).isEqualTo(CURRENT_NAME);
+    }
+
+    @Test
+    @WithCustomSecurityContext
+    void testGetAllByUsername_ok_empty() throws Exception {
+        String usernamePart = CURRENT_NAME.substring(1, 4);
+        String url = ENDPOINT + "/summary/" + usernamePart + "/username-part";
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class,
+                UserSummaryDTO.class);
+        List<UserSummaryDTO> dtoList = objectMapper.readValue(resultString, collectionType);
+        assertThat(dtoList).isEmpty();
     }
 
     @Test
     @WithAnonymousUser
-    void testGetAllUsernamesByIds_unauthorized() throws Exception {
-        String url = ENDPOINT + "/usernames/ids";
-        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
-        mvc.perform(post(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+    void testGetAllByUsername_unauthorized() throws Exception {
+        String usernamePart = "current";
+        String url = ENDPOINT + "/summary/" + usernamePart + "/username-part";
+        mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
+
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testGetByUsernameOrEmail_ok_username() throws Exception {
         String username = LOCAL_NAME;
-        String url = ENDPOINT + "/" + username + "/username-or-email";
+        String url = ENDPOINT + "/summary/" + username + "/username-or-email";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -180,7 +183,7 @@ class UserDataControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testGetByUsernameOrEmail_ok_email() throws Exception {
         String email = LOCAL_NAME + "@email.com";
-        String url = ENDPOINT + "/" + email + "/username-or-email";
+        String url = ENDPOINT + "/summary/" + email + "/username-or-email";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -191,7 +194,7 @@ class UserDataControllerIT {
     @Test
     @WithAnonymousUser
     void testGetByUsernameOrEmail_unauthorized() throws Exception {
-        String url = ENDPOINT + "/" + LOCAL_NAME + "/username-or-email";
+        String url = ENDPOINT + "/summary/" + LOCAL_NAME + "/username-or-email";
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
@@ -200,7 +203,7 @@ class UserDataControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testGetByUsernameOrEmail_notFound() throws Exception {
         String username = "not_exists";
-        String url = ENDPOINT + "/" + username + "/username-or-email";
+        String url = ENDPOINT + "/summary/" + username + "/username-or-email";
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
@@ -209,7 +212,7 @@ class UserDataControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testGetByUsername_ok() throws Exception {
         String username = LOCAL_NAME;
-        String url = ENDPOINT + "/" + username + "/username";
+        String url = ENDPOINT + "/summary/" + username + "/username";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -220,7 +223,7 @@ class UserDataControllerIT {
     @Test
     @WithAnonymousUser
     void testGetByUsername_unauthorized() throws Exception {
-        String url = ENDPOINT + "/" + LOCAL_NAME + "/username";
+        String url = ENDPOINT + "/summary/" + LOCAL_NAME + "/username";
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
@@ -229,7 +232,7 @@ class UserDataControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testGetByUsername_notFound() throws Exception {
         String username = "not_exists";
-        String url = ENDPOINT + "/" + username + "/username";
+        String url = ENDPOINT + "/summary/" + username + "/username";
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }

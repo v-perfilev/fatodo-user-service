@@ -6,16 +6,10 @@ Contract.make {
     name 'check if ids exist'
     description 'should return status 200 and boolean value'
     request {
-        method POST()
-        url("/api/check/id")
-        headers {
-            contentType applicationJson()
-        }
-        body($(
-                consumer(regex(".+")),
-                producer([
-                        uuid().generate()
-                ])
+        method GET()
+        url($(
+                consumer(regex("/api/check/id\\?ids=.*")),
+                producer("/api/check/id?ids=" + uuid().generate())
         ))
     }
     response {

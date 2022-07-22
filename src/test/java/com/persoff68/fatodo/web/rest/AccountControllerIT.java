@@ -11,12 +11,14 @@ import com.persoff68.fatodo.client.ImageServiceClient;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserDTO;
-import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.model.vm.ChangePasswordVM;
 import com.persoff68.fatodo.model.vm.UserVM;
+import com.persoff68.fatodo.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -24,7 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -32,14 +33,13 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
+@AutoConfigureMockMvc
 class AccountControllerIT {
     private static final String ENDPOINT = "/api/account";
 
@@ -48,6 +48,9 @@ class AccountControllerIT {
     private static final String CURRENT_NAME = "current-name";
     private static final String LOCAL_NAME = "local-name";
     private static final String GOOGLE_NAME = "google-name";
+
+    @Autowired
+    MockMvc mvc;
 
     @Autowired
     WebApplicationContext context;
@@ -61,12 +64,8 @@ class AccountControllerIT {
     @MockBean
     ImageServiceClient imageServiceClient;
 
-    MockMvc mvc;
-
     @BeforeEach
     void setup() {
-        mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
-
         User currentUser = TestUser.defaultBuilder()
                 .id(CURRENT_ID)
                 .username(CURRENT_NAME)
@@ -87,14 +86,17 @@ class AccountControllerIT {
                 .provider(Provider.GOOGLE)
                 .build();
 
-        userRepository.deleteAll();
         userRepository.save(currentUser);
         userRepository.save(localUser);
         userRepository.save(googleUser);
 
         when(imageServiceClient.createUserImage(any())).thenReturn("filename");
         when(imageServiceClient.updateUserImage(any())).thenReturn("filename");
-        doNothing().when(imageServiceClient).deleteUserImage(any());
+    }
+
+    @AfterEach
+    void cleanup() {
+        userRepository.deleteAll();
     }
 
     @Test

@@ -1,4 +1,4 @@
-package contracts.userresource
+package contracts.usercontroller
 
 import org.springframework.cloud.contract.spec.Contract
 
@@ -8,8 +8,8 @@ Contract.make {
     request {
         method DELETE()
         url($(
-                consumer(regex("/api/users/" + uuid().toString())),
-                producer("/api/users/8f9a7cae-73c8-4ad6-b135-5bd109b51d2e")
+                consumer(regex("/api/user/" + uuid().toString())),
+                producer("/api/user/8f9a7cae-73c8-4ad6-b135-5bd109b51d2e")
         ))
         headers {
             header 'Authorization': $(

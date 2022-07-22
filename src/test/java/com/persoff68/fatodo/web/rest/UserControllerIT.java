@@ -11,22 +11,22 @@ import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,11 +34,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
-class UserResourceIT {
-    private static final String ENDPOINT = "/api/users";
+@AutoConfigureMockMvc
+class UserControllerIT {
+    private static final String ENDPOINT = "/api/user";
 
     private static final UUID CURRENT_ID = UUID.fromString("6e3c489b-a4fb-4654-aa39-30985b7c4656");
     private static final String CURRENT_NAME = "current-name";
+
+    @Autowired
+    MockMvc mvc;
 
     @Autowired
     WebApplicationContext context;
@@ -47,13 +51,9 @@ class UserResourceIT {
     @Autowired
     ObjectMapper objectMapper;
 
-    MockMvc mvc;
-
 
     @BeforeEach
     void setup() {
-        mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
-
         User currentUser = TestUser.defaultBuilder()
                 .id(CURRENT_ID)
                 .username(CURRENT_NAME)
@@ -62,11 +62,14 @@ class UserResourceIT {
 
         User anotherUser = TestUser.defaultBuilder().build();
 
-        userRepository.deleteAll();
         userRepository.save(currentUser);
         userRepository.save(anotherUser);
     }
 
+    @AfterEach
+    void cleanup() {
+        userRepository.deleteAll();
+    }
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")

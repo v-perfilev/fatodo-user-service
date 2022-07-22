@@ -1,4 +1,4 @@
-package contracts.userresource
+package contracts.usercontroller
 
 import org.springframework.cloud.contract.spec.Contract
 
@@ -7,7 +7,7 @@ Contract.make {
     description 'should return status 200 and UserDTO'
     request {
         method PUT()
-        url("/api/users")
+        url("/api/user")
         headers {
             contentType applicationJson()
             header 'Authorization': $(

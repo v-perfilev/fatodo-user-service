@@ -23,11 +23,11 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(UserResource.ENDPOINT)
+@RequestMapping(UserController.ENDPOINT)
 @RequiredArgsConstructor
-public class UserResource {
+public class UserController {
 
-    static final String ENDPOINT = "/api/users";
+    static final String ENDPOINT = "/api/user";
 
     private final UserService userService;
     private final UserMapper userMapper;

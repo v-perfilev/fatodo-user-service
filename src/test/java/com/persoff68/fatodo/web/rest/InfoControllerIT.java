@@ -9,12 +9,12 @@ import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserInfoDTO;
 import com.persoff68.fatodo.model.dto.UserSummaryDTO;
 import com.persoff68.fatodo.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
@@ -60,43 +60,20 @@ class InfoControllerIT {
                 .email(LOCAL_NAME + "@email.com")
                 .build();
 
-        userRepository.deleteAll();
         userRepository.save(currentUser);
         userRepository.save(localUser);
     }
 
-    @Test
-    @WithCustomSecurityContext
-    void testGetAllUserSummaryByIds_ok() throws Exception {
-        String url = ENDPOINT + "/summary";
-        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
-        ResultActions resultActions = mvc.perform(post(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isOk());
-        String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class,
-                UserSummaryDTO.class);
-        List<UserSummaryDTO> userSummaryDTOList = objectMapper.readValue(resultString, collectionType);
-        assertThat(userSummaryDTOList).hasSize(1);
-    }
-
-    @Test
-    @WithAnonymousUser
-    void testGetAllUserSummaryByIds_unauthorized() throws Exception {
-        String url = ENDPOINT + "/summary";
-        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
-        mvc.perform(post(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isUnauthorized());
+    @AfterEach
+    void cleanup() {
+        userRepository.deleteAll();
     }
 
     @Test
     @WithCustomSecurityContext
     void testGetAllUserInfoByIds_ok() throws Exception {
-        String url = ENDPOINT + "/info";
-        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
-        ResultActions resultActions = mvc.perform(post(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+        String url = ENDPOINT + "/user?ids=" + CURRENT_ID;
+        ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class,
@@ -108,12 +85,9 @@ class InfoControllerIT {
     @Test
     @WithAnonymousUser
     void testGetAllUserInfoByIds_unauthorized() throws Exception {
-        String url = ENDPOINT + "/info";
-        String requestBody = objectMapper.writeValueAsString(List.of(CURRENT_ID));
-        mvc.perform(post(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+        String url = ENDPOINT + "/user?ids=" + CURRENT_ID;
+        mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
-
 
 }

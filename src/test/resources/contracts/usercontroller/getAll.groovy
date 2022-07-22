@@ -1,4 +1,4 @@
-package contracts.userresource
+package contracts.usercontroller
 
 import org.springframework.cloud.contract.spec.Contract
 
@@ -7,7 +7,7 @@ Contract.make {
     description 'should return status 200 and list of UserDTOs'
     request {
         method GET()
-        url("/api/users")
+        url("/api/user")
         headers {
             header 'Authorization': $(
                     consumer(containing("Bearer")),
