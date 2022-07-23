@@ -5,7 +5,6 @@ import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserSummaryDTO;
 import com.persoff68.fatodo.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +25,7 @@ public class UserDataController {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @GetMapping(value = "/username", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/username")
     public ResponseEntity<List<String>> getAllUsernamesByIds(@RequestParam("ids") List<UUID> idList) {
         List<User> userList = userService.getAllByIds(idList);
         List<String> usernameList = userList.stream()
@@ -35,7 +34,7 @@ public class UserDataController {
         return ResponseEntity.ok(usernameList);
     }
 
-    @GetMapping(value = "/ids/{username}/username-part", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/ids/{username}/username-part")
     public ResponseEntity<List<UUID>> getAllIdsByUsernamePart(@PathVariable @NotBlank String username) {
         List<User> userList = userService.getAllByUsernamePart(username);
         List<UUID> userSummaryDTOList = userList.stream()
@@ -44,7 +43,7 @@ public class UserDataController {
         return ResponseEntity.ok(userSummaryDTOList);
     }
 
-    @GetMapping(value = "/summary/{usernamePart}/username-part", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/summary/{usernamePart}/username-part")
     public ResponseEntity<List<UserSummaryDTO>> getAllByUsernamePart(@PathVariable @NotBlank String usernamePart) {
         List<User> userList = userService.getAllByUsernamePart(usernamePart);
         List<UserSummaryDTO> userSummaryDTOList = userList.stream()
@@ -53,14 +52,14 @@ public class UserDataController {
         return ResponseEntity.ok(userSummaryDTOList);
     }
 
-    @GetMapping(value = "/summary/{username}/username", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/summary/{username}/username")
     public ResponseEntity<UserSummaryDTO> getByUsername(@PathVariable @NotBlank String username) {
         User user = userService.getByUsername(username);
         UserSummaryDTO userSummaryDTO = userMapper.pojoToSummaryDTO(user);
         return ResponseEntity.ok(userSummaryDTO);
     }
 
-    @GetMapping(value = "/summary/{usernameOrEmail}/username-or-email", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/summary/{usernameOrEmail}/username-or-email")
     public ResponseEntity<UserSummaryDTO> getByUsernameOrEmail(@PathVariable @NotBlank String usernameOrEmail) {
         User user = userService.getByUsernameOrEmail(usernameOrEmail);
         UserSummaryDTO userSummaryDTO = userMapper.pojoToSummaryDTO(user);

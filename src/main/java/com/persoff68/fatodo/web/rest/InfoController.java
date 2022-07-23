@@ -5,7 +5,6 @@ import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserInfoDTO;
 import com.persoff68.fatodo.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +23,7 @@ public class InfoController {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @GetMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/user")
     public ResponseEntity<List<UserInfoDTO>> getAllUserInfoByIds(@RequestParam("ids") List<UUID> idList) {
         List<User> userList = userService.getAllByIds(idList);
         List<UserInfoDTO> userInfoDTOList = userList.stream()
