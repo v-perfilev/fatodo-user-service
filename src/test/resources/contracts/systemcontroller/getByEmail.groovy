@@ -8,8 +8,8 @@ Contract.make {
     request {
         method GET()
         url($(
-                consumer(regex("/api/system/email/.+")),
-                producer("/api/system/email/current-name@email.com")
+                consumer(regex("/api/system/principal/[^\\/]+/email")),
+                producer("/api/system/principal/current-name@email.com/email")
         ))
         headers {
             header 'Authorization': $(

@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.PutMapping;
         qualifiers = {"feignImageServiceClient"})
 public interface ImageServiceClient {
 
-    @PostMapping(value = "/api/user-images", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/api/user-image", consumes = MediaType.APPLICATION_JSON_VALUE)
     String createUserImage(ImageDTO imageDTO);
 
-    @PutMapping(value = "/api/user-images", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/api/user-image", consumes = MediaType.APPLICATION_JSON_VALUE)
     String updateUserImage(ImageDTO imageDTO);
 
-    @DeleteMapping(value = "/api/user-images/{filename}")
+    @DeleteMapping(value = "/api/user-image/{filename}")
     void deleteUserImage(@PathVariable String filename);
 
 }

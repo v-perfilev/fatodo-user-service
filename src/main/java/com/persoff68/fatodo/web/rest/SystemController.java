@@ -1,11 +1,11 @@
 package com.persoff68.fatodo.web.rest;
 
+import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
-import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -42,28 +42,28 @@ public class SystemController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/principal/{id}/id", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipalDTO> getUserPrincipalById(@PathVariable UUID id) {
         User user = userService.getById(id);
         UserPrincipalDTO userPrincipalDTO = userMapper.pojoToPrincipalDTO(user);
         return ResponseEntity.ok(userPrincipalDTO);
     }
 
-    @GetMapping(value = "/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/principal/{email}/email", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipalDTO> getUserPrincipalByEmail(@PathVariable String email) {
         User user = userService.getByEmail(email);
         UserPrincipalDTO userPrincipalDTO = userMapper.pojoToPrincipalDTO(user);
         return ResponseEntity.ok(userPrincipalDTO);
     }
 
-    @GetMapping(value = "/username/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/principal/{username}/username", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipalDTO> getUserPrincipalByUsername(@PathVariable String username) {
         User user = userService.getByUsername(username);
         UserPrincipalDTO userPrincipalDTO = userMapper.pojoToPrincipalDTO(user);
         return ResponseEntity.ok(userPrincipalDTO);
     }
 
-    @GetMapping(value = "/username-or-email/{usernameOrEmail}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/principal/{usernameOrEmail}/username-or-email", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserPrincipalDTO> getUserPrincipalByUsernameOrEmail(@PathVariable String usernameOrEmail) {
         User user = userService.getByUsernameOrEmail(usernameOrEmail);
         UserPrincipalDTO userPrincipalDTO = userMapper.pojoToPrincipalDTO(user);

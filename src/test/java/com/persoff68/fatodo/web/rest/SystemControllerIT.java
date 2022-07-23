@@ -99,7 +99,7 @@ class SystemControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testGetUserPrincipalById_ok() throws Exception {
         UUID id = LOCAL_ID;
-        String url = ENDPOINT + "/id/" + id;
+        String url = ENDPOINT + "/principal/" + id + "/id";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -110,7 +110,7 @@ class SystemControllerIT {
     @Test
     @WithAnonymousUser
     void testGetUserPrincipalById_unauthorized() throws Exception {
-        String url = ENDPOINT + "/id/" + LOCAL_ID;
+        String url = ENDPOINT + "/principal/" + LOCAL_ID + "/id";
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
@@ -118,7 +118,7 @@ class SystemControllerIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
     void testGetUserPrincipalById_forbidden() throws Exception {
-        String url = ENDPOINT + "/id/" + LOCAL_ID;
+        String url = ENDPOINT + "/principal/" + LOCAL_ID + "/id";
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
     }
@@ -127,7 +127,7 @@ class SystemControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testGetUserPrincipalById_notFound() throws Exception {
         UUID id = UUID.randomUUID();
-        String url = ENDPOINT + "/id/" + id;
+        String url = ENDPOINT + "/principal/" + id + "/id";
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
@@ -137,7 +137,7 @@ class SystemControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testGetUserPrincipalByEmail_ok() throws Exception {
         String email = LOCAL_NAME + "@email.com";
-        String url = ENDPOINT + "/email/" + email;
+        String url = ENDPOINT + "/principal/" + email + "/email";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -149,7 +149,7 @@ class SystemControllerIT {
     @WithAnonymousUser
     void testGetUserPrincipalByEmail_unauthorized() throws Exception {
         String email = LOCAL_NAME + "@email.com";
-        String url = ENDPOINT + "/email/" + email;
+        String url = ENDPOINT + "/principal/" + email + "/email";
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
@@ -158,7 +158,7 @@ class SystemControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_USER")
     void testGetUserPrincipalByEmail_forbidden() throws Exception {
         String email = LOCAL_NAME + "@email.com";
-        String url = ENDPOINT + "/email/" + email;
+        String url = ENDPOINT + "/principal/" + email + "/email";
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
     }
@@ -167,7 +167,7 @@ class SystemControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testGetUserPrincipalByEmail_notFound() throws Exception {
         String email = "not-exists@email.com";
-        String url = ENDPOINT + "/email/" + email;
+        String url = ENDPOINT + "/principal/" + email + "/email";
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
@@ -177,7 +177,7 @@ class SystemControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testGetUserPrincipalByUsername_ok() throws Exception {
         String username = LOCAL_NAME;
-        String url = ENDPOINT + "/username/" + username;
+        String url = ENDPOINT + "/principal/" + username + "/username";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -188,7 +188,7 @@ class SystemControllerIT {
     @Test
     @WithAnonymousUser
     void testGetUserPrincipalByUsername_unauthorized() throws Exception {
-        String url = ENDPOINT + "/username/" + LOCAL_NAME;
+        String url = ENDPOINT + "/principal/" + LOCAL_NAME + "/username";
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
@@ -196,7 +196,7 @@ class SystemControllerIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
     void testGetUserPrincipalByUsername_forbidden() throws Exception {
-        String url = ENDPOINT + "/username/" + LOCAL_NAME;
+        String url = ENDPOINT + "/principal/" + LOCAL_NAME + "/username";
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
     }
@@ -205,7 +205,7 @@ class SystemControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testGetUserPrincipalByUsername_notFound() throws Exception {
         String username = "not_exists";
-        String url = ENDPOINT + "/username/" + username;
+        String url = ENDPOINT + "/principal/" + username + "/username";
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
@@ -214,7 +214,7 @@ class SystemControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testGetUserPrincipalByUsernameOrEmail_ok_username() throws Exception {
         String username = LOCAL_NAME;
-        String url = ENDPOINT + "/username-or-email/" + username;
+        String url = ENDPOINT + "/principal/" + username + "/username-or-email";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -226,7 +226,7 @@ class SystemControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testGetUserPrincipalByUsernameOrEmail_ok_email() throws Exception {
         String email = LOCAL_NAME + "@email.com";
-        String url = ENDPOINT + "/username-or-email/" + email;
+        String url = ENDPOINT + "/principal/" + email + "/username-or-email";
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -237,7 +237,7 @@ class SystemControllerIT {
     @Test
     @WithAnonymousUser
     void testGetUserPrincipalByUsernameOrEmail_unauthorized() throws Exception {
-        String url = ENDPOINT + "/username-or-email/" + LOCAL_NAME;
+        String url = ENDPOINT + "/principal/" + LOCAL_NAME + "username-or-email";
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }
@@ -245,7 +245,7 @@ class SystemControllerIT {
     @Test
     @WithCustomSecurityContext(authority = "ROLE_USER")
     void testGetUserPrincipalByUsernameOrEmail_forbidden() throws Exception {
-        String url = ENDPOINT + "/username-or-email/" + LOCAL_NAME;
+        String url = ENDPOINT + "/principal/" + LOCAL_NAME + "username-or-email";
         mvc.perform(get(url))
                 .andExpect(status().isForbidden());
     }
@@ -254,7 +254,7 @@ class SystemControllerIT {
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
     void testGetUserPrincipalByUsernameOrEmail_notFound() throws Exception {
         String username = "not_exists";
-        String url = ENDPOINT + "/username-or-email/" + username;
+        String url = ENDPOINT + "/principal/" + username + "/username-or-email";
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
