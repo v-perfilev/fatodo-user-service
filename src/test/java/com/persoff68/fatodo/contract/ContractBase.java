@@ -7,6 +7,7 @@ import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,12 +19,11 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMessageVerifier
-public class ContractBase {
+class ContractBase {
     private static final UUID CURRENT_ID = UUID.fromString("8f9a7cae-73c8-4ad6-b135-5bd109b51d2e");
     private static final UUID LOCAL_ID = UUID.fromString("73e6c420-dccc-4d54-99a7-3017af127d8a");
     private static final String CURRENT_NAME = "current-name";
@@ -67,14 +67,17 @@ public class ContractBase {
                 .provider(Provider.GOOGLE)
                 .build();
 
-        userRepository.deleteAll();
         userRepository.save(currentUser);
         userRepository.save(localUser);
         userRepository.save(googleUser);
 
         when(imageServiceClient.createUserImage(any())).thenReturn("filename");
         when(imageServiceClient.updateUserImage(any())).thenReturn("filename");
-        doNothing().when(imageServiceClient).deleteUserImage(any());
+    }
+
+    @AfterEach
+    void cleanup() {
+        userRepository.deleteAll();
     }
 
 }
