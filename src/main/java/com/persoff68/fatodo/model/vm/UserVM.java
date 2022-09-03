@@ -23,6 +23,8 @@ public class UserVM {
 
     private String lastname;
 
+    private String gender;
+
     @NotNull
     private String language;
 

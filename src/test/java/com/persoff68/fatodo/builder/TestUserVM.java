@@ -17,9 +17,10 @@ public class TestUserVM extends UserVM {
                       String lastname,
                       @NotNull String language,
                       @NotNull String timezone,
+                      String gender,
                       String imageFilename,
                       MultipartFile imageContent) {
-        super(id, username, firstname, lastname, language, timezone, imageFilename, imageContent);
+        super(id, username, firstname, lastname, gender, language, timezone, imageFilename, imageContent);
     }
 
     public static TestUserVMBuilder defaultBuilder() {
@@ -30,6 +31,7 @@ public class TestUserVM extends UserVM {
                 .lastname(DEFAULT_VALUE)
                 .language("en")
                 .timezone("Europe/Berlin")
+                .gender("FEMALE")
                 .imageFilename(DEFAULT_VALUE);
     }
 

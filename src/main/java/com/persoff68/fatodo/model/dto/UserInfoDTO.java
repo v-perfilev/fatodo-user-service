@@ -19,4 +19,6 @@ public class UserInfoDTO extends AbstractDTO {
 
     private String language;
 
+    private String gender;
+
 }

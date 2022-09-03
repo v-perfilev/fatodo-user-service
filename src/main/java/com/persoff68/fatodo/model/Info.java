@@ -13,8 +13,16 @@ public class Info {
 
     private String imageFilename;
 
+    private Gender gender;
+
     private String language;
 
     private String timezone;
+
+    public enum Gender {
+        MALE,
+        FEMALE,
+        DIVERSE
+    }
 
 }

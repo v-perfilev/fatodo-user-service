@@ -35,6 +35,7 @@ public interface UserMapper {
     @Mapping(source = "info.firstname", target = "firstname")
     @Mapping(source = "info.lastname", target = "lastname")
     @Mapping(source = "info.language", target = "language")
+    @Mapping(source = "info.gender", target = "gender")
     UserInfoDTO pojoToInfoDTO(User user);
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringsIntoAuthorities")
@@ -53,6 +54,7 @@ public interface UserMapper {
     @Mapping(source = "imageFilename", target = "info.imageFilename")
     @Mapping(source = "language", target = "info.language")
     @Mapping(source = "timezone", target = "info.timezone")
+    @Mapping(source = "gender", target = "info.gender")
     User vmToPojo(UserVM userVM);
 
 

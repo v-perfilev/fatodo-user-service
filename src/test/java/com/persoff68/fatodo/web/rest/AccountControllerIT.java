@@ -9,6 +9,7 @@ import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.builder.TestUserVM;
 import com.persoff68.fatodo.client.ImageServiceClient;
 import com.persoff68.fatodo.config.constant.Provider;
+import com.persoff68.fatodo.model.Info;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.vm.ChangePasswordVM;
@@ -134,6 +135,7 @@ class AccountControllerIT {
         assertThat(resultDTO.getInfo().getFirstname()).isEqualTo(vm.getFirstname());
         assertThat(resultDTO.getInfo().getLastname()).isEqualTo(vm.getLastname());
         assertThat(resultDTO.getInfo().getLanguage()).isEqualTo(vm.getLanguage());
+        assertThat(resultDTO.getInfo().getGender()).isEqualTo(Info.Gender.FEMALE);
         assertThat(resultDTO.getInfo().getImageFilename()).isEqualTo(vm.getImageFilename());
     }
 
