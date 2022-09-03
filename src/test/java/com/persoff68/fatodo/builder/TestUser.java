@@ -16,13 +16,16 @@ public class TestUser extends User {
     private static final String DEFAULT_VALUE = "test_value";
 
     @Builder
-    public TestUser(UUID id, @NotNull String email, @NotNull String username, @NotNull Set<Authority> authorities, String password, @NotNull Provider provider, String providerId, @NotNull boolean activated, @NotNull Info info) {
+    public TestUser(UUID id, @NotNull String email, @NotNull String username, @NotNull Set<Authority> authorities,
+                    String password, @NotNull Provider provider, String providerId, @NotNull boolean activated,
+                    @NotNull Info info) {
         super(email, username, authorities, password, provider, providerId, activated, info);
         super.setId(id);
         super.setInfo(new Info());
         super.getInfo().setFirstname(DEFAULT_VALUE);
         super.getInfo().setLastname(DEFAULT_VALUE);
         super.getInfo().setLanguage("en");
+        super.getInfo().setGender(Info.Gender.FEMALE);
         super.getInfo().setImageFilename(DEFAULT_VALUE);
     }
 

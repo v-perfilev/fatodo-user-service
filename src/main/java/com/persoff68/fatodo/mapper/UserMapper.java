@@ -30,6 +30,7 @@ public interface UserMapper {
     @Mapping(source = "info.firstname", target = "firstname")
     @Mapping(source = "info.lastname", target = "lastname")
     @Mapping(source = "info.imageFilename", target = "imageFilename")
+    @Mapping(source = "info.gender", target = "gender")
     UserSummaryDTO pojoToSummaryDTO(User user);
 
     @Mapping(source = "info.firstname", target = "firstname")

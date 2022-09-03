@@ -39,6 +39,13 @@ public class UserDataController {
         return ResponseEntity.ok(userSummaryDTOList);
     }
 
+    @GetMapping(value = "/summary")
+    public ResponseEntity<List<UserSummaryDTO>> getAllUserSummariesByIds(@RequestParam("ids") List<UUID> idList) {
+        List<User> userList = userService.getAllByIds(idList);
+        List<UserSummaryDTO> userSummaryDTOList = userList.stream().map(userMapper::pojoToSummaryDTO).toList();
+        return ResponseEntity.ok(userSummaryDTOList);
+    }
+
     @GetMapping("/summary/{usernamePart}/username-part")
     public ResponseEntity<List<UserSummaryDTO>> getAllByUsernamePart(@PathVariable @NotBlank String usernamePart) {
         List<User> userList = userService.getAllByUsernamePart(usernamePart);

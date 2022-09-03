@@ -28,6 +28,7 @@ Contract.make {
                 "username"     : "current-name",
                 "firstname"    : "test_value",
                 "lastname"     : "test_value",
+                "gender"       : "FEMALE",
                 "imageFilename": "test_value"
         ])
     }

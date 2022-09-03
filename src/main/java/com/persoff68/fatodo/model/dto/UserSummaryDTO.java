@@ -15,6 +15,8 @@ public class UserSummaryDTO extends AbstractDTO {
 
     private String lastname;
 
+    private String gender;
+
     private String imageFilename;
 
 }

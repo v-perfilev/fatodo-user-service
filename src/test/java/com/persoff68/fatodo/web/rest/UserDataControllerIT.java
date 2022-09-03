@@ -130,6 +130,29 @@ class UserDataControllerIT {
 
     @Test
     @WithCustomSecurityContext
+    void getAllUserSummariesByIds_ok() throws Exception {
+        String url = ENDPOINT + "/summary?ids=" + CURRENT_ID;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class,
+                UserSummaryDTO.class);
+        List<UserSummaryDTO> dtoList = objectMapper.readValue(resultString, collectionType);
+        assertThat(dtoList).hasSize(1);
+        assertThat(dtoList.get(0).getUsername()).isEqualTo(CURRENT_NAME);
+    }
+
+    @Test
+    @WithAnonymousUser
+    void getAllUserSummariesByIds_unauthorized() throws Exception {
+        String url = ENDPOINT + "/summary?ids=" + CURRENT_ID;
+        mvc.perform(get(url))
+                .andExpect(status().isUnauthorized());
+    }
+
+
+    @Test
+    @WithCustomSecurityContext
     void testGetAllByUsername_ok() throws Exception {
         String usernamePart = CURRENT_NAME.substring(0, 4).toUpperCase();
         String url = ENDPOINT + "/summary/" + usernamePart + "/username-part";
