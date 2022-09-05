@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.service;
 
+import com.persoff68.fatodo.config.constant.Language;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.repository.UserRepository;
@@ -34,8 +35,7 @@ public class AccountService {
         if (!currentUserId.equals(newUser.getId())) {
             throw new PermissionException();
         }
-        User user = userRepository.findById(newUserId)
-                .orElseThrow(ModelNotFoundException::new);
+        User user = userRepository.findById(newUserId).orElseThrow(ModelNotFoundException::new);
 
         user.setUsername(newUser.getUsername());
         user.setInfo(newUser.getInfo());
@@ -47,10 +47,8 @@ public class AccountService {
     }
 
     public void changePassword(String oldPassword, String newPassword) {
-        UUID id = SecurityUtils.getCurrentId()
-                .orElseThrow(UnauthorizedException::new);
-        User user = userRepository.findById(id)
-                .orElseThrow(ModelNotFoundException::new);
+        UUID id = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
+        User user = userRepository.findById(id).orElseThrow(ModelNotFoundException::new);
         if (!user.getProvider().equals(Provider.LOCAL)) {
             throw new WrongProviderException();
         }
@@ -58,6 +56,14 @@ public class AccountService {
             throw new WrongPasswordException();
         }
         user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    public void changeLanguage(String languageString) {
+        UUID id = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
+        User user = userRepository.findById(id).orElseThrow(ModelNotFoundException::new);
+        Language language = Language.valueOf(languageString);
+        user.getInfo().setLanguage(language);
         userRepository.save(user);
     }
 

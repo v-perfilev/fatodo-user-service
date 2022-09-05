@@ -29,7 +29,7 @@ public class TestUserVM extends UserVM {
                 .username(DEFAULT_VALUE)
                 .firstname(DEFAULT_VALUE)
                 .lastname(DEFAULT_VALUE)
-                .language("en")
+                .language("EN")
                 .timezone("Europe/Berlin")
                 .gender("FEMALE")
                 .imageFilename(DEFAULT_VALUE);

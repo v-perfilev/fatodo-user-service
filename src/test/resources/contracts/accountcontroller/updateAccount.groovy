@@ -6,8 +6,8 @@ Contract.make {
     name 'update account'
     description 'should return status 200 and UserDTO'
     request {
-        method POST()
-        url("/api/account/update")
+        method PUT()
+        url("/api/account")
         headers {
             contentType multipartFormData()
             header 'Authorization': $(

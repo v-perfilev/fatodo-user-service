@@ -3,9 +3,8 @@ package com.persoff68.fatodo.config.constant;
 import java.util.Arrays;
 
 public enum Language {
-    DEFAULT(Constants.EN_VALUE),
-    EN(Constants.EN_VALUE),
-    RU(Constants.RU_VALUE);
+    EN("EN"),
+    RU("RU");
 
     private final String value;
 
@@ -21,11 +20,4 @@ public enum Language {
         return Arrays.stream(values()).anyMatch(language -> language.getValue().equals(value));
     }
 
-    public static class Constants {
-        public static final String EN_VALUE = "en";
-        public static final String RU_VALUE = "ru";
-
-        private Constants() {
-        }
-    }
 }

@@ -3,19 +3,22 @@ package com.persoff68.fatodo.web.rest;
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserDTO;
+import com.persoff68.fatodo.model.vm.ChangeLanguageVM;
 import com.persoff68.fatodo.model.vm.ChangePasswordVM;
 import com.persoff68.fatodo.model.vm.UserVM;
+import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;
 import com.persoff68.fatodo.security.util.SecurityUtils;
 import com.persoff68.fatodo.service.AccountService;
 import com.persoff68.fatodo.service.UserService;
+import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.web.rest.exception.InvalidFormException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -35,7 +39,10 @@ public class AccountController {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @GetMapping(value = "/current")
+    private final UserRepository userRepository;
+
+    @GetMapping
+
     public ResponseEntity<UserDTO> getCurrentUser() {
         UUID id = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
         User user = userService.getById(id);
@@ -43,7 +50,7 @@ public class AccountController {
         return ResponseEntity.ok(userDTO);
     }
 
-    @PostMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<UserDTO> updateData(@ModelAttribute @Valid UserVM userVM) {
         User newUser = userMapper.vmToPojo(userVM);
         byte[] imageContent = getBytesFromMultipartFile(userVM.getImageContent());
@@ -52,9 +59,18 @@ public class AccountController {
         return ResponseEntity.ok(userDTO);
     }
 
-    @PostMapping(value = "/change-password")
+    @PutMapping(value = "/password")
     public ResponseEntity<Void> changePassword(@RequestBody @Valid ChangePasswordVM changePasswordVM) {
         accountService.changePassword(changePasswordVM.getOldPassword(), changePasswordVM.getNewPassword());
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/language")
+    public ResponseEntity<Void> changeLanguage(@RequestBody @Valid ChangeLanguageVM changeLanguageVM) {
+        accountService.changeLanguage(changeLanguageVM.getLanguage());
+
+        List<User> all = userRepository.findAll();
+
         return ResponseEntity.ok().build();
     }
 

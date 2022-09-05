@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.model;
 
+import com.persoff68.fatodo.config.constant.Language;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,7 @@ public class Info {
 
     private Gender gender;
 
-    private String language;
+    private Language language;
 
     private String timezone;
 

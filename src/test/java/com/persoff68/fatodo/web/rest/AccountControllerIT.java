@@ -8,10 +8,12 @@ import com.persoff68.fatodo.builder.TestChangePasswordVM;
 import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.builder.TestUserVM;
 import com.persoff68.fatodo.client.ImageServiceClient;
+import com.persoff68.fatodo.config.constant.Language;
 import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.Info;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserDTO;
+import com.persoff68.fatodo.model.vm.ChangeLanguageVM;
 import com.persoff68.fatodo.model.vm.ChangePasswordVM;
 import com.persoff68.fatodo.model.vm.UserVM;
 import com.persoff68.fatodo.repository.UserRepository;
@@ -36,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FatodoUserServiceApplication.class)
@@ -103,8 +105,7 @@ class AccountControllerIT {
     @Test
     @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
     void testGetCurrentUser_ok() throws Exception {
-        String url = ENDPOINT + "/current";
-        ResultActions resultActions = mvc.perform(get(url))
+        ResultActions resultActions = mvc.perform(get(ENDPOINT))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
@@ -114,18 +115,16 @@ class AccountControllerIT {
     @Test
     @WithAnonymousUser
     void testGetCurrentUser_unauthorized() throws Exception {
-        String url = ENDPOINT + "/current";
-        mvc.perform(get(url))
+        mvc.perform(get(ENDPOINT))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
     void testUpdate_ok() throws Exception {
-        String url = ENDPOINT + "/update";
         UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
         MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
-        ResultActions resultActions = mvc.perform(post(url)
+        ResultActions resultActions = mvc.perform(put(ENDPOINT)
                         .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -134,7 +133,7 @@ class AccountControllerIT {
         assertThat(resultDTO.getUsername()).isEqualTo(vm.getUsername());
         assertThat(resultDTO.getInfo().getFirstname()).isEqualTo(vm.getFirstname());
         assertThat(resultDTO.getInfo().getLastname()).isEqualTo(vm.getLastname());
-        assertThat(resultDTO.getInfo().getLanguage()).isEqualTo(vm.getLanguage());
+        assertThat(resultDTO.getInfo().getLanguage()).isEqualTo(Language.valueOf(vm.getLanguage()));
         assertThat(resultDTO.getInfo().getGender()).isEqualTo(Info.Gender.FEMALE);
         assertThat(resultDTO.getInfo().getImageFilename()).isEqualTo(vm.getImageFilename());
     }
@@ -142,10 +141,9 @@ class AccountControllerIT {
     @Test
     @WithAnonymousUser
     void testUpdate_unauthorized() throws Exception {
-        String url = ENDPOINT + "/update";
         UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
         MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
-        mvc.perform(post(url)
+        mvc.perform(put(ENDPOINT)
                         .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
                 .andExpect(status().isUnauthorized());
     }
@@ -153,10 +151,9 @@ class AccountControllerIT {
     @Test
     @WithCustomSecurityContext
     void testUpdate_forbidden_wrongUser() throws Exception {
-        String url = ENDPOINT + "/update";
         UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
         MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
-        mvc.perform(post(url)
+        mvc.perform(put(ENDPOINT)
                         .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
                 .andExpect(status().isForbidden());
     }
@@ -164,10 +161,9 @@ class AccountControllerIT {
     @Test
     @WithCustomSecurityContext(id = "bafc4e0e-75d4-4059-9d4d-209855dd91c1")
     void testUpdate_badRequest_notExists() throws Exception {
-        String url = ENDPOINT + "/update";
         UserVM vm = TestUserVM.defaultBuilder().id(UUID.fromString("bafc4e0e-75d4-4059-9d4d-209855dd91c1")).build();
         MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
-        mvc.perform(post(url)
+        mvc.perform(put(ENDPOINT)
                         .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
                 .andExpect(status().isNotFound());
     }
@@ -177,8 +173,8 @@ class AccountControllerIT {
     void testChangePassword_ok() throws Exception {
         ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
-        String url = ENDPOINT + "/change-password";
-        mvc.perform(post(url)
+        String url = ENDPOINT + "/password";
+        mvc.perform(put(url)
                         .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isOk());
     }
@@ -188,8 +184,8 @@ class AccountControllerIT {
     void testChangePassword_unauthorized() throws Exception {
         ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
-        String url = ENDPOINT + "/change-password";
-        mvc.perform(post(url)
+        String url = ENDPOINT + "/password";
+        mvc.perform(put(url)
                         .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isUnauthorized());
     }
@@ -199,8 +195,8 @@ class AccountControllerIT {
     void testChangePassword_wrongProvider() throws Exception {
         ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
-        String url = ENDPOINT + "/change-password";
-        mvc.perform(post(url)
+        String url = ENDPOINT + "/password";
+        mvc.perform(put(url)
                         .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
     }
@@ -210,10 +206,43 @@ class AccountControllerIT {
     void testChangePassword_wrongPassword() throws Exception {
         ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().build();
         String requestBody = objectMapper.writeValueAsString(vm);
-        String url = ENDPOINT + "/change-password";
-        mvc.perform(post(url)
+        String url = ENDPOINT + "/password";
+        mvc.perform(put(url)
                         .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
+    void testChangeLanguage_ok() throws Exception {
+        ChangeLanguageVM vm = new ChangeLanguageVM("RU");
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/language";
+        mvc.perform(put(url)
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
+    void testChangeLanguage_badRequest() throws Exception {
+        ChangeLanguageVM vm = new ChangeLanguageVM("wrong");
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/language";
+        mvc.perform(put(url)
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testChangeLanguage_unauthorized() throws Exception {
+        ChangeLanguageVM vm = new ChangeLanguageVM("RU");
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/language";
+        mvc.perform(put(url)
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isUnauthorized());
     }
 
 }

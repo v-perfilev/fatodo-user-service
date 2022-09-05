@@ -3,11 +3,11 @@ package contracts.accountcontroller
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    name 'change password'
+    name 'change language'
     description 'should return status 200'
     request {
         method PUT()
-        url("/api/account/password")
+        url("/api/account/language")
         headers {
             contentType applicationJson()
             header 'Authorization': $(
@@ -16,13 +16,9 @@ Contract.make {
             )
         }
         body(
-                "oldPassword": $(
+                "language": $(
                         consumer(anyNonBlankString()),
-                        producer("test_password")
-                ),
-                "newPassword": $(
-                        consumer(anyNonBlankString()),
-                        producer("test_password")
+                        producer("RU")
                 ),
         )
     }
