@@ -88,9 +88,9 @@ public class UserService {
     }
 
     public User create(User user) {
-        Language language = user.getInfo().getLanguage();
-        if (language == null) {
-            user.getInfo().setLanguage(Language.EN);
+        String language = user.getInfo().getLanguage();
+        if (language == null || !Language.contains(language)) {
+            user.getInfo().setLanguage(Language.DEFAULT.getValue());
         }
         user.setAuthorities(Set.of(new Authority(AuthorityType.USER.getValue())));
         return userRepository.save(user);

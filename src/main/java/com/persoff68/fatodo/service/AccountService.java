@@ -35,7 +35,8 @@ public class AccountService {
         if (!currentUserId.equals(newUser.getId())) {
             throw new PermissionException();
         }
-        User user = userRepository.findById(newUserId).orElseThrow(ModelNotFoundException::new);
+        User user = userRepository.findById(newUserId)
+                .orElseThrow(ModelNotFoundException::new);
 
         user.setUsername(newUser.getUsername());
         user.setInfo(newUser.getInfo());
@@ -47,8 +48,10 @@ public class AccountService {
     }
 
     public void changePassword(String oldPassword, String newPassword) {
-        UUID id = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
-        User user = userRepository.findById(id).orElseThrow(ModelNotFoundException::new);
+        UUID id = SecurityUtils.getCurrentId()
+                .orElseThrow(UnauthorizedException::new);
+        User user = userRepository.findById(id)
+                .orElseThrow(ModelNotFoundException::new);
         if (!user.getProvider().equals(Provider.LOCAL)) {
             throw new WrongProviderException();
         }
@@ -59,12 +62,15 @@ public class AccountService {
         userRepository.save(user);
     }
 
-    public void changeLanguage(String languageString) {
-        UUID id = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
-        User user = userRepository.findById(id).orElseThrow(ModelNotFoundException::new);
-        Language language = Language.valueOf(languageString);
-        user.getInfo().setLanguage(language);
-        userRepository.save(user);
+    public void changeLanguage(String language) {
+        UUID id = SecurityUtils.getCurrentId()
+                .orElseThrow(UnauthorizedException::new);
+        User user = userRepository.findById(id)
+                .orElseThrow(ModelNotFoundException::new);
+        if (Language.contains(language)) {
+            user.getInfo().setLanguage(language);
+            userRepository.save(user);
+        }
     }
 
     private boolean isPasswordCorrect(User user, String password) {
