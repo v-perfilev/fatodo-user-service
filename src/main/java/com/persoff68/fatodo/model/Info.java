@@ -1,5 +1,9 @@
 package com.persoff68.fatodo.model;
 
+import com.persoff68.fatodo.model.constant.DateFormat;
+import com.persoff68.fatodo.model.constant.Gender;
+import com.persoff68.fatodo.model.constant.Language;
+import com.persoff68.fatodo.model.constant.TimeFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,14 +19,12 @@ public class Info {
 
     private Gender gender;
 
-    private String language;
+    private Language language = Language.EN;
 
     private String timezone;
 
-    public enum Gender {
-        MALE,
-        FEMALE,
-        DIVERSE
-    }
+    private TimeFormat timeFormat = TimeFormat.H24;
+
+    private DateFormat dateFormat = DateFormat.YMD_DASH;
 
 }

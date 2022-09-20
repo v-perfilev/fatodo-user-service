@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.builder;
 
-import com.persoff68.fatodo.config.constant.Provider;
+import com.persoff68.fatodo.model.constant.Provider;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import lombok.Builder;
 
@@ -25,7 +25,7 @@ public class TestOAuth2UserDTO extends OAuth2UserDTO {
         return TestOAuth2UserDTO.builder()
                 .email(DEFAULT_VALUE + "@email.com")
                 .username(DEFAULT_VALUE)
-                .language("en")
+                .language("EN")
                 .timezone(DEFAULT_VALUE)
                 .provider(Provider.GOOGLE.getValue())
                 .providerId(DEFAULT_VALUE);

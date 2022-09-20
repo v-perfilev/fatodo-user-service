@@ -8,9 +8,9 @@ import com.persoff68.fatodo.builder.TestChangePasswordVM;
 import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.builder.TestUserVM;
 import com.persoff68.fatodo.client.ImageServiceClient;
-import com.persoff68.fatodo.config.constant.Provider;
-import com.persoff68.fatodo.model.Info;
 import com.persoff68.fatodo.model.User;
+import com.persoff68.fatodo.model.constant.Gender;
+import com.persoff68.fatodo.model.constant.Provider;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.vm.ChangeLanguageVM;
 import com.persoff68.fatodo.model.vm.ChangePasswordVM;
@@ -132,8 +132,8 @@ class AccountControllerIT {
         assertThat(resultDTO.getUsername()).isEqualTo(vm.getUsername());
         assertThat(resultDTO.getInfo().getFirstname()).isEqualTo(vm.getFirstname());
         assertThat(resultDTO.getInfo().getLastname()).isEqualTo(vm.getLastname());
-        assertThat(resultDTO.getInfo().getLanguage()).isEqualTo(vm.getLanguage());
-        assertThat(resultDTO.getInfo().getGender()).isEqualTo(Info.Gender.FEMALE);
+        assertThat(resultDTO.getInfo().getLanguage().toString()).isEqualTo(vm.getLanguage());
+        assertThat(resultDTO.getInfo().getGender()).isEqualTo(Gender.FEMALE);
         assertThat(resultDTO.getInfo().getImageFilename()).isEqualTo(vm.getImageFilename());
     }
 
@@ -215,7 +215,7 @@ class AccountControllerIT {
     @Test
     @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
     void testChangeLanguage_ok() throws Exception {
-        ChangeLanguageVM vm = new ChangeLanguageVM("ru");
+        ChangeLanguageVM vm = new ChangeLanguageVM("RU");
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/language";
         mvc.perform(put(url)
@@ -226,7 +226,7 @@ class AccountControllerIT {
     @Test
     @WithAnonymousUser
     void testChangeLanguage_unauthorized() throws Exception {
-        ChangeLanguageVM vm = new ChangeLanguageVM("ru");
+        ChangeLanguageVM vm = new ChangeLanguageVM("RU");
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/language";
         mvc.perform(put(url)

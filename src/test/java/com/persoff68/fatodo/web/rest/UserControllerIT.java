@@ -7,7 +7,7 @@ import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.builder.TestUserDTO;
 import com.persoff68.fatodo.config.constant.AuthorityType;
-import com.persoff68.fatodo.config.constant.Provider;
+import com.persoff68.fatodo.model.constant.Provider;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.repository.UserRepository;

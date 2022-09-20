@@ -1,4 +1,4 @@
-package com.persoff68.fatodo.config.constant;
+package com.persoff68.fatodo.model.constant;
 
 import org.junit.jupiter.api.Test;
 

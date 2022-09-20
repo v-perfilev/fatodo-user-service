@@ -23,7 +23,7 @@ public class TestLocalUserDTO extends LocalUserDTO {
         return TestLocalUserDTO.builder()
                 .email(DEFAULT_VALUE + "@email.com")
                 .username(DEFAULT_VALUE)
-                .language("en")
+                .language("EN")
                 .timezone(DEFAULT_VALUE)
                 .password(DEFAULT_VALUE);
     }

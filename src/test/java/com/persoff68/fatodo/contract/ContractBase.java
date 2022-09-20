@@ -2,7 +2,7 @@ package com.persoff68.fatodo.contract;
 
 import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.client.ImageServiceClient;
-import com.persoff68.fatodo.config.constant.Provider;
+import com.persoff68.fatodo.model.constant.Provider;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.security.jwt.JwtTokenProvider;

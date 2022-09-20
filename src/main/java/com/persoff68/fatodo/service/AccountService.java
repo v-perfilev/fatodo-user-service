@@ -1,8 +1,8 @@
 package com.persoff68.fatodo.service;
 
-import com.persoff68.fatodo.config.constant.Language;
-import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.User;
+import com.persoff68.fatodo.model.constant.Language;
+import com.persoff68.fatodo.model.constant.Provider;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;
 import com.persoff68.fatodo.security.util.SecurityUtils;
@@ -67,10 +67,9 @@ public class AccountService {
                 .orElseThrow(UnauthorizedException::new);
         User user = userRepository.findById(id)
                 .orElseThrow(ModelNotFoundException::new);
-        if (Language.contains(language)) {
-            user.getInfo().setLanguage(language);
-            userRepository.save(user);
-        }
+        Language languageValue = Language.valueOf(language);
+        user.getInfo().setLanguage(languageValue);
+        userRepository.save(user);
     }
 
     private boolean isPasswordCorrect(User user, String password) {

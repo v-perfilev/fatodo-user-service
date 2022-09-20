@@ -1,10 +1,12 @@
 package com.persoff68.fatodo.builder;
 
 import com.persoff68.fatodo.config.constant.AuthorityType;
-import com.persoff68.fatodo.config.constant.Provider;
 import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.Info;
 import com.persoff68.fatodo.model.User;
+import com.persoff68.fatodo.model.constant.Gender;
+import com.persoff68.fatodo.model.constant.Language;
+import com.persoff68.fatodo.model.constant.Provider;
 import lombok.Builder;
 
 import javax.validation.constraints.NotNull;
@@ -24,8 +26,8 @@ public class TestUser extends User {
         super.setInfo(new Info());
         super.getInfo().setFirstname(DEFAULT_VALUE);
         super.getInfo().setLastname(DEFAULT_VALUE);
-        super.getInfo().setLanguage("en");
-        super.getInfo().setGender(Info.Gender.FEMALE);
+        super.getInfo().setLanguage(Language.EN);
+        super.getInfo().setGender(Gender.FEMALE);
         super.getInfo().setImageFilename(DEFAULT_VALUE);
     }
 

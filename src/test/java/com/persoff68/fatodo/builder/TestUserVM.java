@@ -15,12 +15,15 @@ public class TestUserVM extends UserVM {
                       @NotNull String username,
                       String firstname,
                       String lastname,
+                      String gender,
                       @NotNull String language,
                       @NotNull String timezone,
-                      String gender,
+                      String timeFormat,
+                      String dateFormat,
                       String imageFilename,
                       MultipartFile imageContent) {
-        super(id, username, firstname, lastname, gender, language, timezone, imageFilename, imageContent);
+        super(id, username, firstname, lastname, gender, language, timezone, timeFormat, dateFormat, imageFilename,
+                imageContent);
     }
 
     public static TestUserVMBuilder defaultBuilder() {
@@ -29,9 +32,11 @@ public class TestUserVM extends UserVM {
                 .username(DEFAULT_VALUE)
                 .firstname(DEFAULT_VALUE)
                 .lastname(DEFAULT_VALUE)
-                .language("en")
-                .timezone("Europe/Berlin")
                 .gender("FEMALE")
+                .language("EN")
+                .timezone("Europe/Berlin")
+                .timeFormat("H24")
+                .dateFormat("MDY_SLASH")
                 .imageFilename(DEFAULT_VALUE);
     }
 

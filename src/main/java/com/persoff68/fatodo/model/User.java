@@ -1,6 +1,6 @@
 package com.persoff68.fatodo.model;
 
-import com.persoff68.fatodo.config.constant.Provider;
+import com.persoff68.fatodo.model.constant.Provider;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
