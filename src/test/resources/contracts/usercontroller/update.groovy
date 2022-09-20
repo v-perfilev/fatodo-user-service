@@ -46,7 +46,7 @@ Contract.make {
                         producer([
                                 "firstname"    : "test_firstname",
                                 "lastname"     : "test_lastname",
-                                "language"     : "en",
+                                "language"     : "EN",
                                 "imageFilename": "test_image",
                         ])
                 )
@@ -76,7 +76,7 @@ Contract.make {
                 "info": [
                         "firstname"    : "test_firstname",
                         "lastname"     : "test_lastname",
-                        "language"     : "en",
+                        "language"     : "EN",
                         "imageFilename": "test_image",
                 ]
         )

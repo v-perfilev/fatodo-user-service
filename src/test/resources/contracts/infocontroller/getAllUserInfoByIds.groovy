@@ -30,7 +30,7 @@ Contract.make {
                         "username" : "current-name",
                         "firstname": "test_value",
                         "lastname" : "test_value",
-                        "language" : "en",
+                        "language" : "EN",
                 ]
         ])
     }

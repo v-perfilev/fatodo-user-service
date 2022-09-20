@@ -30,7 +30,7 @@ Contract.make {
                 "info": [
                         "firstname": "test_value",
                         "lastname": "test_value",
-                        "language": "en",
+                        "language": "EN",
                         "imageFilename": "test_value",
                 ]
         )

@@ -27,7 +27,7 @@ Contract.make {
                 "password": anyNonBlankString(),
                 "language": $(
                         consumer(anyNonBlankString()),
-                        producer("en")
+                        producer("EN")
                 ),
                 "timezone": $(
                         consumer(anyNonBlankString()),
@@ -52,7 +52,7 @@ Contract.make {
                 "info": [
                         "firstname"    : null,
                         "lastname"     : null,
-                        "language"     : "en",
+                        "language"     : "EN",
                         "imageFilename": null,
                 ]
         )

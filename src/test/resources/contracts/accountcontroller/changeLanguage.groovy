@@ -18,7 +18,7 @@ Contract.make {
         body(
                 "language": $(
                         consumer(anyNonBlankString()),
-                        producer("ru")
+                        producer("RU")
                 ),
         )
     }

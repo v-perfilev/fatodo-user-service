@@ -40,7 +40,7 @@ Contract.make {
                 "info": $(
                         consumer(any()),
                         producer([
-                                "language": "en"
+                                "language": "EN"
                         ])
                 )
         )
@@ -68,7 +68,7 @@ Contract.make {
                 "info": [
                         "firstname"    : null,
                         "lastname"     : null,
-                        "language"     : "en",
+                        "language"     : "EN",
                         "imageFilename": null,
                 ]
         )

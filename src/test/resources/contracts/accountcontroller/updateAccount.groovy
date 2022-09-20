@@ -34,11 +34,19 @@ Contract.make {
                 ),
                 "language": $(
                         consumer(any()),
-                        producer("test_language_new")
+                        producer("RU")
                 ),
                 "timezone": $(
                         consumer(any()),
                         producer("Europe/Berlin")
+                ),
+                "timeFormat": $(
+                        consumer(any()),
+                        producer("12H")
+                ),
+                "dateFormat": $(
+                        consumer(any()),
+                        producer("MDY_SLASH")
                 ),
                 "imageFilename": $(
                         consumer(any()),
@@ -61,7 +69,7 @@ Contract.make {
                 "info": [
                         "firstname"    : "test_firstname_new",
                         "lastname"     : "test_lastname_new",
-                        "language"     : "test_language_new",
+                        "language"     : "RU",
                         "imageFilename": "test_value",
                 ]
         )
