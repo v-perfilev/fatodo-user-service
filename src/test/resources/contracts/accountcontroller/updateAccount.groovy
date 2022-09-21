@@ -42,7 +42,7 @@ Contract.make {
                 ),
                 "timeFormat": $(
                         consumer(any()),
-                        producer("12H")
+                        producer("H12")
                 ),
                 "dateFormat": $(
                         consumer(any()),
