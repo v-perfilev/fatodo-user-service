@@ -8,8 +8,8 @@ import com.persoff68.fatodo.builder.TestOAuth2UserDTO;
 import com.persoff68.fatodo.builder.TestResetPasswordDTO;
 import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.config.constant.AuthorityType;
-import com.persoff68.fatodo.model.constant.Provider;
 import com.persoff68.fatodo.model.User;
+import com.persoff68.fatodo.model.constant.Provider;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
@@ -277,7 +277,7 @@ class SystemControllerIT {
         assertThat(resultDTO.getProvider()).isEqualTo(Provider.LOCAL.getValue());
         assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.USER.getValue());
         assertThat(resultDTO.isActivated()).isFalse();
-        assertThat(resultDTO.getInfo().getLanguage().toString()).isEqualTo(dto.getLanguage());
+        assertThat(resultDTO.getInfo().getLanguage()).hasToString(dto.getLanguage());
     }
 
     @Test
@@ -347,7 +347,7 @@ class SystemControllerIT {
         assertThat(resultDTO.getProviderId()).isEqualTo(dto.getProviderId());
         assertThat(resultDTO.getAuthorities()).containsOnly(AuthorityType.USER.getValue());
         assertThat(resultDTO.isActivated()).isTrue();
-        assertThat(resultDTO.getInfo().getLanguage().toString()).isEqualTo(dto.getLanguage());
+        assertThat(resultDTO.getInfo().getLanguage()).hasToString(dto.getLanguage());
     }
 
     @Test

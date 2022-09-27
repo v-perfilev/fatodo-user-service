@@ -132,7 +132,7 @@ class AccountControllerIT {
         assertThat(resultDTO.getUsername()).isEqualTo(vm.getUsername());
         assertThat(resultDTO.getInfo().getFirstname()).isEqualTo(vm.getFirstname());
         assertThat(resultDTO.getInfo().getLastname()).isEqualTo(vm.getLastname());
-        assertThat(resultDTO.getInfo().getLanguage().toString()).isEqualTo(vm.getLanguage());
+        assertThat(resultDTO.getInfo().getLanguage()).hasToString(vm.getLanguage());
         assertThat(resultDTO.getInfo().getGender()).isEqualTo(Gender.FEMALE);
         assertThat(resultDTO.getInfo().getImageFilename()).isEqualTo(vm.getImageFilename());
     }
