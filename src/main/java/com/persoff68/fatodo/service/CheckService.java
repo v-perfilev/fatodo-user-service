@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -36,12 +37,20 @@ public class CheckService {
     }
 
     public boolean doesIdExist(UUID id) {
-        return userRepository.existsById(id);
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            return false;
+        } else {
+            return !userOptional.get().isDeleted();
+        }
     }
 
     public boolean doIdsExist(List<UUID> idList) {
         List<User> userList = userRepository.findAllByIdIn(idList);
-        return userList.size() == idList.size();
+        List<User> allowedUserList = userList.stream()
+                .filter(u -> !u.isDeleted())
+                .toList();
+        return allowedUserList.size() == idList.size();
     }
 
 }

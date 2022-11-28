@@ -87,16 +87,17 @@ public class AccountService {
         User user = userRepository.findById(userId)
                 .orElseThrow(ModelNotFoundException::new);
 
+        // remove image
         String imageFilename = user.getInfo().getImageFilename();
         if (imageFilename != null) {
             imageService.deleteUserImage(imageFilename);
         }
 
+        // remove traces in other services
         contactService.deleteAccountPermanently(userId);
         itemService.deleteAccountPermanently(userId);
         chatService.deleteAccountPermanently(userId);
         eventService.deleteAccountPermanently(userId);
-        // TODO possibly remove user from checks
 
         // clear user object
         String idString = userId.toString();
