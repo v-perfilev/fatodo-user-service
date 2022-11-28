@@ -4,6 +4,7 @@ import com.persoff68.fatodo.client.ImageServiceClient;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.ImageDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,5 +26,10 @@ public class ImageService {
             imageServiceClient.deleteUserImage(filename);
         }
         return filename;
+    }
+
+    @Async
+    public void deleteUserImage(String filename) {
+        imageServiceClient.deleteUserImage(filename);
     }
 }

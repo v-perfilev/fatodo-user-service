@@ -7,7 +7,11 @@ import com.persoff68.fatodo.model.constant.Provider;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;
 import com.persoff68.fatodo.security.util.SecurityUtils;
+import com.persoff68.fatodo.service.client.ChatService;
+import com.persoff68.fatodo.service.client.ContactService;
+import com.persoff68.fatodo.service.client.EventService;
 import com.persoff68.fatodo.service.client.ImageService;
+import com.persoff68.fatodo.service.client.ItemService;
 import com.persoff68.fatodo.service.exception.ModelInvalidException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import com.persoff68.fatodo.service.exception.PermissionException;
@@ -24,6 +28,10 @@ import java.util.UUID;
 public class AccountService {
 
     private final ImageService imageService;
+    private final ContactService contactService;
+    private final ItemService itemService;
+    private final ChatService chatService;
+    private final EventService eventService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
@@ -74,18 +82,24 @@ public class AccountService {
     }
 
     public void deleteAccountPermanently() {
-        UUID id = SecurityUtils.getCurrentId()
+        UUID userId = SecurityUtils.getCurrentId()
                 .orElseThrow(UnauthorizedException::new);
-        User user = userRepository.findById(id)
+        User user = userRepository.findById(userId)
                 .orElseThrow(ModelNotFoundException::new);
 
-        // TODO delete from contacts
-        // TODO delete from items
-        // TODO delete from chats
-        // TODO delete from events
+        String imageFilename = user.getInfo().getImageFilename();
+        if (imageFilename != null) {
+            imageService.deleteUserImage(imageFilename);
+        }
+
+        contactService.deleteAccountPermanently(userId);
+        itemService.deleteAccountPermanently(userId);
+        chatService.deleteAccountPermanently(userId);
+        eventService.deleteAccountPermanently(userId);
+        // TODO possibly remove user from checks
 
         // clear user object
-        String idString = id.toString();
+        String idString = userId.toString();
         user.setEmail(idString);
         user.setUsername(idString);
         user.setPassword(idString);
