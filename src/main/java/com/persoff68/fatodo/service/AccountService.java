@@ -1,5 +1,6 @@
 package com.persoff68.fatodo.service;
 
+import com.persoff68.fatodo.model.Info;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.constant.Language;
 import com.persoff68.fatodo.model.constant.Provider;
@@ -69,6 +70,27 @@ public class AccountService {
                 .orElseThrow(ModelNotFoundException::new);
         Language languageValue = Language.valueOf(language);
         user.getInfo().setLanguage(languageValue);
+        userRepository.save(user);
+    }
+
+    public void deleteAccountPermanently() {
+        UUID id = SecurityUtils.getCurrentId()
+                .orElseThrow(UnauthorizedException::new);
+        User user = userRepository.findById(id)
+                .orElseThrow(ModelNotFoundException::new);
+
+        // TODO delete from contacts
+        // TODO delete from items
+        // TODO delete from chats
+        // TODO delete from events
+
+        // clear user object
+        String idString = id.toString();
+        user.setEmail(idString);
+        user.setUsername(idString);
+        user.setPassword(idString);
+        user.setDeleted(true);
+        user.setInfo(new Info());
         userRepository.save(user);
     }
 

@@ -36,8 +36,9 @@ public class User extends AbstractAuditingModel {
 
     private String providerId;
 
-    @NotNull
     private boolean activated;
+
+    private boolean deleted = false;
 
     @NotNull
     private Info info = new Info();
