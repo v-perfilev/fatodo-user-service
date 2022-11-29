@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.UUID;
 
-@FeignClient(name = "chat-service", contextId = "system", primary = false,
+@FeignClient(name = "chat-service", primary = false,
         configuration = {FeignSystemConfiguration.class},
         qualifiers = {"feignChatSystemServiceClient"})
 public interface ChatSystemServiceClient {

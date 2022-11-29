@@ -7,7 +7,11 @@ import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.builder.TestChangePasswordVM;
 import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.builder.TestUserVM;
+import com.persoff68.fatodo.client.ChatSystemServiceClient;
+import com.persoff68.fatodo.client.ContactSystemServiceClient;
+import com.persoff68.fatodo.client.EventSystemServiceClient;
 import com.persoff68.fatodo.client.ImageServiceClient;
+import com.persoff68.fatodo.client.ItemSystemServiceClient;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.constant.Gender;
 import com.persoff68.fatodo.model.constant.Provider;
@@ -16,6 +20,7 @@ import com.persoff68.fatodo.model.vm.ChangeLanguageVM;
 import com.persoff68.fatodo.model.vm.ChangePasswordVM;
 import com.persoff68.fatodo.model.vm.UserVM;
 import com.persoff68.fatodo.repository.UserRepository;
+import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +40,10 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -64,7 +72,15 @@ class AccountControllerIT {
     PasswordEncoder passwordEncoder;
 
     @MockBean
+    ChatSystemServiceClient chatSystemServiceClient;
+    @MockBean
+    ContactSystemServiceClient contactSystemServiceClient;
+    @MockBean
+    EventSystemServiceClient eventSystemServiceClient;
+    @MockBean
     ImageServiceClient imageServiceClient;
+    @MockBean
+    ItemSystemServiceClient itemSystemServiceClient;
 
     @BeforeEach
     void setup() {
@@ -179,6 +195,17 @@ class AccountControllerIT {
     }
 
     @Test
+    @WithCustomSecurityContext(id = "71afdeec-cffd-479f-90ca-12fca4167cda")
+    void testChangePassword_wrongProvider() throws Exception {
+        ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/password";
+        mvc.perform(put(url)
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     @WithAnonymousUser
     void testChangePassword_unauthorized() throws Exception {
         ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
@@ -189,16 +216,6 @@ class AccountControllerIT {
                 .andExpect(status().isUnauthorized());
     }
 
-    @Test
-    @WithCustomSecurityContext(id = "71afdeec-cffd-479f-90ca-12fca4167cda")
-    void testChangePassword_wrongProvider() throws Exception {
-        ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
-        String requestBody = objectMapper.writeValueAsString(vm);
-        String url = ENDPOINT + "/password";
-        mvc.perform(put(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isBadRequest());
-    }
 
     @Test
     @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
@@ -232,6 +249,26 @@ class AccountControllerIT {
         mvc.perform(put(url)
                         .contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isUnauthorized());
+    }
+
+
+    @Test
+    @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
+    void testDeleteAccountPermanently() throws Exception {
+        mvc.perform(delete(ENDPOINT))
+                .andExpect(status().isOk());
+
+        verify(chatSystemServiceClient, timeout(1000)).deleteAccountPermanently(CURRENT_ID);
+        verify(contactSystemServiceClient, timeout(1000)).deleteAccountPermanently(CURRENT_ID);
+        verify(eventSystemServiceClient, timeout(1000)).deleteAccountPermanently(CURRENT_ID);
+        verify(itemSystemServiceClient, timeout(1000)).deleteAccountPermanently(CURRENT_ID);
+
+        User user = userRepository.findById(CURRENT_ID).orElseThrow(ModelNotFoundException::new);
+
+        assertThat(user.getEmail()).isEqualTo(CURRENT_ID.toString());
+        assertThat(user.getUsername()).isEqualTo(CURRENT_ID.toString());
+        assertThat(user.getPassword()).isEqualTo(CURRENT_ID.toString());
+        assertThat(user.isDeleted()).isTrue();
     }
 
 }

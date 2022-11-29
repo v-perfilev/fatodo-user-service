@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.UUID;
 
-@FeignClient(name = "event-service", contextId = "system", primary = false,
+@FeignClient(name = "event-service", primary = false,
         configuration = {FeignSystemConfiguration.class},
         qualifiers = {"feignEventSystemServiceClient"})
 public interface EventSystemServiceClient {

@@ -28,6 +28,7 @@ class CheckControllerIT {
     private static final String ENDPOINT = "/api/check";
 
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID USER_ID_DELETED = UUID.randomUUID();
     private static final String LOCAL_NAME = "local-name";
     private static final String NOT_EXISTING_NAME = "not-existing-name";
 
@@ -50,7 +51,15 @@ class CheckControllerIT {
                 .email(LOCAL_NAME + "@email.com")
                 .build();
 
+        User localUserDeleted = TestUser.defaultBuilder()
+                .id(USER_ID_DELETED)
+                .username(LOCAL_NAME + "_deleted")
+                .email(LOCAL_NAME + "_deleted@email.com")
+                .deleted(true)
+                .build();
+
         userRepository.save(localUser);
+        userRepository.save(localUserDeleted);
     }
 
     @AfterEach
@@ -151,6 +160,17 @@ class CheckControllerIT {
 
     @Test
     @WithAnonymousUser
+    void testDoesIdExist_false_deleted() throws Exception {
+        String url = ENDPOINT + "/id/" + USER_ID_DELETED;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        boolean doesExist = Boolean.parseBoolean(resultString);
+        assertThat(doesExist).isFalse();
+    }
+
+    @Test
+    @WithAnonymousUser
     void testDoesIdExist_true() throws Exception {
         String url = ENDPOINT + "/id/" + USER_ID;
         ResultActions resultActions = mvc.perform(get(url))
@@ -164,6 +184,18 @@ class CheckControllerIT {
     @WithAnonymousUser
     void testDoIdsExist_false() throws Exception {
         String params = String.join(",", USER_ID.toString(), UUID.randomUUID().toString());
+        String url = ENDPOINT + "/id?ids=" + params;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        boolean doesExist = Boolean.parseBoolean(resultString);
+        assertThat(doesExist).isFalse();
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testDoIdsExist_false_deleted() throws Exception {
+        String params = String.join(",", USER_ID.toString(), USER_ID_DELETED.toString());
         String url = ENDPOINT + "/id?ids=" + params;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());

@@ -20,8 +20,8 @@ public class TestUser extends User {
     @Builder
     public TestUser(UUID id, @NotNull String email, @NotNull String username, @NotNull Set<Authority> authorities,
                     String password, @NotNull Provider provider, String providerId, @NotNull boolean activated,
-                    @NotNull Info info) {
-        super(email, username, authorities, password, provider, providerId, activated, info);
+                    @NotNull boolean deleted, @NotNull Info info) {
+        super(email, username, authorities, password, provider, providerId, activated, deleted, info);
         super.setId(id);
         super.setInfo(new Info());
         super.getInfo().setFirstname(DEFAULT_VALUE);
@@ -39,7 +39,8 @@ public class TestUser extends User {
                 .authorities(Collections.singleton(new Authority(AuthorityType.USER.getValue())))
                 .password(DEFAULT_VALUE)
                 .provider(Provider.LOCAL)
-                .activated(true);
+                .activated(true)
+                .deleted(false);
     }
 
 }

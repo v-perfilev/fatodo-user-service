@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.UUID;
 
-@FeignClient(name = "item-service", contextId = "system", primary = false,
+@FeignClient(name = "item-service", primary = false,
         configuration = {FeignSystemConfiguration.class},
         qualifiers = {"feignItemSystemServiceClient"})
 public interface ItemSystemServiceClient {

@@ -107,6 +107,7 @@ public class AccountService {
         user.setDeleted(true);
         user.setInfo(new Info());
         userRepository.save(user);
+
     }
 
     private boolean isPasswordCorrect(User user, String password) {
