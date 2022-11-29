@@ -7,7 +7,6 @@ import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserInfoDTO;
-import com.persoff68.fatodo.model.dto.UserSummaryDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,6 +52,7 @@ class InfoControllerIT {
                 .username(CURRENT_NAME)
                 .email(CURRENT_NAME + "@email.com")
                 .activated(false)
+                .deleted(true)
                 .build();
 
         User localUser = TestUser.defaultBuilder()
@@ -77,9 +77,10 @@ class InfoControllerIT {
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class,
-                UserSummaryDTO.class);
-        List<UserInfoDTO> userSummaryDTOList = objectMapper.readValue(resultString, collectionType);
-        assertThat(userSummaryDTOList).hasSize(1);
+                UserInfoDTO.class);
+        List<UserInfoDTO> userInfoDTOList = objectMapper.readValue(resultString, collectionType);
+        assertThat(userInfoDTOList).hasSize(1);
+        assertThat(userInfoDTOList.get(0).isDeleted()).isTrue();
     }
 
     @Test

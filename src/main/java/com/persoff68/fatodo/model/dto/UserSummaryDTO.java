@@ -19,4 +19,6 @@ public class UserSummaryDTO extends AbstractDTO {
 
     private String imageFilename;
 
+    private boolean deleted;
+
 }

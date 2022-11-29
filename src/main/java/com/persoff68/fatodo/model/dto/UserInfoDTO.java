@@ -21,4 +21,6 @@ public class UserInfoDTO extends AbstractDTO {
 
     private String gender;
 
+    private boolean deleted;
+
 }

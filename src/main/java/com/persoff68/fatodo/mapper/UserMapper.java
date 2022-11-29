@@ -31,12 +31,14 @@ public interface UserMapper {
     @Mapping(source = "info.lastname", target = "lastname")
     @Mapping(source = "info.imageFilename", target = "imageFilename")
     @Mapping(source = "info.gender", target = "gender")
+    @Mapping(source = "deleted", target = "deleted")
     UserSummaryDTO pojoToSummaryDTO(User user);
 
     @Mapping(source = "info.firstname", target = "firstname")
     @Mapping(source = "info.lastname", target = "lastname")
     @Mapping(source = "info.language", target = "language")
     @Mapping(source = "info.gender", target = "gender")
+    @Mapping(source = "deleted", target = "deleted")
     UserInfoDTO pojoToInfoDTO(User user);
 
     @Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringsIntoAuthorities")
