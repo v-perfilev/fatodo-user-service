@@ -2,6 +2,7 @@ package com.persoff68.fatodo.builder;
 
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.model.Info;
+import com.persoff68.fatodo.model.Settings;
 import com.persoff68.fatodo.model.constant.Language;
 import com.persoff68.fatodo.model.constant.Provider;
 import com.persoff68.fatodo.model.dto.UserDTO;
@@ -20,14 +21,15 @@ public class TestUserDTO extends UserDTO {
     @Builder
     public TestUserDTO(UUID id, @NotNull @Email @Size(min = 5, max = 50) String email, @NotNull @Size(min = 5, max =
             50) String username, Set<String> authorities, String provider, String providerId, boolean activated,
-                       boolean deleted, Info info) {
-        super(email, username, authorities, provider, providerId, activated, deleted, info);
+                       boolean deleted, Info info, Settings settings) {
+        super(email, username, authorities, provider, providerId, activated, deleted, info, settings);
         super.setId(id);
         super.setInfo(new Info());
         super.getInfo().setFirstname(DEFAULT_VALUE);
         super.getInfo().setLastname(DEFAULT_VALUE);
         super.getInfo().setLanguage(Language.EN);
         super.getInfo().setImageFilename(DEFAULT_VALUE);
+        super.setSettings(new Settings());
     }
 
     public static TestUserDTOBuilder defaultBuilder() {

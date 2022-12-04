@@ -21,9 +21,10 @@ public class TestUserVM extends UserVM {
                       String timeFormat,
                       String dateFormat,
                       String imageFilename,
-                      MultipartFile imageContent) {
+                      MultipartFile imageContent,
+                      boolean emailReminders) {
         super(id, username, firstname, lastname, gender, language, timezone, timeFormat, dateFormat, imageFilename,
-                imageContent);
+                imageContent, emailReminders);
     }
 
     public static TestUserVMBuilder defaultBuilder() {

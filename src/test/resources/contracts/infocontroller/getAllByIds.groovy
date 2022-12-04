@@ -25,14 +25,12 @@ Contract.make {
         }
         body([
                 [
-                        "id"      : "8f9a7cae-73c8-4ad6-b135-5bd109b51d2e",
-                        "email"   : "current-name@email.com",
-                        "username": "current-name",
-                        "info"    : [
-                                "firstname": "test_value",
-                                "lastname" : "test_value",
-                                "language" : "EN",
-                        ]
+                        "id"       : "8f9a7cae-73c8-4ad6-b135-5bd109b51d2e",
+                        "email"    : "current-name@email.com",
+                        "username" : "current-name",
+                        "firstname": "test_value",
+                        "lastname" : "test_value",
+                        "deleted"  : false,
                 ]
         ])
     }

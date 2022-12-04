@@ -3,6 +3,7 @@ package com.persoff68.fatodo.builder;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.Info;
+import com.persoff68.fatodo.model.Settings;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.constant.Gender;
 import com.persoff68.fatodo.model.constant.Language;
@@ -20,8 +21,8 @@ public class TestUser extends User {
     @Builder
     public TestUser(UUID id, @NotNull String email, @NotNull String username, @NotNull Set<Authority> authorities,
                     String password, @NotNull Provider provider, String providerId, @NotNull boolean activated,
-                    @NotNull boolean deleted, @NotNull Info info) {
-        super(email, username, authorities, password, provider, providerId, activated, deleted, info);
+                    @NotNull boolean deleted, @NotNull Info info, @NotNull Settings settings) {
+        super(email, username, authorities, password, provider, providerId, activated, deleted, info, settings);
         super.setId(id);
         super.setInfo(new Info());
         super.getInfo().setFirstname(DEFAULT_VALUE);
@@ -29,6 +30,7 @@ public class TestUser extends User {
         super.getInfo().setLanguage(Language.EN);
         super.getInfo().setGender(Gender.FEMALE);
         super.getInfo().setImageFilename(DEFAULT_VALUE);
+        super.setSettings(new Settings());
     }
 
     public static TestUserBuilder defaultBuilder() {

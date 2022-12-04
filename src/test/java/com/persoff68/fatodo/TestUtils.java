@@ -11,9 +11,17 @@ public class TestUtils {
     public static MultiValueMap<String, String> objectToMap(Object object) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(object);
-        Map<String, String> map = objectMapper.readValue(json, Map.class);
+        Map<String, Object> map = objectMapper.readValue(json, Map.class);
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
-        map.forEach(multiValueMap::add);
+        map.forEach((key, value) -> {
+            if (value == null) {
+                multiValueMap.add(key, null);
+            } else if (value instanceof String) {
+                multiValueMap.add(key, (String) value);
+            } else {
+                multiValueMap.add(key, String.valueOf(value));
+            }
+        });
         return multiValueMap;
     }
 

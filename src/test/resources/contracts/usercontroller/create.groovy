@@ -42,6 +42,12 @@ Contract.make {
                         producer([
                                 "language": "EN"
                         ])
+                ),
+                "settings": $(
+                        consumer(any()),
+                        producer([
+                                "emailReminders": true
+                        ])
                 )
         )
         bodyMatchers {
