@@ -72,7 +72,7 @@ class InfoControllerIT {
     @Test
     @WithCustomSecurityContext
     void testGetAllUserInfoByIds_ok() throws Exception {
-        String url = ENDPOINT + "/user?ids=" + CURRENT_ID;
+        String url = ENDPOINT + "?ids=" + CURRENT_ID;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
@@ -86,7 +86,176 @@ class InfoControllerIT {
     @Test
     @WithAnonymousUser
     void testGetAllUserInfoByIds_unauthorized() throws Exception {
-        String url = ENDPOINT + "/user?ids=" + CURRENT_ID;
+        String url = ENDPOINT + "?ids=" + CURRENT_ID;
+        mvc.perform(get(url))
+                .andExpect(status().isUnauthorized());
+    }
+
+
+    @Test
+    @WithCustomSecurityContext
+    void testGetAllByUsernamePart_ok() throws Exception {
+        String usernamePart = CURRENT_NAME.substring(0, 4).toUpperCase();
+        String url = ENDPOINT + "/" + usernamePart + "/username-part";
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class,
+                UserInfoDTO.class);
+        List<UserInfoDTO> dtoList = objectMapper.readValue(resultString, collectionType);
+        assertThat(dtoList).hasSize(1);
+        assertThat(dtoList.get(0).getUsername()).isEqualTo(CURRENT_NAME);
+    }
+
+    @Test
+    @WithCustomSecurityContext
+    void testGetAllByUsernamePart_ok_empty() throws Exception {
+        String usernamePart = CURRENT_NAME.substring(1, 4);
+        String url = ENDPOINT + "/" + usernamePart + "/username-part";
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class,
+                UserInfoDTO.class);
+        List<UserInfoDTO> dtoList = objectMapper.readValue(resultString, collectionType);
+        assertThat(dtoList).isEmpty();
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testGetAllByUsernamePart_unauthorized() throws Exception {
+        String usernamePart = "current";
+        String url = ENDPOINT + "/" + usernamePart + "/username-part";
+        mvc.perform(get(url))
+                .andExpect(status().isUnauthorized());
+    }
+
+
+    @Test
+    @WithCustomSecurityContext
+    void testGetByUsername_ok() throws Exception {
+        String username = LOCAL_NAME;
+        String url = ENDPOINT + "/" + username + "/username";
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        UserInfoDTO resultDTO = objectMapper.readValue(resultString, UserInfoDTO.class);
+        assertThat(resultDTO.getUsername()).isEqualTo(username);
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testGetByUsername_unauthorized() throws Exception {
+        String url = ENDPOINT + "/" + LOCAL_NAME + "/username";
+        mvc.perform(get(url))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithCustomSecurityContext
+    void testGetByUsername_notFound() throws Exception {
+        String username = "not_exists";
+        String url = ENDPOINT + "/" + username + "/username";
+        mvc.perform(get(url))
+                .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    @WithCustomSecurityContext
+    void testGetByUsernameOrEmail_ok_username() throws Exception {
+        String username = LOCAL_NAME;
+        String url = ENDPOINT + "/" + username + "/username-or-email";
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        UserInfoDTO resultDTO = objectMapper.readValue(resultString, UserInfoDTO.class);
+        assertThat(resultDTO.getUsername()).isEqualTo(username);
+    }
+
+    @Test
+    @WithCustomSecurityContext
+    void testGetByUsernameOrEmail_ok_email() throws Exception {
+        String email = LOCAL_NAME + "@email.com";
+        String url = ENDPOINT + "/" + email + "/username-or-email";
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        UserInfoDTO resultDTO = objectMapper.readValue(resultString, UserInfoDTO.class);
+        assertThat(resultDTO).isNotNull();
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testGetByUsernameOrEmail_unauthorized() throws Exception {
+        String url = ENDPOINT + "/" + LOCAL_NAME + "/username-or-email";
+        mvc.perform(get(url))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithCustomSecurityContext
+    void testGetByUsernameOrEmail_notFound() throws Exception {
+        String username = "not_exists";
+        String url = ENDPOINT + "/" + username + "/username-or-email";
+        mvc.perform(get(url))
+                .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    @WithCustomSecurityContext
+    void testGetAllUsernamesByIds_ok() throws Exception {
+        String url = ENDPOINT + "/username?ids=" + CURRENT_ID;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, String.class);
+        List<String> usernameList = objectMapper.readValue(resultString, collectionType);
+        assertThat(usernameList).hasSize(1);
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testGetAllUsernamesByIds_unauthorized() throws Exception {
+        String url = ENDPOINT + "/username?ids=" + CURRENT_ID;
+        mvc.perform(get(url))
+                .andExpect(status().isUnauthorized());
+    }
+
+
+    @Test
+    @WithCustomSecurityContext
+    void testGetAllIdsByUsername_ok() throws Exception {
+        String usernamePart = CURRENT_NAME.substring(0, 4).toUpperCase();
+        String url = ENDPOINT + "/ids/" + usernamePart + "/username-part";
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, UUID.class);
+        List<UUID> idsList = objectMapper.readValue(resultString, collectionType);
+        assertThat(idsList).hasSize(1);
+        assertThat(idsList.get(0)).isNotNull();
+    }
+
+    @Test
+    @WithCustomSecurityContext
+    void testGetAllIdsByUsername_ok_empty() throws Exception {
+        String usernamePart = CURRENT_NAME.substring(1, 4);
+        String url = ENDPOINT + "/ids/" + usernamePart + "/username-part";
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, UUID.class);
+        List<UUID> idsList = objectMapper.readValue(resultString, collectionType);
+        assertThat(idsList).isEmpty();
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testGetAllIdsByUsername_unauthorized() throws Exception {
+        String usernamePart = "current";
+        String url = ENDPOINT + "/ids/" + usernamePart + "/username-part";
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
     }

@@ -8,7 +8,6 @@ import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserInfoDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
-import com.persoff68.fatodo.model.dto.UserSummaryDTO;
 import com.persoff68.fatodo.model.vm.UserVM;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -30,12 +29,6 @@ public interface UserMapper {
     @Mapping(source = "info.firstname", target = "firstname")
     @Mapping(source = "info.lastname", target = "lastname")
     @Mapping(source = "info.imageFilename", target = "imageFilename")
-    @Mapping(source = "info.gender", target = "gender")
-    @Mapping(source = "deleted", target = "deleted")
-    UserSummaryDTO pojoToSummaryDTO(User user);
-
-    @Mapping(source = "info.firstname", target = "firstname")
-    @Mapping(source = "info.lastname", target = "lastname")
     @Mapping(source = "info.language", target = "language")
     @Mapping(source = "info.gender", target = "gender")
     @Mapping(source = "deleted", target = "deleted")
