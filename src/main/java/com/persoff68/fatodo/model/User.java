@@ -43,4 +43,7 @@ public class User extends AbstractAuditingModel {
     @NotNull
     private Info info = new Info();
 
+    @NotNull
+    private Settings settings = new Settings();
+
 }

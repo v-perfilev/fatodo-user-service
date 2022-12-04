@@ -49,6 +49,7 @@ public class AccountService {
 
         user.setUsername(newUser.getUsername());
         user.setInfo(newUser.getInfo());
+        user.setSettings(newUser.getSettings());
 
         String imageFilename = imageService.updateUser(user, newUser, image);
         user.getInfo().setImageFilename(imageFilename);

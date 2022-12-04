@@ -46,7 +46,7 @@ public class AccountController {
     }
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UserDTO> updateData(@ModelAttribute @Valid UserVM userVM) {
+    public ResponseEntity<UserDTO> update(@ModelAttribute @Valid UserVM userVM) {
         User newUser = userMapper.vmToPojo(userVM);
         byte[] imageContent = getBytesFromMultipartFile(userVM.getImageContent());
         User user = accountService.update(newUser, imageContent);

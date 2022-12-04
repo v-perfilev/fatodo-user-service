@@ -41,4 +41,6 @@ public class UserVM {
 
     private MultipartFile imageContent;
 
+    private boolean emailReminders;
+
 }

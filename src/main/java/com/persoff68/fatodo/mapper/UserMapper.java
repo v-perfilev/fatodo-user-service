@@ -52,6 +52,7 @@ public interface UserMapper {
     @Mapping(source = "timeFormat", target = "info.timeFormat")
     @Mapping(source = "dateFormat", target = "info.dateFormat")
     @Mapping(source = "gender", target = "info.gender")
+    @Mapping(source = "emailReminders", target = "settings.emailReminders")
     User vmToPojo(UserVM userVM);
 
 
