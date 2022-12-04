@@ -20,8 +20,8 @@ public class TestUserDTO extends UserDTO {
     @Builder
     public TestUserDTO(UUID id, @NotNull @Email @Size(min = 5, max = 50) String email, @NotNull @Size(min = 5, max =
             50) String username, Set<String> authorities, String provider, String providerId, boolean activated,
-                       Info info) {
-        super(email, username, authorities, provider, providerId, activated, info);
+                       boolean deleted, Info info) {
+        super(email, username, authorities, provider, providerId, activated, deleted, info);
         super.setId(id);
         super.setInfo(new Info());
         super.getInfo().setFirstname(DEFAULT_VALUE);

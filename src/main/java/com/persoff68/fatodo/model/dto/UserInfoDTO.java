@@ -19,8 +19,6 @@ public class UserInfoDTO extends AbstractDTO {
 
     private String imageFilename;
 
-    private String language;
-
     private String gender;
 
     private boolean deleted;

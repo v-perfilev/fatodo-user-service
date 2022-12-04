@@ -1,6 +1,7 @@
 package com.persoff68.fatodo.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.builder.TestLocalUserDTO;
@@ -13,6 +14,7 @@ import com.persoff68.fatodo.model.constant.Provider;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
+import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -27,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -258,6 +261,38 @@ class SystemControllerIT {
         mvc.perform(get(url))
                 .andExpect(status().isNotFound());
     }
+
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    void testGetAllDataByIds_ok() throws Exception {
+        String url = ENDPOINT + "/data?ids=" + CURRENT_ID;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class,
+                UserDTO.class);
+        List<UserDTO> userDTOList = objectMapper.readValue(resultString, collectionType);
+        assertThat(userDTOList).hasSize(1);
+        assertThat(userDTOList.get(0).isDeleted()).isFalse();
+    }
+
+    @Test
+    @WithCustomSecurityContext(authority = "ROLE_USER")
+    void testGetAllDataByIds_forbidden() throws Exception {
+        String url = ENDPOINT + "/data?ids=" + CURRENT_ID;
+        mvc.perform(get(url))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testGetAllDataByIds_unauthorized() throws Exception {
+        String url = ENDPOINT + "/data?ids=" + CURRENT_ID;
+        mvc.perform(get(url))
+                .andExpect(status().isUnauthorized());
+    }
+
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")

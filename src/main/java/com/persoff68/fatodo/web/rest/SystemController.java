@@ -5,6 +5,7 @@ import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
 import com.persoff68.fatodo.model.dto.OAuth2UserDTO;
 import com.persoff68.fatodo.model.dto.ResetPasswordDTO;
+import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -67,6 +70,13 @@ public class SystemController {
         User user = userService.getByUsernameOrEmail(usernameOrEmail);
         UserPrincipalDTO userPrincipalDTO = userMapper.pojoToPrincipalDTO(user);
         return ResponseEntity.ok(userPrincipalDTO);
+    }
+
+    @GetMapping(value = "/data")
+    public ResponseEntity<List<UserDTO>> getAllUserDataByIds(@RequestParam("ids") List<UUID> idList) {
+        List<User> userList = userService.getAllByIds(idList);
+        List<UserDTO> userDTOList = userList.stream().map(userMapper::pojoToDTO).toList();
+        return ResponseEntity.ok(userDTOList);
     }
 
     @PostMapping(value = "/local")

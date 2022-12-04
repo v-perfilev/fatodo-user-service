@@ -34,6 +34,8 @@ public class UserDTO extends AbstractAuditingDTO {
 
     private boolean activated;
 
+    private boolean deleted;
+
     private Info info;
 
 

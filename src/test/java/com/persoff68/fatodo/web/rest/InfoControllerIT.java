@@ -71,7 +71,7 @@ class InfoControllerIT {
 
     @Test
     @WithCustomSecurityContext
-    void testGetAllUserInfoByIds_ok() throws Exception {
+    void testGetAllByIds_ok() throws Exception {
         String url = ENDPOINT + "?ids=" + CURRENT_ID;
         ResultActions resultActions = mvc.perform(get(url))
                 .andExpect(status().isOk());
@@ -85,7 +85,7 @@ class InfoControllerIT {
 
     @Test
     @WithAnonymousUser
-    void testGetAllUserInfoByIds_unauthorized() throws Exception {
+    void testGetAllByIds_unauthorized() throws Exception {
         String url = ENDPOINT + "?ids=" + CURRENT_ID;
         mvc.perform(get(url))
                 .andExpect(status().isUnauthorized());
