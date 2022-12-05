@@ -76,8 +76,10 @@ Contract.make {
                 "info": [
                         "firstname"    : "test_firstname",
                         "lastname"     : "test_lastname",
-                        "language"     : "EN",
                         "imageFilename": "test_image",
+                ],
+                "settings": [
+                        "language": "EN",
                 ]
         )
     }

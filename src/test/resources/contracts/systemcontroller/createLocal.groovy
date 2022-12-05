@@ -52,8 +52,10 @@ Contract.make {
                 "info": [
                         "firstname"    : null,
                         "lastname"     : null,
-                        "language"     : "EN",
                         "imageFilename": null,
+                ],
+                "settings": [
+                        "language": "EN",
                 ]
         )
     }

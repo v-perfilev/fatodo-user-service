@@ -31,8 +31,10 @@ Contract.make {
                         "info"       : [
                                 "firstname"    : "test_value",
                                 "lastname"     : "test_value",
-                                "language"     : "EN",
                                 "imageFilename": "test_value",
+                        ],
+                        "settings"   : [
+                                "language": "EN",
                         ]
                 ],
                 [
@@ -45,8 +47,10 @@ Contract.make {
                         "info"       : [
                                 "firstname"    : "test_value",
                                 "lastname"     : "test_value",
-                                "language"     : "EN",
                                 "imageFilename": "test_value",
+                        ],
+                        "settings"   : [
+                                "language": "EN",
                         ]
                 ],
                 [
@@ -59,8 +63,10 @@ Contract.make {
                         "info"       : [
                                 "firstname"    : "test_value",
                                 "lastname"     : "test_value",
-                                "language"     : "EN",
                                 "imageFilename": "test_value",
+                        ],
+                        "settings"   : [
+                                "language": "EN",
                         ]
                 ]
         ])

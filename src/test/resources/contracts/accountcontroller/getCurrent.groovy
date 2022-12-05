@@ -28,10 +28,12 @@ Contract.make {
                 "provider": "LOCAL",
                 "providerId": null,
                 "info": [
-                        "firstname": "test_value",
-                        "lastname": "test_value",
-                        "language": "EN",
+                        "firstname"    : "test_value",
+                        "lastname"     : "test_value",
                         "imageFilename": "test_value",
+                ],
+                "settings": [
+                        "language": "EN",
                 ]
         )
     }

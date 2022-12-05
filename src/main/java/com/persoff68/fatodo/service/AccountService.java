@@ -1,6 +1,7 @@
 package com.persoff68.fatodo.service;
 
 import com.persoff68.fatodo.model.Info;
+import com.persoff68.fatodo.model.Settings;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.constant.Language;
 import com.persoff68.fatodo.model.constant.Provider;
@@ -12,9 +13,7 @@ import com.persoff68.fatodo.service.client.ContactService;
 import com.persoff68.fatodo.service.client.EventService;
 import com.persoff68.fatodo.service.client.ImageService;
 import com.persoff68.fatodo.service.client.ItemService;
-import com.persoff68.fatodo.service.exception.ModelInvalidException;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
-import com.persoff68.fatodo.service.exception.PermissionException;
 import com.persoff68.fatodo.service.exception.WrongPasswordException;
 import com.persoff68.fatodo.service.exception.WrongProviderException;
 import lombok.RequiredArgsConstructor;
@@ -35,26 +34,28 @@ public class AccountService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public User update(User newUser, byte[] image) {
-        UUID currentUserId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
-        UUID newUserId = newUser.getId();
-        if (newUserId == null) {
-            throw new ModelInvalidException();
-        }
-        if (!currentUserId.equals(newUser.getId())) {
-            throw new PermissionException();
-        }
-        User user = userRepository.findById(newUserId)
+    public void updateInfo(String username, Info info, byte[] image) {
+        UUID userId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
+        User user = userRepository.findById(userId)
                 .orElseThrow(ModelNotFoundException::new);
 
-        user.setUsername(newUser.getUsername());
-        user.setInfo(newUser.getInfo());
-        user.setSettings(newUser.getSettings());
+        String imageFilename = imageService.updateUser(user.getInfo(), info, image);
 
-        String imageFilename = imageService.updateUser(user, newUser, image);
+        user.setUsername(username);
+        user.setInfo(info);
         user.getInfo().setImageFilename(imageFilename);
 
-        return userRepository.save(user);
+        userRepository.save(user);
+    }
+
+    public void updateSettings(Settings settings) {
+        UUID userId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
+        User user = userRepository.findById(userId)
+                .orElseThrow(ModelNotFoundException::new);
+
+        user.setSettings(settings);
+
+        userRepository.save(user);
     }
 
     public void changePassword(String oldPassword, String newPassword) {
@@ -78,7 +79,7 @@ public class AccountService {
         User user = userRepository.findById(id)
                 .orElseThrow(ModelNotFoundException::new);
         Language languageValue = Language.valueOf(language);
-        user.getInfo().setLanguage(languageValue);
+        user.getSettings().setLanguage(languageValue);
         userRepository.save(user);
     }
 

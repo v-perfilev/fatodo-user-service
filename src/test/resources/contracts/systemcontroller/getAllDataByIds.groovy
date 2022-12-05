@@ -32,7 +32,10 @@ Contract.make {
                         "info"    : [
                                 "firstname": "test_value",
                                 "lastname" : "test_value",
-                                "language" : "EN",
+
+                        ],
+                        "settings": [
+                                "language": "EN",
                         ]
                 ]
         ])

@@ -27,9 +27,9 @@ public class TestUserDTO extends UserDTO {
         super.setInfo(new Info());
         super.getInfo().setFirstname(DEFAULT_VALUE);
         super.getInfo().setLastname(DEFAULT_VALUE);
-        super.getInfo().setLanguage(Language.EN);
         super.getInfo().setImageFilename(DEFAULT_VALUE);
         super.setSettings(new Settings());
+        super.getSettings().setLanguage(Language.EN);
     }
 
     public static TestUserDTOBuilder defaultBuilder() {

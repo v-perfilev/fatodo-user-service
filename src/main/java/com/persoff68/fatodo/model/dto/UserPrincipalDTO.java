@@ -1,6 +1,7 @@
 package com.persoff68.fatodo.model.dto;
 
 import com.persoff68.fatodo.model.Info;
+import com.persoff68.fatodo.model.Settings;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -24,6 +25,10 @@ public class UserPrincipalDTO extends AbstractDTO {
 
     private boolean activated;
 
+    private boolean deleted;
+
     private Info info;
+
+    private Settings settings;
 
 }

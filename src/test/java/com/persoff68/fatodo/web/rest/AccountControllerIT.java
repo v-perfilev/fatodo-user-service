@@ -5,20 +5,21 @@ import com.persoff68.fatodo.FatodoUserServiceApplication;
 import com.persoff68.fatodo.TestUtils;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.builder.TestChangePasswordVM;
+import com.persoff68.fatodo.builder.TestInfoVM;
+import com.persoff68.fatodo.builder.TestSettingsVM;
 import com.persoff68.fatodo.builder.TestUser;
-import com.persoff68.fatodo.builder.TestUserVM;
 import com.persoff68.fatodo.client.ChatSystemServiceClient;
 import com.persoff68.fatodo.client.ContactSystemServiceClient;
 import com.persoff68.fatodo.client.EventSystemServiceClient;
 import com.persoff68.fatodo.client.ImageServiceClient;
 import com.persoff68.fatodo.client.ItemSystemServiceClient;
 import com.persoff68.fatodo.model.User;
-import com.persoff68.fatodo.model.constant.Gender;
 import com.persoff68.fatodo.model.constant.Provider;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.vm.ChangeLanguageVM;
 import com.persoff68.fatodo.model.vm.ChangePasswordVM;
-import com.persoff68.fatodo.model.vm.UserVM;
+import com.persoff68.fatodo.model.vm.InfoVM;
+import com.persoff68.fatodo.model.vm.SettingsVM;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
 import org.junit.jupiter.api.AfterEach;
@@ -84,25 +85,14 @@ class AccountControllerIT {
 
     @BeforeEach
     void setup() {
-        User currentUser = TestUser.defaultBuilder()
-                .id(CURRENT_ID)
-                .username(CURRENT_NAME)
-                .email(CURRENT_NAME + "@email.com")
-                .password(passwordEncoder.encode("test_password"))
-                .build();
+        User currentUser = TestUser.defaultBuilder().id(CURRENT_ID).username(CURRENT_NAME).email(CURRENT_NAME +
+                "@email.com").password(passwordEncoder.encode("test_password")).build();
 
-        User localUser = TestUser.defaultBuilder()
-                .username(LOCAL_NAME)
-                .email(LOCAL_NAME + "@email.com")
-                .password(passwordEncoder.encode("test_password"))
-                .build();
+        User localUser =
+                TestUser.defaultBuilder().username(LOCAL_NAME).email(LOCAL_NAME + "@email.com").password(passwordEncoder.encode("test_password")).build();
 
-        User googleUser = TestUser.defaultBuilder()
-                .id(GOOGLE_ID)
-                .username(GOOGLE_NAME)
-                .email(GOOGLE_NAME + "@email.com")
-                .provider(Provider.GOOGLE)
-                .build();
+        User googleUser = TestUser.defaultBuilder().id(GOOGLE_ID).username(GOOGLE_NAME).email(GOOGLE_NAME + "@email" +
+                ".com").provider(Provider.GOOGLE).build();
 
         userRepository.save(currentUser);
         userRepository.save(localUser);
@@ -120,8 +110,7 @@ class AccountControllerIT {
     @Test
     @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
     void testGetCurrentUser_ok() throws Exception {
-        ResultActions resultActions = mvc.perform(get(ENDPOINT))
-                .andExpect(status().isOk());
+        ResultActions resultActions = mvc.perform(get(ENDPOINT)).andExpect(status().isOk());
         String resultString = resultActions.andReturn().getResponse().getContentAsString();
         UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
         assertThat(resultDTO.getId()).isEqualTo(CURRENT_ID);
@@ -130,58 +119,51 @@ class AccountControllerIT {
     @Test
     @WithAnonymousUser
     void testGetCurrentUser_unauthorized() throws Exception {
-        mvc.perform(get(ENDPOINT))
-                .andExpect(status().isUnauthorized());
+        mvc.perform(get(ENDPOINT)).andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
-    void testUpdate_ok() throws Exception {
-        UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
+    void testUpdateInfo_ok() throws Exception {
+        InfoVM vm = TestInfoVM.defaultBuilder()
+                .username("test_username")
+                .firstname("test_firstname")
+                .lastname("test_lastname")
+                .gender("DIVERSE")
+                .build();
         MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
-        ResultActions resultActions = mvc.perform(put(ENDPOINT)
-                        .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
-                .andExpect(status().isOk());
-        String resultString = resultActions.andReturn().getResponse().getContentAsString();
-        UserDTO resultDTO = objectMapper.readValue(resultString, UserDTO.class);
-        assertThat(resultDTO.getId()).isNotNull();
-        assertThat(resultDTO.getUsername()).isEqualTo(vm.getUsername());
-        assertThat(resultDTO.getInfo().getFirstname()).isEqualTo(vm.getFirstname());
-        assertThat(resultDTO.getInfo().getLastname()).isEqualTo(vm.getLastname());
-        assertThat(resultDTO.getInfo().getLanguage()).hasToString(vm.getLanguage());
-        assertThat(resultDTO.getInfo().getGender()).isEqualTo(Gender.FEMALE);
-        assertThat(resultDTO.getInfo().getImageFilename()).isEqualTo(vm.getImageFilename());
+        String url = ENDPOINT + "/info";
+        mvc.perform(put(url).contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap)).andExpect(status().isOk());
     }
 
     @Test
     @WithAnonymousUser
-    void testUpdate_unauthorized() throws Exception {
-        UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
+    void testUpdateInfo_unauthorized() throws Exception {
+        InfoVM vm = TestInfoVM.defaultBuilder().build();
         MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
-        mvc.perform(put(ENDPOINT)
-                        .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
-                .andExpect(status().isUnauthorized());
+        String url = ENDPOINT + "/info";
+        mvc.perform(put(url).contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap)).andExpect(status().isUnauthorized());
+    }
+
+
+    @Test
+    @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
+    void testUpdateSettings_ok() throws Exception {
+        SettingsVM vm = TestSettingsVM.defaultBuilder().build();
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/settings";
+        mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(status().isOk());
     }
 
     @Test
-    @WithCustomSecurityContext
-    void testUpdate_forbidden_wrongUser() throws Exception {
-        UserVM vm = TestUserVM.defaultBuilder().id(CURRENT_ID).build();
-        MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
-        mvc.perform(put(ENDPOINT)
-                        .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
-                .andExpect(status().isForbidden());
+    @WithAnonymousUser
+    void testUpdateSettings_unauthorized() throws Exception {
+        SettingsVM vm = TestSettingsVM.defaultBuilder().build();
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/settings";
+        mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(status().isUnauthorized());
     }
 
-    @Test
-    @WithCustomSecurityContext(id = "bafc4e0e-75d4-4059-9d4d-209855dd91c1")
-    void testUpdate_badRequest_notExists() throws Exception {
-        UserVM vm = TestUserVM.defaultBuilder().id(UUID.fromString("bafc4e0e-75d4-4059-9d4d-209855dd91c1")).build();
-        MultiValueMap<String, String> multiValueMap = TestUtils.objectToMap(vm);
-        mvc.perform(put(ENDPOINT)
-                        .contentType(MediaType.MULTIPART_FORM_DATA).params(multiValueMap))
-                .andExpect(status().isNotFound());
-    }
 
     @Test
     @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
@@ -189,9 +171,7 @@ class AccountControllerIT {
         ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/password";
-        mvc.perform(put(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isOk());
+        mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(status().isOk());
     }
 
     @Test
@@ -200,9 +180,7 @@ class AccountControllerIT {
         ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/password";
-        mvc.perform(put(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isBadRequest());
+        mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -211,9 +189,7 @@ class AccountControllerIT {
         ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().oldPassword("test_password").build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/password";
-        mvc.perform(put(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isUnauthorized());
+        mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(status().isUnauthorized());
     }
 
 
@@ -223,9 +199,7 @@ class AccountControllerIT {
         ChangePasswordVM vm = TestChangePasswordVM.defaultBuilder().build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/password";
-        mvc.perform(put(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isBadRequest());
+        mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(status().isBadRequest());
     }
 
 
@@ -235,9 +209,7 @@ class AccountControllerIT {
         ChangeLanguageVM vm = new ChangeLanguageVM("RU");
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/language";
-        mvc.perform(put(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isOk());
+        mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(status().isOk());
     }
 
     @Test
@@ -246,17 +218,14 @@ class AccountControllerIT {
         ChangeLanguageVM vm = new ChangeLanguageVM("RU");
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/language";
-        mvc.perform(put(url)
-                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isUnauthorized());
+        mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(status().isUnauthorized());
     }
 
 
     @Test
     @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
     void testDeleteAccountPermanently() throws Exception {
-        mvc.perform(delete(ENDPOINT))
-                .andExpect(status().isOk());
+        mvc.perform(delete(ENDPOINT)).andExpect(status().isOk());
 
         verify(chatSystemServiceClient, timeout(1000)).deleteAccountPermanently(CURRENT_ID);
         verify(contactSystemServiceClient, timeout(1000)).deleteAccountPermanently(CURRENT_ID);

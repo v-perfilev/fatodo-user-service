@@ -1,11 +1,14 @@
 package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.mapper.UserMapper;
+import com.persoff68.fatodo.model.Info;
+import com.persoff68.fatodo.model.Settings;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.vm.ChangeLanguageVM;
 import com.persoff68.fatodo.model.vm.ChangePasswordVM;
-import com.persoff68.fatodo.model.vm.UserVM;
+import com.persoff68.fatodo.model.vm.InfoVM;
+import com.persoff68.fatodo.model.vm.SettingsVM;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;
 import com.persoff68.fatodo.security.util.SecurityUtils;
 import com.persoff68.fatodo.service.AccountService;
@@ -45,13 +48,19 @@ public class AccountController {
         return ResponseEntity.ok(userDTO);
     }
 
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UserDTO> update(@ModelAttribute @Valid UserVM userVM) {
-        User newUser = userMapper.vmToPojo(userVM);
-        byte[] imageContent = getBytesFromMultipartFile(userVM.getImageContent());
-        User user = accountService.update(newUser, imageContent);
-        UserDTO userDTO = userMapper.pojoToDTO(user);
-        return ResponseEntity.ok(userDTO);
+    @PutMapping(value = "/info", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateInfo(@ModelAttribute @Valid InfoVM infoVM) {
+        Info info = userMapper.vmToInfo(infoVM);
+        byte[] imageContent = getBytesFromMultipartFile(infoVM.getImageContent());
+        accountService.updateInfo(infoVM.getUsername(), info, imageContent);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/settings")
+    public ResponseEntity<Void> updateInfo(@RequestBody @Valid SettingsVM settingsVM) {
+        Settings settings = userMapper.vmToSettings(settingsVM);
+        accountService.updateSettings(settings);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "/password")
