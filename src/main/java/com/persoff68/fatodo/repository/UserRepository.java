@@ -37,12 +37,12 @@ public interface UserRepository extends MongoRepository<User, UUID> {
 
     Page<User> findAllByUsernameStartsWithIgnoreCase(String username, Pageable pageable);
 
-    Optional<User> findByUsername(String username);
+    Optional<User> findByUsernameIgnoreCase(String username);
 
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmailIgnoreCase(String email);
 
-    boolean existsByUsername(String username);
+    boolean existsByUsernameIgnoreCase(String username);
 
-    boolean existsByEmail(String email);
+    boolean existsByEmailIgnoreCase(String email);
 
 }

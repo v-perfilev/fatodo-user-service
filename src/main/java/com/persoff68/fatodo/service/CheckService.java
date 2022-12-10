@@ -17,21 +17,21 @@ public class CheckService {
     private final UserRepository userRepository;
 
     public boolean doesUsernameExist(String username) {
-        return userRepository.existsByUsername(username);
+        return userRepository.existsByUsernameIgnoreCase(username);
     }
 
     public boolean doesEmailExist(String email) {
-        return userRepository.existsByEmail(email);
+        return userRepository.existsByEmailIgnoreCase(email);
     }
 
     public boolean doesUsernameOrEmailExist(String user) {
         boolean isEmail = UserUtils.isEmail(user);
         boolean usernameOrEmailExists = false;
         if (isEmail) {
-            usernameOrEmailExists = userRepository.existsByEmail(user);
+            usernameOrEmailExists = userRepository.existsByEmailIgnoreCase(user);
         }
         if (!usernameOrEmailExists) {
-            usernameOrEmailExists = userRepository.existsByUsername(user);
+            usernameOrEmailExists = userRepository.existsByUsernameIgnoreCase(user);
         }
         return usernameOrEmailExists;
     }

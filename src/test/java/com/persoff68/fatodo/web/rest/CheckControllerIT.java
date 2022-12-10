@@ -93,6 +93,18 @@ class CheckControllerIT {
 
     @Test
     @WithAnonymousUser
+    void testDoesEmailExist_true_uppercase() throws Exception {
+        String email = LOCAL_NAME.toUpperCase() + "@email.com";
+        String url = ENDPOINT + "/email/" + email;
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        boolean doesExist = Boolean.parseBoolean(resultString);
+        assertThat(doesExist).isTrue();
+    }
+
+    @Test
+    @WithAnonymousUser
     void testDoesUsernameExist_false() throws Exception {
         String url = ENDPOINT + "/username/" + NOT_EXISTING_NAME;
         ResultActions resultActions = mvc.perform(get(url))
@@ -112,6 +124,18 @@ class CheckControllerIT {
         boolean doesExist = Boolean.parseBoolean(resultString);
         assertThat(doesExist).isTrue();
     }
+
+    @Test
+    @WithAnonymousUser
+    void testDoesUsernameExist_true_uppercase() throws Exception {
+        String url = ENDPOINT + "/username/" + LOCAL_NAME.toUpperCase();
+        ResultActions resultActions = mvc.perform(get(url))
+                .andExpect(status().isOk());
+        String resultString = resultActions.andReturn().getResponse().getContentAsString();
+        boolean doesExist = Boolean.parseBoolean(resultString);
+        assertThat(doesExist).isTrue();
+    }
+
 
     @Test
     @WithAnonymousUser

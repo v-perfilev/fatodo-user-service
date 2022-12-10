@@ -44,10 +44,10 @@ public class UserService {
         boolean isEmail = UserUtils.isEmail(usernameOrEmail);
         User user = null;
         if (isEmail) {
-            user = userRepository.findByEmail(usernameOrEmail).orElse(null);
+            user = userRepository.findByEmailIgnoreCase(usernameOrEmail).orElse(null);
         }
         if (user == null) {
-            user = userRepository.findByUsername(usernameOrEmail).orElse(null);
+            user = userRepository.findByUsernameIgnoreCase(usernameOrEmail).orElse(null);
         }
         if (user == null) {
             throw new ModelNotFoundException();
@@ -56,12 +56,12 @@ public class UserService {
     }
 
     public User getByEmail(String email) {
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(ModelNotFoundException::new);
     }
 
     public User getByUsername(String username) {
-        return userRepository.findByUsername(username)
+        return userRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(ModelNotFoundException::new);
     }
 
@@ -87,6 +87,7 @@ public class UserService {
     }
 
     public User create(User user) {
+        user.setEmail(user.getEmail().toLowerCase());
         user.setAuthorities(Set.of(new Authority(AuthorityType.USER.getValue())));
         return userRepository.save(user);
     }
