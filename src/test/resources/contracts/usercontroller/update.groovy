@@ -46,8 +46,21 @@ Contract.make {
                         producer([
                                 "firstname"    : "test_firstname",
                                 "lastname"     : "test_lastname",
-                                "language"     : "EN",
+                                "gender"       : "MALE",
                                 "imageFilename": "test_image",
+                        ])
+                ),
+                "settings": $(
+                        consumer(any()),
+                        producer([
+                                "language": "EN"
+                        ])
+                ),
+                "notifications": $(
+                        consumer(any()),
+                        producer([
+                                "pushNotifications" : [],
+                                "emailNotifications": []
                         ])
                 )
         )

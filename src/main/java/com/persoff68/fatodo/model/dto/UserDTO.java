@@ -38,10 +38,13 @@ public class UserDTO extends AbstractAuditingDTO {
 
     private boolean deleted;
 
+    @NotNull
     private Info info;
 
+    @NotNull
     private Settings settings;
 
+    @NotNull
     private Notifications notifications;
 
 }

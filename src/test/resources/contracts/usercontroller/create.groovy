@@ -40,13 +40,20 @@ Contract.make {
                 "info": $(
                         consumer(any()),
                         producer([
-                                "language": "EN"
+                                "gender": "MALE"
                         ])
                 ),
                 "settings": $(
                         consumer(any()),
                         producer([
-                                "emailReminders": true
+                                "language": "EN"
+                        ])
+                ),
+                "notifications": $(
+                        consumer(any()),
+                        producer([
+                                "pushNotifications": [],
+                                "emailNotifications": []
                         ])
                 )
         )
