@@ -18,6 +18,4 @@ public class Settings {
 
     private DateFormat dateFormat = DateFormat.YMD_DASH;
 
-    private boolean emailReminders = true;
-
 }

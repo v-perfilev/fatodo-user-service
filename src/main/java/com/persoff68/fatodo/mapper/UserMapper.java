@@ -3,6 +3,7 @@ package com.persoff68.fatodo.mapper;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.Info;
+import com.persoff68.fatodo.model.Notifications;
 import com.persoff68.fatodo.model.Settings;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.LocalUserDTO;
@@ -11,6 +12,7 @@ import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.dto.UserInfoDTO;
 import com.persoff68.fatodo.model.dto.UserPrincipalDTO;
 import com.persoff68.fatodo.model.vm.InfoVM;
+import com.persoff68.fatodo.model.vm.NotificationsVM;
 import com.persoff68.fatodo.model.vm.SettingsVM;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -51,6 +53,7 @@ public interface UserMapper {
 
     Settings vmToSettings(SettingsVM settingsVM);
 
+    Notifications vmToNotifications(NotificationsVM notificationsVM);
 
     @Named("authoritiesIntoStrings")
     default Set<String> authoritiesIntoStrings(Set<Authority> authoritySet) {

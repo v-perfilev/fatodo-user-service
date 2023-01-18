@@ -3,6 +3,7 @@ package com.persoff68.fatodo.builder;
 import com.persoff68.fatodo.config.constant.AuthorityType;
 import com.persoff68.fatodo.model.Authority;
 import com.persoff68.fatodo.model.Info;
+import com.persoff68.fatodo.model.Notifications;
 import com.persoff68.fatodo.model.Settings;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.constant.Gender;
@@ -10,7 +11,6 @@ import com.persoff68.fatodo.model.constant.Language;
 import com.persoff68.fatodo.model.constant.Provider;
 import lombok.Builder;
 
-import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
@@ -19,10 +19,22 @@ public class TestUser extends User {
     private static final String DEFAULT_VALUE = "test_value";
 
     @Builder
-    public TestUser(UUID id, @NotNull String email, @NotNull String username, @NotNull Set<Authority> authorities,
-                    String password, @NotNull Provider provider, String providerId, @NotNull boolean activated,
-                    @NotNull boolean deleted, @NotNull Info info, @NotNull Settings settings) {
-        super(email, username, authorities, password, provider, providerId, activated, deleted, info, settings);
+    public TestUser(UUID id, String email, String username, Set<Authority> authorities,
+                    String password, Provider provider, String providerId, boolean activated,
+                    boolean deleted, Info info, Settings settings, Notifications notifications) {
+        super(
+                email,
+                username,
+                authorities,
+                password,
+                provider,
+                providerId,
+                activated,
+                deleted,
+                info,
+                settings,
+                notifications
+        );
         super.setId(id);
         super.setInfo(new Info());
         super.getInfo().setFirstname(DEFAULT_VALUE);
@@ -31,6 +43,7 @@ public class TestUser extends User {
         super.getInfo().setImageFilename(DEFAULT_VALUE);
         super.setSettings(new Settings());
         super.getSettings().setLanguage(Language.EN);
+        super.setNotifications(new Notifications());
     }
 
     public static TestUserBuilder defaultBuilder() {

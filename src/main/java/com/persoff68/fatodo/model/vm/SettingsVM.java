@@ -23,6 +23,4 @@ public class SettingsVM {
     @NotNull
     private String dateFormat;
 
-    private boolean emailReminders;
-
 }

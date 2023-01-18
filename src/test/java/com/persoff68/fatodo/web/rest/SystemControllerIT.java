@@ -275,6 +275,9 @@ class SystemControllerIT {
         List<UserDTO> userDTOList = objectMapper.readValue(resultString, collectionType);
         assertThat(userDTOList).hasSize(1);
         assertThat(userDTOList.get(0).isDeleted()).isFalse();
+        assertThat(userDTOList.get(0).getInfo()).isNotNull();
+        assertThat(userDTOList.get(0).getSettings()).isNotNull();
+        assertThat(userDTOList.get(0).getNotifications()).isNotNull();
     }
 
     @Test

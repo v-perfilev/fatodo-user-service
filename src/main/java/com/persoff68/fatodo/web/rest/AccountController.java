@@ -2,12 +2,14 @@ package com.persoff68.fatodo.web.rest;
 
 import com.persoff68.fatodo.mapper.UserMapper;
 import com.persoff68.fatodo.model.Info;
+import com.persoff68.fatodo.model.Notifications;
 import com.persoff68.fatodo.model.Settings;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.vm.ChangeLanguageVM;
 import com.persoff68.fatodo.model.vm.ChangePasswordVM;
 import com.persoff68.fatodo.model.vm.InfoVM;
+import com.persoff68.fatodo.model.vm.NotificationsVM;
 import com.persoff68.fatodo.model.vm.SettingsVM;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;
 import com.persoff68.fatodo.security.util.SecurityUtils;
@@ -60,6 +62,13 @@ public class AccountController {
     public ResponseEntity<Void> updateInfo(@RequestBody @Valid SettingsVM settingsVM) {
         Settings settings = userMapper.vmToSettings(settingsVM);
         accountService.updateSettings(settings);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/notifications")
+    public ResponseEntity<Void> updateNotifications(@RequestBody @Valid NotificationsVM notificationsVM) {
+        Notifications notifications = userMapper.vmToNotifications(notificationsVM);
+        accountService.updateNotifications(notifications);
         return ResponseEntity.ok().build();
     }
 

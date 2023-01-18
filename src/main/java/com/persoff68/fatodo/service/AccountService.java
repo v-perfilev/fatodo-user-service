@@ -1,10 +1,12 @@
 package com.persoff68.fatodo.service;
 
 import com.persoff68.fatodo.model.Info;
+import com.persoff68.fatodo.model.Notifications;
 import com.persoff68.fatodo.model.Settings;
 import com.persoff68.fatodo.model.User;
 import com.persoff68.fatodo.model.constant.Language;
 import com.persoff68.fatodo.model.constant.Provider;
+import com.persoff68.fatodo.model.constant.PushNotificationType;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.security.exception.UnauthorizedException;
 import com.persoff68.fatodo.security.util.SecurityUtils;
@@ -54,6 +56,17 @@ public class AccountService {
                 .orElseThrow(ModelNotFoundException::new);
 
         user.setSettings(settings);
+
+        userRepository.save(user);
+    }
+
+    public void updateNotifications(Notifications notifications) {
+        UUID userId = SecurityUtils.getCurrentId().orElseThrow(UnauthorizedException::new);
+        User user = userRepository.findById(userId)
+                .orElseThrow(ModelNotFoundException::new);
+
+        notifications.getPushNotifications().add(PushNotificationType.REMINDER);
+        user.setNotifications(notifications);
 
         userRepository.save(user);
     }

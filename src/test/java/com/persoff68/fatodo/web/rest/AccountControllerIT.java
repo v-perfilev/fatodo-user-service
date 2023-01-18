@@ -6,6 +6,7 @@ import com.persoff68.fatodo.TestUtils;
 import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.builder.TestChangePasswordVM;
 import com.persoff68.fatodo.builder.TestInfoVM;
+import com.persoff68.fatodo.builder.TestNotificationsVM;
 import com.persoff68.fatodo.builder.TestSettingsVM;
 import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.client.ChatSystemServiceClient;
@@ -14,11 +15,14 @@ import com.persoff68.fatodo.client.EventSystemServiceClient;
 import com.persoff68.fatodo.client.ImageServiceClient;
 import com.persoff68.fatodo.client.ItemSystemServiceClient;
 import com.persoff68.fatodo.model.User;
+import com.persoff68.fatodo.model.constant.EmailNotificationType;
 import com.persoff68.fatodo.model.constant.Provider;
+import com.persoff68.fatodo.model.constant.PushNotificationType;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.model.vm.ChangeLanguageVM;
 import com.persoff68.fatodo.model.vm.ChangePasswordVM;
 import com.persoff68.fatodo.model.vm.InfoVM;
+import com.persoff68.fatodo.model.vm.NotificationsVM;
 import com.persoff68.fatodo.model.vm.SettingsVM;
 import com.persoff68.fatodo.repository.UserRepository;
 import com.persoff68.fatodo.service.exception.ModelNotFoundException;
@@ -161,6 +165,30 @@ class AccountControllerIT {
         SettingsVM vm = TestSettingsVM.defaultBuilder().build();
         String requestBody = objectMapper.writeValueAsString(vm);
         String url = ENDPOINT + "/settings";
+        mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithCustomSecurityContext(id = "6e3c489b-a4fb-4654-aa39-30985b7c4656")
+    void testUpdateNotifications_ok() throws Exception {
+        NotificationsVM vm = TestNotificationsVM.defaultBuilder().build();
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/notifications";
+        mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(status().isOk());
+        User user = userRepository.findById(CURRENT_ID).orElseThrow();
+        assertThat(user.getNotifications().getEmailNotifications())
+                .contains(EmailNotificationType.REMINDER);
+        assertThat(user.getNotifications().getPushNotifications())
+                .contains(PushNotificationType.REMINDER)
+                .hasSizeGreaterThan(5);
+    }
+
+    @Test
+    @WithAnonymousUser
+    void testUpdateNotifications_unauthorized() throws Exception {
+        NotificationsVM vm = TestNotificationsVM.defaultBuilder().build();
+        String requestBody = objectMapper.writeValueAsString(vm);
+        String url = ENDPOINT + "/notifications";
         mvc.perform(put(url).contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(status().isUnauthorized());
     }
 

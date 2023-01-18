@@ -46,4 +46,7 @@ public class User extends AbstractAuditingModel {
     @NotNull
     private Settings settings = new Settings();
 
+    @NotNull
+    private Notifications notifications = new Notifications();
+
 }

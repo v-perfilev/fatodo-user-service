@@ -6,15 +6,13 @@ import lombok.Builder;
 import javax.validation.constraints.NotNull;
 
 public class TestSettingsVM extends SettingsVM {
-    private static final String DEFAULT_VALUE = "test_value";
 
     @Builder
     public TestSettingsVM(@NotNull String language,
                           @NotNull String timezone,
                           String timeFormat,
-                          String dateFormat,
-                          boolean emailReminders) {
-        super(language, timezone, timeFormat, dateFormat, emailReminders);
+                          String dateFormat) {
+        super(language, timezone, timeFormat, dateFormat);
     }
 
     public static TestSettingsVMBuilder defaultBuilder() {
@@ -22,8 +20,7 @@ public class TestSettingsVM extends SettingsVM {
                 .language("EN")
                 .timezone("Europe/Berlin")
                 .timeFormat("H24")
-                .dateFormat("MDY_SLASH")
-                .emailReminders(true);
+                .dateFormat("MDY_SLASH");
     }
 
 }
