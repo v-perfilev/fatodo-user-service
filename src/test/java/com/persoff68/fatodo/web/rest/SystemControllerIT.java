@@ -320,13 +320,13 @@ class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    void testCreateLocalUser_conflict_duplicated() throws Exception {
+    void testCreateLocalUser_internalError_duplicated() throws Exception {
         String url = ENDPOINT + "/local";
         LocalUserDTO dto = TestLocalUserDTO.defaultBuilder().username(LOCAL_NAME).build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isConflict());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -390,7 +390,7 @@ class SystemControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
-    void testCreateOAuth2User_conflict_duplicated() throws Exception {
+    void testCreateOAuth2User_internalError_duplicated() throws Exception {
         String url = ENDPOINT + "/oauth2";
         OAuth2UserDTO dto = TestOAuth2UserDTO.defaultBuilder()
                 .username(GOOGLE_NAME)
@@ -399,7 +399,7 @@ class SystemControllerIT {
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(url)
                         .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isConflict());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test

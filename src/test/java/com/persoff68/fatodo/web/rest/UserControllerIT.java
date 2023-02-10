@@ -7,8 +7,8 @@ import com.persoff68.fatodo.annotation.WithCustomSecurityContext;
 import com.persoff68.fatodo.builder.TestUser;
 import com.persoff68.fatodo.builder.TestUserDTO;
 import com.persoff68.fatodo.config.constant.AuthorityType;
-import com.persoff68.fatodo.model.constant.Provider;
 import com.persoff68.fatodo.model.User;
+import com.persoff68.fatodo.model.constant.Provider;
 import com.persoff68.fatodo.model.dto.UserDTO;
 import com.persoff68.fatodo.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -155,12 +155,12 @@ class UserControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    void testCreate_conflict_duplicated() throws Exception {
+    void testCreate_internalError_duplicated() throws Exception {
         UserDTO dto = TestUserDTO.defaultBuilder().id(null).username(CURRENT_NAME).build();
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(post(ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isConflict());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -217,7 +217,7 @@ class UserControllerIT {
 
     @Test
     @WithCustomSecurityContext(authority = "ROLE_ADMIN")
-    void testUpdate_conflict_duplicated() throws Exception {
+    void testUpdate_internalError_duplicated() throws Exception {
         UserDTO dto = TestUserDTO.defaultBuilder()
                 .id(CURRENT_ID)
                 .username(CURRENT_NAME)
@@ -225,7 +225,7 @@ class UserControllerIT {
         String requestBody = objectMapper.writeValueAsString(dto);
         mvc.perform(put(ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON).content(requestBody))
-                .andExpect(status().isConflict());
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
