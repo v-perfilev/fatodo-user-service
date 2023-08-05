@@ -341,6 +341,17 @@ class SystemControllerIT {
     }
 
     @Test
+    @WithCustomSecurityContext(authority = "ROLE_SYSTEM")
+    void testCreateLocalUser_internalError_languageNotExist() throws Exception {
+        String url = ENDPOINT + "/local";
+        LocalUserDTO dto = TestLocalUserDTO.defaultBuilder().language("mars").build();
+        String requestBody = objectMapper.writeValueAsString(dto);
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON).content(requestBody))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
     @WithAnonymousUser
     void testCreateLocalUser_unauthorized() throws Exception {
         String url = ENDPOINT + "/local";
