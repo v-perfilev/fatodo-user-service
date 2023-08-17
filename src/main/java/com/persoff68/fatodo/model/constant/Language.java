@@ -7,5 +7,5 @@ public enum Language {
     FR,
     PT,
     RU,
-    UA
+    UK
 }
