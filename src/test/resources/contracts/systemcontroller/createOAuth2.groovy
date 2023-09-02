@@ -18,19 +18,19 @@ Contract.make {
         body(
                 "email": $(
                         consumer(email()),
-                        producer("test_facebook@email.com")
+                        producer("test_google@email.com")
                 ),
                 "username": $(
                         consumer(email()),
-                        producer("test_facebook@email.com")
+                        producer("test_google@email.com")
                 ),
                 "provider": $(
                         consumer(execute('assertProviders($it)')),
-                        producer("FACEBOOK")
+                        producer("GOOGLE")
                 ),
                 "providerId": $(
                         consumer(anyNonBlankString()),
-                        producer("test_provider_facebook")
+                        producer("test_provider_google")
                 ),
                 "language": $(
                         consumer(anyNonBlankString()),
@@ -48,11 +48,11 @@ Contract.make {
             contentType applicationJson()
         }
         body(
-                "email": "test_facebook@email.com",
-                "username": "test_facebook@email.com",
+                "email": "test_google@email.com",
+                "username": "test_google@email.com",
                 "password": null,
-                "provider": "FACEBOOK",
-                "providerId": "test_provider_facebook",
+                "provider": "GOOGLE",
+                "providerId": "test_provider_google",
                 "authorities": ["ROLE_USER"],
                 "activated": true,
                 "info": [
